@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareKind Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+       <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-container {
+            background-color: #fff;
+            width: 100%;
+            height: 400px;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-icon, .donation-button {
+            font-size: 24px;
+            cursor: pointer;
+            color: #28A745;
+        }
+
+        .profile-info {
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 10px;
+            position: relative;
+            cursor: pointer;
+            border: 2px solid #007bff;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-pic input {
+            display: none;
+        }
+
+        .edit-icon {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            padding: 5px;
+            cursor: pointer;
+            color: #28A745;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat p {
+            margin: 0;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .stat h3 {
+            margin: 5px 0 0;
+            font-size: 18px;
+            color: #343a40;
+        }
+
+        .profile-name, .profile-bio {
+            display: inline-block;
+            width: calc(100% - 40px);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .profile-name input, .profile-bio input {
+            border: none;
+            border-bottom: 2px solid #007bff;
+            font-size: 16px;
+            text-align: center;
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .profile-name input:focus, .profile-bio input:focus {
+            border-bottom: 2px solid #28a745;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .profile-bio {
+            font-size: 16px;
+            color: #6c757d;
+        }
+        
+        .post-container {
+            width: 100%;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .post-header h3 {
+            font-size: 20px;
+            color: #343A40;
+        }
+
+        .post-header i {
+            font-size: 24px;
+            cursor: pointer;
+            color: #007BFF;
+        }
+
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .post-item {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .post-item img, .post-item video {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .long-video {
+            max-height: 300px;
+            object-fit: cover;
+        }
+
+        .alert {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .delete-icon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            border-radius: 50%;
+            padding: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .post-item:hover .delete-icon {
+            display: block;
+        }
+
+        /* Tabs Style */
+        .post-tabs {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+        
+        .tab-button {
+            background-color: #f0f2f5;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            outline: none;
+            border-radius: 5px;
+        }
+        
+        .tab-button.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Additional styles for long video and Reels */
+        .post-item img{
+            max-height: 300px;
+        }
+        .post-item video.long-video {
+            max-height: 300px; /* Adjust as needed */
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background-color: #ddd;
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .progress-bar span {
+            display: block;
+            height: 100%;
+            background-color: #28a745;
+            width: 0%;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 10px;
+            color: #007bff;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            align-items: center;
+            bottom: 0;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+        }
+
+        .bottom-nav img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .bottom-nav i {
+            font-size: 24px;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <i class="fas fa-bars menu-icon"></i>
+            <i class="fas fa-donate donation-button"></i>
+        </div>
+        <div class="profile-info">
+            <div class="profile-pic">
+                <input type="file" id="profileImageUpload" accept="image/*">
+                <img id="profileImage" src="sk pictures/k6.png" alt="Profile Image">
+                <label class="edit-icon" for="imageUpload">
+                    <i class="fas fa-pencil-alt"></i>
+                </label>
+                <input type="file" id="imageUpload" accept="image/*">
+            </div>
+            <div class="profile-name">
+                <input type="text" id="profileName" placeholder="Your Name" maxlength="50" required>
+            </div>
+            <div class="profile-bio">
+                <input type="text" id="profileBio" placeholder="Your Bio" maxlength="150">
+            </div>
+        </div>
+        <div class="profile-stats">
+            <div class="stat">
+                <p><i class="fa-solid fa-file-import"></i> Post</p>
+                <h3 id="postCount">0</h3>
+            </div>
+            <div class="stat">
+                <p><i class="fas fa-hands-helping"></i> Lives Supported</p>
+                <h3>100</h3>
+            </div>
+            <div class="stat">
+                <p><i class="fas fa-users"></i> Supporters</p>
+                <h3>1.1M</h3>
+            </div>
+        </div>
+        <div class="post-container">
+            <div class="post-header">
+                <h3>Your Posts</h3>
+                <i class="fas fa-plus-circle" id="addImageIcon"></i>
+                <i class="fas fa-video" id="addVideoIcon"></i>
+                <i class="fas fa-film" id="addReelIcon"></i>
+                <input type="file" id="uploadImage" accept="image/*" style="display:none;">
+                <input type="file" id="uploadVideo" accept="video/*" style="display:none;">
+                <input type="file" id="uploadReel" accept="video/*" style="display:none;">
+            </div>
+            <div class="post-tabs">
+                <button class="tab-button active" data-tab="all">All</button>
+                <button class="tab-button" data-tab="image">Images</button>
+                <button class="tab-button" data-tab="video">Records</button>
+                <button class="tab-button" data-tab="reel">Reels</button>
+            </div>
+            <div id="postGrid" class="post-grid"></div>
+            <div class="message" id="message">No posts available.</div>
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <a href="home.html" title="Home"><i class="fa-solid fa-house"></i></a>
+        <a href="reels.html" title="Reels"><i class="fa-solid fa-radio"></i></a>
+        <a href="maker.html" title="Makers"><i class="fa fa-star"></i></a>
+        <a href="rewards.html" title="Rewards"><i class="fa-solid fa-trophy"></i></a>
+        <a href="profile.html" title="Profile"><img src="sk pictures/k6.png" alt="Profile"></a>
+    </div>
+    <div id="loading" class="loading">Loading...</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    let postCount = 0;
+
+    loadProfile();
+
+    document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
+    document.getElementById('profileName').addEventListener('input', saveProfile);
+    document.getElementById('profileBio').addEventListener('input', saveProfile);
+
+    document.getElementById('uploadImage').addEventListener('change', handleFileUpload.bind(null, 'image'));
+    document.getElementById('uploadVideo').addEventListener('change', handleFileUpload.bind(null, 'video'));
+    document.getElementById('uploadReel').addEventListener('change', handleFileUpload.bind(null, 'reel'));
+
+    document.getElementById('addImageIcon').addEventListener('click', () => document.getElementById('uploadImage').click());
+    document.getElementById('addVideoIcon').addEventListener('click', () => document.getElementById('uploadVideo').click());
+    document.getElementById('addReelIcon').addEventListener('click', () => document.getElementById('uploadReel').click());
+
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            filterPosts(this.getAttribute('data-tab'));
+        });
+    });
+
+    const request = indexedDB.open('ShareKindDB', 3); // Use consistent version number
+
+    request.onerror = function(event) {
+        console.error('Database error:', event.target.errorCode);
+    };
+
+    request.onsuccess = function(event) {
+        const db = event.target.result;
+        console.log('Database opened successfully');
+        loadPosts(db);
+    };
+
+    request.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains('posts')) {
+            console.log('Creating object store');
+            db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
+        }
+    };
+
+    function saveProfile() {
+        const profileName = document.getElementById('profileName').value;
+        const profileBio = document.getElementById('profileBio').value;
+
+        localStorage.setItem('profileName', profileName);
+        localStorage.setItem('profileBio', profileBio);
+    }
+
+    function loadProfile() {
+        const profileName = localStorage.getItem('profileName');
+        const profileBio = localStorage.getItem('profileBio');
+        const profileImage = localStorage.getItem('profileImage');
+
+        if (profileName) document.getElementById('profileName').value = profileName;
+        if (profileBio) document.getElementById('profileBio').value = profileBio;
+        if (profileImage) {
+            document.getElementById('profileImage').src = profileImage;
+            document.querySelector('.bottom-nav img').src = profileImage;
+        }
+    }
+
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const profileImage = e.target.result;
+                document.getElementById('profileImage').src = profileImage;
+                document.querySelector('.bottom-nav img').src = profileImage;
+                localStorage.setItem('profileImage', profileImage);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function handleFileUpload(type, event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const post = {
+                    id: Date.now(),
+                    type: type,
+                    content: e.target.result
+                };
+                if (type === 'video' || type === 'reel') {
+                    const videoElement = document.createElement('video');
+                    videoElement.src = e.target.result;
+                    videoElement.onloadedmetadata = function() {
+                        const videoDuration = videoElement.duration;
+                        if (type === 'reel' && videoDuration > 120) {
+                            showAlert('Reels can only be less than 2 minutes!');
+                            return;
+                        }
+                        if (type === 'video' && (videoDuration <= 120 || videoDuration > 10800)) {
+                            showAlert('Videos must be more than 2 minutes and up to 3 hours!');
+                            return;
+                        }
+                        savePost(post);
+                    };
+                    videoElement.onerror = function() {
+                        showAlert('Error loading video.');
+                    };
+                } else {
+                    savePost(post);
+                }
+            };
+            reader.onerror = function() {
+                showAlert('Error reading file.');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function savePost(post) {
+        const request = indexedDB.open('ShareKindDB', 3);
+        request.onsuccess = function(event) {
+            const db = event.target.result;
+            const transaction = db.transaction(['posts'], 'readwrite');
+            const objectStore = transaction.objectStore('posts');
+            objectStore.add(post);
+            transaction.oncomplete = function() {
+                console.log('Post saved:', post);
+                loadPosts(db); // Refresh the posts after saving
+            };
+            transaction.onerror = function(event) {
+                console.error('Transaction error:', event.target.errorCode);
+            };
+        };
+    }
+
+    function loadPosts(db) {
+        const transaction = db.transaction(['posts'], 'readonly');
+        const objectStore = transaction.objectStore('posts');
+        const request = objectStore.getAll();
+        request.onsuccess = function(event) {
+            const posts = event.target.result;
+            displayPosts(posts);
+        };
+        request.onerror = function(event) {
+            console.error('Failed to load posts:', event.target.errorCode);
+        };
+    }
+
+    function displayPosts(posts) {
+        const postGrid = document.getElementById('postGrid');
+        postGrid.innerHTML = '';
+        if (posts.length > 0) {
+            posts.forEach(post => {
+                const postItem = document.createElement('div');
+                postItem.className = 'post-item';
+                postItem.setAttribute('data-id', post.id); // Store post ID for deletion
+
+                let postContent = '';
+                if (post.type === 'image') {
+                    postContent = `<img src="${post.content}" alt="Post Image">`;
+                } else if (post.type === 'video' || post.type === 'reel') {
+                    postContent = `
+                        <video src="${post.content}" class="${post.type === 'video' ? 'long-video' : ''}" controls></video>
+                    `;
+                }
+
+                // Add delete icon
+                postItem.innerHTML = `
+                    ${postContent}
+                    <button class="delete-icon" onclick="deletePost(${post.id})">🗑</button>
+                `;
+
+                postGrid.appendChild(postItem);
+
+                // Add event listeners for play/pause functionality directly on the video element
+                const videoElement = postItem.querySelector('video');
+
+                if (videoElement) {
+                    videoElement.addEventListener('click', () => {
+                        if (videoElement.paused) {
+                            videoElement.play();
+                        } else {
+                            videoElement.pause();
+                        }
+                    });
+                }
+            });
+            document.getElementById('message').style.display = 'none';
+        } else {
+            document.getElementById('message').style.display = 'block';
+        }
+
+        updatePostCount(posts.length);
+    }
+
+    function updatePostCount(count) {
+        document.getElementById('postCount').innerText = count;
+    }
+
+    function filterPosts(tab) {
+        const request = indexedDB.open('ShareKindDB', 3);
+        request.onsuccess = function(event) {
+            const db = event.target.result;
+            const transaction = db.transaction(['posts'], 'readonly');
+            const objectStore = transaction.objectStore('posts');
+            const request = objectStore.getAll();
+            request.onsuccess = function(event) {
+                const posts = event.target.result;
+                const filteredPosts = posts.filter(post => tab === 'all' || post.type === tab);
+                displayPosts(filteredPosts);
+            };
+            request.onerror = function(event) {
+                console.error('Failed to filter posts:', event.target.errorCode);
+            };
+        };
+    }
+
+    function showAlert(message) {
+        const alertBox = document.createElement('div');
+        alertBox.className = 'alert';
+        alertBox.innerText = message;
+        document.body.appendChild(alertBox);
+        setTimeout(() => alertBox.remove(), 3000);
+    }
+
+    window.deletePost = function(postId) {
+        const request = indexedDB.open('ShareKindDB', 3);
+        request.onsuccess = function(event) {
+            const db = event.target.result;
+            const transaction = db.transaction(['posts'], 'readwrite');
+            const objectStore = transaction.objectStore('posts');
+            const deleteRequest = objectStore.delete(postId);
+            deleteRequest.onsuccess = function() {
+                console.log('Post deleted:', postId);
+                loadPosts(db); // Refresh the posts after deletion
+            };
+            deleteRequest.onerror = function(event) {
+                console.error('Delete error:', event.target.errorCode);
+            };
+        };
+    };
+});
+    </script>        
+</body>
+</html>

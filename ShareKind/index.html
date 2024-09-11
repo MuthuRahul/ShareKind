@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" /> 
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>ShareKind</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0; }
+      .stories { display: flex; overflow-x: auto; padding: 10px; background-color: #fff; }
+      .story { text-align: center; margin-right: 10px; }
+      .story-img { position: relative; width: 70px; height: 70px; border-radius: 50%; overflow: hidden; border: 2px solid #0095f6; cursor: pointer; }
+      .story-img img { width: 100%; height: 100%; object-fit: cover; }
+      .add-icon { position: absolute; bottom: 0; right: 5px; background-color: #28a745; color: white; width: 20px; height: 20px; border-radius: 50%; text-align: center; line-height: 20px; font-size: 16px; font-weight: bold; }
+      .story p { margin-top: 5px; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 70px; }
+      #uploadInput { display: none; }
+      .uploaded-content { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 10; justify-content: center; align-items: center; cursor: pointer; }
+      .uploaded-content img, .uploaded-content video { max-width: 100%; max-height: 100%; border-radius: 10px; }
+      .uploaded-content video { max-height: 90%; }
+      .close-btn { position: absolute; top: 10px; right: 10px; color: white; font-size: 24px; cursor: pointer; }
+      .delete-btn i { position: absolute; top: 10px; left: 10px; color: white; font-size: 24px; cursor: pointer; }
+      .navigation { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; }
+      .nav-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #fff; margin: 0 5px; cursor: pointer; opacity: 0.5; }
+      .nav-dot.active { opacity: 1; }
+  </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <h1>ShareKind</h1>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+            <i class="fa fa-search"></i>
+        </div>
+        <div class="icons">
+            <a href="chat.html"><i class="fa-regular fa-bell"></i></a>
+        </div>
+    </div>
+
+    <div class="stories">
+      <div class="story">
+          <div class="story-img" id="your-story">
+            <img id="storyProfileImage" src="sk pictures\k6.png" alt="Profile Icon">
+              <div class="add-icon" id="uploadButton">+</div>
+          </div>
+          <p>Story</p>
+      </div>
+  </div>
+  <input type="file" id="uploadInput" accept="image/,video/" multiple>
+  <div class="uploaded-content" id="uploadedContent">
+    <div class="delete-btn" id="deleteBtn"><i class="fa-solid fa-trash"></i>&times;</div>
+      <div class="close-btn" id="closeBtn">&times;</div>
+      <img id="uploadedImage" src="" alt="Uploaded Image">
+      <video controls autoplay id="uploadedVideo">
+          <source id="videoSource" src="" type="video/mp4">
+          Your browser does not support the video tag.
+      </video>
+      <div class="navigation" id="navigation"></div>
+  </div>
+  <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          const uploadButton = document.getElementById('uploadButton');
+          const uploadInput = document.getElementById('uploadInput');
+          const yourStory = document.getElementById('your-story');
+          const uploadedContent = document.getElementById('uploadedContent');
+          const uploadedImage = document.getElementById('uploadedImage');
+          const uploadedVideo = document.getElementById('uploadedVideo');
+          const videoSource = document.getElementById('videoSource');
+          const closeBtn = document.getElementById('closeBtn');
+          const deleteBtn = document.getElementById('deleteBtn');
+          const navigation = document.getElementById('navigation');
+
+          let uploadedFiles = [];
+          let currentIndex = 0;
+          let swapTimeout;
+
+          uploadButton.addEventListener('click', function () {
+              uploadInput.click();
+          });
+
+          uploadInput.addEventListener('change', function () {
+              const newFiles = Array.from(this.files);
+              newFiles.forEach(file => {
+                  uploadedFiles.push({ file, timestamp: Date.now() });
+              });
+              removeExpiredStories();
+              updateNavigation();
+          });
+
+          yourStory.addEventListener('click', function () {
+              if (uploadedFiles.length > 0) {
+                  showUploadedMedia(0);
+              } else {
+  
+              }
+          });
+
+          closeBtn.addEventListener('click', function (event) {
+              event.stopPropagation();
+              uploadedContent.style.display = 'none';
+              clearTimeout(swapTimeout);
+          });
+
+          deleteBtn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            deleteCurrentMedia();
+          });
+
+          uploadedContent.addEventListener('click', function () {
+              clearTimeout(swapTimeout);
+              currentIndex = (currentIndex + 1) % uploadedFiles.length;
+              showUploadedMedia(currentIndex);
+          });
+          // Load saved profile image from localStorage on page load
+          window.onload = function() {
+            const savedImage = localStorage.getItem('profileImage');
+            if (savedImage) {
+              document.getElementById('storyProfileImage').src = savedImage;
+            }
+          };
+
+          function showUploadedMedia(index) {
+              const file = uploadedFiles[index].file;
+              const url = URL.createObjectURL(file);
+
+              if (file.type.startsWith('image/')) {
+                  uploadedImage.setAttribute('src', url);
+                  uploadedImage.style.display = 'block';
+                  uploadedVideo.style.display = 'none';
+                  startAutoSwap(5000); // Swap image after 5 seconds
+              } else if (file.type.startsWith('video/')) {
+                  videoSource.setAttribute('src', url);
+                  uploadedVideo.load();
+                  uploadedVideo.style.display = 'block';
+                  uploadedImage.style.display = 'none';
+                  uploadedVideo.onloadedmetadata = function () {
+                      const duration = Math.min(uploadedVideo.duration * 1000, 10000); // Play video for its duration or max 10 seconds
+                      startAutoSwap(duration);
+                  };
+                  uploadedVideo.play();
+              }
+
+              uploadedContent.style.display = 'flex';
+              currentIndex = index;
+              updateActiveNavDot(index);
+          }
+
+          function updateNavigation() {
+              navigation.innerHTML = '';
+              uploadedFiles.forEach((file, index) => {
+                  const dot = document.createElement('div');
+                  dot.classList.add('nav-dot');
+                  dot.addEventListener('click', (event) => {
+                      event.stopPropagation(); // Prevent parent click event
+                      showUploadedMedia(index);
+                  });
+                  navigation.appendChild(dot);
+              });
+          }
+
+          function updateActiveNavDot(activeIndex) {
+              const dots = document.querySelectorAll('.nav-dot');
+              dots.forEach((dot, index) => {
+                  if (index === activeIndex) {
+                      dot.classList.add('active');
+                  } else {
+                      dot.classList.remove('active');
+                  }
+              });
+          }
+
+          function removeExpiredStories() {
+              const currentTime = Date.now();
+              uploadedFiles = uploadedFiles.filter(({ file, timestamp }) => {
+                  if (currentTime - timestamp < 24 * 60 * 60 * 1000) {
+                      return true;
+                  } else {
+                      URL.revokeObjectURL(URL.createObjectURL(file));
+                      return false;
+                  }
+              });
+
+              updateNavigation();
+          }
+
+          function startAutoSwap(duration) {
+              clearTimeout(swapTimeout); // Clear any existing timeout
+              swapTimeout = setTimeout(() => {
+                  currentIndex = (currentIndex + 1) % uploadedFiles.length;
+                  showUploadedMedia(currentIndex);
+              }, duration);
+          }
+
+          function deleteCurrentMedia() {
+                if (uploadedFiles.length > 0) {
+                    uploadedFiles.splice(currentIndex, 1);
+                    if (uploadedFiles.length > 0) {
+                        currentIndex = Math.min(currentIndex, uploadedFiles.length - 1);
+                        showUploadedMedia(currentIndex);
+                    } else {
+                        uploadedContent.style.display = 'none';
+                    }
+                    updateNavigation();
+                }
+            }
+            setInterval(removeExpiredStories, 60 * 1000); // Check and remove expired stories every minute
+      });
+      </script>
+      
+      <section class="home" id="home">
+        <div class="home-slider">
+            <div class="swiper">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                  <!-- Slides -->
+                  <div class="swiper-slide">
+                    <div class="image">
+                      <img src="sk pictures\k4.jpg" alt="">
+                    </div>
+                  </div>
+                  
+                  <div class="swiper-slide">
+                    <div class="image">
+                      <img src="sk pictures\k3.jpg" alt="">
+                    </div>
+                  </div>
+                  
+                  <div class="swiper-slide">
+                    <div class="image">
+                      <img src="sk pictures\k2.jpg" alt="">
+                    </div>
+                  </div>
+                  
+                  <div class="swiper-slide">
+                    <div class="image">
+                      <img src="sk pictures\k7.jpg" alt="">
+                    </div>
+                    </div>
+                
+                </div>
+                <!-- If we need pagination -->
+                <div class="swiper-pagination"></div>
+              
+                <!-- If we need navigation buttons -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+              </div>
+        </div>
+        </section>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    
+        <script>
+            const swiper = new Swiper('.swiper', {
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                loop: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                });
+        </script>
+
+<section  id="trending">
+    <div class="container">
+      <h3 class="text-center section-subheading">-ShareKind-</h3>
+      <h1 class="text-center section-heading">-Small Acts Big Impacts!-</h1>
+    </div>
+    <div class="container">
+      <div class="swiper trending-slider">
+        <div class="swiper-wrapper">
+          <!------ slide start------>
+          <div class="swiper-slide trending-slide">
+            <div class="trending-slide-img">
+              <img src="sk pictures/s1.jpg" alt="Trending">
+            </div>
+            <div class="trending-slide-content">
+              <h1 class="sk-rate">₹1,00,000</h1>
+              <div class="trending-slide-content-bottom">
+                <h2 class="sk-days">10days left</h2>
+              </div>
+            </div>
+          </div>
+          <!------slide end------>
+          <!------ slide start------>
+          <div class="swiper-slide trending-slide">
+            <div class="trending-slide-img">
+              <img src="sk pictures/s2.jpg" alt="Trending">
+            </div>
+            <div class="trending-slide-content">
+              <h1 class="sk-rate">₹1,00,000</h1>
+              <div class="trending-slide-content-bottom">
+                <h2 class="sk-days">10days left</h2>
+              </div>
+            </div>
+          </div>
+          <!------slide end------>
+          <!------ slide start------>
+          <div class="swiper-slide trending-slide">
+            <div class="trending-slide-img">
+              <img src="sk pictures/s3.jpg" alt="Trending">
+            </div>
+            <div class="trending-slide-content">
+              <h1 class="sk-rate">₹1,00,000</h1>
+              <div class="trending-slide-content-bottom">
+                <h2 class="sk-days">10days left</h2>
+              </div>
+            </div>
+          </div>
+          <!------slide end------>
+          <!------ slide start------>
+          <div class="swiper-slide trending-slide">
+            <div class="trending-slide-img">
+              <img src="sk pictures/s4.jpg" alt="Trending">
+            </div>
+            <div class="trending-slide-content">
+              <h1 class="sk-rate">₹1,00,000</h1>
+              <div class="trending-slide-content-bottom">
+                <h2 class="sk-days">10days left</h2>
+              </div>
+            </div>
+          </div>
+          <!------slide end------>
+          <!------ slide start------>
+          <div class="swiper-slide trending-slide">
+            <div class="trending-slide-img">
+              <img src="sk pictures/s5.webp" alt="Trending">
+            </div>
+            <div class="trending-slide-content">
+              <h1 class="sk-rate">₹1,00,000</h1>
+              <div class="trending-slide-content-bottom">
+                <h2 class="sk-days">10days left</h2>
+              </div>
+            </div>
+          </div>
+          <!------slide end------>
+          <!------ slide start------>
+          <div class="swiper-slide trending-slide">
+            <div class="trending-slide-img">
+              <img src="sk pictures/s6.jpg" alt="Trending">
+            </div>
+            <div class="trending-slide-content">
+              <h1 class="sk-rate">₹1,00,000</h1>
+              <div class="trending-slide-content-bottom">
+                <h2 class="sk-days">10days left</h2>
+              </div>
+            </div>
+          </div>
+          <!------slide end------>
+          <!------ slide start------>
+          <div class="swiper-slide trending-slide">
+            <div class="trending-slide-img">
+              <img src="sk pictures/s7.webp" alt="Trending">
+            </div>
+            <div class="trending-slide-content">
+              <h1 class="sk-rate">₹1,00,000</h1>
+              <div class="trending-slide-content-bottom">
+                <h2 class="sk-days">10days left</h2>
+              </div>
+            </div>
+          </div>
+          <!------slide end------>
+          <!------ slide start------>
+          <div class="swiper-slide trending-slide">
+            <div class="trending-slide-img">
+              <img src="sk pictures/s8.jpg" alt="Trending">
+            </div>
+            <div class="trending-slide-content">
+              <h1 class="sk-rate">₹1,00,000</h1>
+              <div class="trending-slide-content-bottom">
+                <h2 class="sk-days">10days left</h2>
+              </div>
+            </div>
+          </div>
+          <!------slide end------>
+          <!------ slide start------>
+          <div class="swiper-slide trending-slide">
+            <div class="trending-slide-img">
+              <img src="sk pictures/s9.webp" alt="Trending">
+            </div>
+            <div class="trending-slide-content">
+              <h1 class="sk-rate">₹1,00,000</h1>
+              <div class="trending-slide-content-bottom">
+                <h2 class="sk-days">10days left</h2>
+              </div>
+            </div>
+          </div>
+          <!------slide end------>
+          <!------ slide start------>
+          <div class="swiper-slide trending-slide">
+            <div class="trending-slide-img">
+              <img src="sk pictures/s10.jpg" alt="Trending">
+            </div>
+            <div class="trending-slide-content">
+              <h1 class="sk-rate">₹1,00,000</h1>
+              <div class="trending-slide-content-bottom">
+                <h2 class="sk-days">10days left</h2>
+              </div>
+            </div>
+          </div>
+          <!------slide end------>
+        
+        </div>
+
+        <div class="trending-slider-control">
+          <div class="swiper-button-prev slider-arrow">
+            <ion-icon name="arrow-back-outline"></ion-icon>
+          </div>
+          <div class="swiper-button-next slider-arrow">
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Scripts -->
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+<script src="script.js"></script>
+
+<div class="donation-buttons"></div>
+<div class="donation-btn food-btn">
+  <i class="fas fa-utensils"></i>
+  <span>Food & Hungry</span>
+</div>
+<div class="cards-container">
+<div class="fundraiser-card">
+  <img src="sk pictures/f1.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Saran's Family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/f3.webp" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Suresh's Family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+
+<div class="fundraiser-card">
+  <img src="sk pictures/f4.webp" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Sundar's Family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/f5.webp" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Sudharshan's Family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/f2.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Sridar's Family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+</div>
+
+
+
+<script>
+  // Initial setup
+   currentProgress = 50; // Example: 50% funded
+   totalSupporters = 45;
+
+  document.getElementById('donate-button').addEventListener('click', function() {
+      if (currentProgress < 100) {
+          currentProgress += 10;
+          totalSupporters += 1;
+          updateProgressBar();
+          alert('Thank you for your contribution!');
+      } else {
+          alert('The goal has already been reached!');
+      }
+  });
+
+  document.querySelector('.share-icon').addEventListener('click', function() {
+      alert('Share this fundraiser on your social media!');
+      // Placeholder for share functionality
+  });
+
+  function updateProgressBar() {
+      const progressElement = document.getElementById('progress');
+      const progressLabel = document.getElementById('progress-label');
+      const goalBadge = document.getElementById('goal-badge');
+      const supporterCount = document.getElementById('supporter-count');
+
+      progressElement.style.width = currentProgress + '%';
+      progressLabel.textContent = currentProgress + '% funded';
+      supporterCount.textContent = totalSupporters + ' Supporters';
+
+      if (currentProgress >= 100) {
+          goalBadge.style.display = 'block';
+          progressLabel.textContent = 'Goal Achieved!';
+      }
+  }
+
+  // Initialize progress bar on load
+  window.onload = function() {
+      updateProgressBar();
+  };
+</script>
+
+<div class="donation-buttons"></div>
+<div class="donation-btn btn-medical">
+  <i class="fas fa-heart"></i> <!-- Education Icon -->
+  <span>Medical</span>
+</div>
+<div class="cards-container">
+<div class="fundraiser-card">
+  <img src="sk pictures/m1.avif" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for karthik's family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+
+<div class="fundraiser-card">
+  <img src="sk pictures/m2.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for kumar's family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/m3.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for kathir's family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/m4.webp" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for karthikeyan's family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/m5.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for kumari's family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+</div>
+
+
+
+<script>
+  // Initial setup
+   currentProgress = 50; // Example: 50% funded
+   totalSupporters = 45;
+
+  document.getElementById('donate-button').addEventListener('click', function() {
+      if (currentProgress < 100) {
+          currentProgress += 10;
+          totalSupporters += 1;
+          updateProgressBar();
+          alert('Thank you for your contribution!');
+      } else {
+          alert('The goal has already been reached!');
+      }
+  });
+
+  document.querySelector('.share-icon').addEventListener('click', function() {
+      alert('Share this fundraiser on your social media!');
+      // Placeholder for share functionality
+  });
+
+  function updateProgressBar() {
+      const progressElement = document.getElementById('progress');
+      const progressLabel = document.getElementById('progress-label');
+      const goalBadge = document.getElementById('goal-badge');
+      const supporterCount = document.getElementById('supporter-count');
+
+      progressElement.style.width = currentProgress + '%';
+      progressLabel.textContent = currentProgress + '% funded';
+      supporterCount.textContent = totalSupporters + ' Supporters';
+
+      if (currentProgress >= 100) {
+          goalBadge.style.display = 'block';
+          progressLabel.textContent = 'Goal Achieved!';
+      }
+  }
+
+  // Initialize progress bar on load
+  window.onload = function() {
+      updateProgressBar();
+  };
+</script>
+
+
+<div class="donation-buttons"></div>
+<div class="donation-btn btn-education">
+  <i class="fas fa-graduation-cap"></i> <!-- Education Icon -->
+  <span>Education</span>
+</div>
+<div class="cards-container">
+<div class="fundraiser-card">
+  <img src="sk pictures/e1.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Raveena's Education</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/e2.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Ramya's Education</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/e3.jfif" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Reethika's Education</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/e4.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Rathika's Education</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/e5.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Ranjeeni's Education</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+</div>
+
+
+
+<script>
+  // Initial setup
+   currentProgress = 50; // Example: 50% funded
+   totalSupporters = 45;
+
+  document.getElementById('donate-button').addEventListener('click', function() {
+      if (currentProgress < 100) {
+          currentProgress += 10;
+          totalSupporters += 1;
+          updateProgressBar();
+          alert('Thank you for your contribution!');
+      } else {
+          alert('The goal has already been reached!');
+      }
+  });
+
+  document.querySelector('.share-icon').addEventListener('click', function() {
+      alert('Share this fundraiser on your social media!');
+      // Placeholder for share functionality
+  });
+
+  function updateProgressBar() {
+      const progressElement = document.getElementById('progress');
+      const progressLabel = document.getElementById('progress-label');
+      const goalBadge = document.getElementById('goal-badge');
+      const supporterCount = document.getElementById('supporter-count');
+
+      progressElement.style.width = currentProgress + '%';
+      progressLabel.textContent = currentProgress + '% funded';
+      supporterCount.textContent = totalSupporters + ' Supporters';
+
+      if (currentProgress >= 100) {
+          goalBadge.style.display = 'block';
+          progressLabel.textContent = 'Goal Achieved!';
+      }
+  }
+
+  // Initialize progress bar on load
+  window.onload = function() {
+      updateProgressBar();
+  };
+</script>
+
+<div class="donation-buttons"></div>
+<div class="donation-btn btn-disabled">
+  <i class="fas fa-wheelchair"></i>
+  <span>Disabled person</span>
+</div>
+<div class="cards-container">
+<div class="fundraiser-card">
+  <img src="sk pictures/d1.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Amir's Family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/d2.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Abinash's Family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/d3.jpeg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Ajith's Family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/d4.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Akash's Family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+
+<div class="fundraiser-card">
+  <img src="sk pictures/d5.jpg" alt="Fundraiser Image">
+  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
+  <h2>Help Fund for Arun's Family</h2>
+  <div class="milestones">
+    <div>
+      <i class="share-icon">🔗</i> <!-- Share Icon -->
+      <span id="share-text">Share</span>
+  </div>
+      <div>
+          <i class="comment-icon">💬</i> <!-- Comment Icon -->
+          <span>33 Comments</span>
+      </div>
+  </div>
+  <div class="supporters">
+    <span>₹1,98,000 Required</span>
+      <div>
+        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
+        <span id="days-left">35 Days Left</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+  </div>
+  <div class="progress-label" id="progress-label">50% funded</div>
+  <div class="donate">
+    <div>
+      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
+      <span id="supporter-count">45 Supporters</span>
+  </div>
+      <button id="donate-button">Help Now</button>
+  </div>
+</div>
+</div>
+
+
+
+<script>
+  // Initial setup
+  let currentProgress = 50; // Example: 50% funded
+  let totalSupporters = 45;
+
+  document.getElementById('donate-button').addEventListener('click', function() {
+      if (currentProgress < 100) {
+          currentProgress += 10;
+          totalSupporters += 1;
+          updateProgressBar();
+          alert('Thank you for your contribution!');
+      } else {
+          alert('The goal has already been reached!');
+      }
+  });
+
+  document.querySelector('.share-icon').addEventListener('click', function() {
+      alert('Share this fundraiser on your social media!');
+      // Placeholder for share functionality
+  });
+
+  function updateProgressBar() {
+      const progressElement = document.getElementById('progress');
+      const progressLabel = document.getElementById('progress-label');
+      const goalBadge = document.getElementById('goal-badge');
+      const supporterCount = document.getElementById('supporter-count');
+
+      progressElement.style.width = currentProgress + '%';
+      progressLabel.textContent = currentProgress + '% funded';
+      supporterCount.textContent = totalSupporters + ' Supporters';
+
+      if (currentProgress >= 100) {
+          goalBadge.style.display = 'block';
+          progressLabel.textContent = 'Goal Achieved!';
+      }
+  }
+
+  // Initialize progress bar on load
+  window.onload = function() {
+      updateProgressBar();
+  };
+</script>
+
+
+<div class="bottom-nav">
+  <div class="nav-icon"><a href="index.html" title="Home"><i class="fa-solid fa-house"></i></a></div>
+  <div class="nav-icon"><a href="reels.html" title="Reels"><i class="fa-solid fa-radio"></i></a></div>
+  <div class="nav-icon"><a href="maker.html" title="Makers"><i class="fa fa-star"></i></a></div>
+  <div class="nav-icon"><a href="reward.html" title="Rewards"><i class="fa-solid fa-trophy"></i></a></div>
+  <div class="nav-icon"><a href="profile.html" title="Profile"><img id="bottomNavProfileImage" src="sk pictures\k6.png" alt="Profile Icon"></a></div>
+</div>
+<script>
+
+  // Load saved profile image from localStorage on page load
+      const savedImage = localStorage.getItem('profileImage');
+      if (savedImage) {
+          document.getElementById('bottomNavProfileImage').src = savedImage;
+      }
+
+</script>
+
+
+    
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ebee;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-container {
+            max-width: 500px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .chat-header h1 {
+            flex-grow: 1;
+            text-align: center;
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .new-message-btn {
+            background-color: white;
+            color: #007bff;
+            border: none;
+            font-size: 20px;
+            padding: 0;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .new-message-btn:hover {
+            background-color: #e7f0ff;
+        }
+
+        .search-container {
+            padding: 15px;
+            padding-left: 5px;
+            padding-right: 30px;
+            background-color: #f1f1f1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container i {
+            position: absolute;
+            right: 28rem;
+            top: 7.1rem;
+            font-size: 16px;
+            color: #343a40;
+        }
+
+        /* Responsive Navigation */
+        @media (max-width: 768px) {
+            .search-container i {
+                position: absolute;
+                top: 7.1rem;
+                right: 10px;
+                font-size: 16px;
+                color: #343a40;
+            }
+        }
+
+        .todays-hero-container {
+            padding: 15px;
+            padding-top: 10px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .todays-hero-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .hero-list {
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .hero-item {
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .hero-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #007bff;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+            margin-bottom: 5px;
+        }
+
+        .hero-name {
+            font-size: 12px;
+            color: #333;
+        }
+
+        .chat-list {
+            padding: 15px;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background-color: white;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .chat-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+            margin-right: 15px;
+            border: 2px solid #007bff;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-details {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .chat-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+
+        .chat-message-preview {
+            font-size: 14px;
+            color: #777;
+            margin: 5px 0 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <header class="chat-header">
+            <h1>Messages</h1>
+            <button class="new-message-btn">+</button>
+        </header>
+
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder=" Search chats...">
+            <i class="fa fa-search"></i>
+        </div>
+
+        <div class="todays-hero-container">
+            <div class="todays-hero-title">Today's Hero</div>
+            <div class="hero-list" id="heroList">
+                <!-- Dynamic hero items will be inserted here -->
+            </div>
+        </div>
+
+        <div class="chat-list" id="chatList">
+            <!-- Dynamic chat items will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProfilesIntoChatList();
+            loadTodaysHeroes();
+
+            document.querySelector('.new-message-btn').addEventListener('click', function() {
+                alert('New message functionality to be implemented');
+            });
+
+            document.querySelector('.search-bar').addEventListener('input', function(e) {
+                const searchQuery = e.target.value.toLowerCase();
+                const chatItems = document.querySelectorAll('.chat-item');
+
+                chatItems.forEach(item => {
+                    const name = item.querySelector('.chat-name').textContent.toLowerCase();
+                    if (name.includes(searchQuery)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        function loadProfilesIntoChatList() {
+            const chatList = document.getElementById('chatList');
+
+            const profileName = localStorage.getItem('profileName') || 'Default Name';
+            let profileImage = localStorage.getItem('profileImage') || 'default-avatar.png';
+
+            const img = new Image();
+            img.src = profileImage;
+            img.onerror = () => profileImage = 'default-avatar.png';
+
+            chatList.innerHTML = `
+                <div class="chat-item" onclick="navigateToChat('${profileName}')">
+                    <div class="chat-avatar" style="background-image: url('${profileImage}');"></div>
+                    <div class="chat-details">
+                        <p class="chat-name">${profileName}</p>
+                        <p class="chat-message-preview">Last message preview...</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadTodaysHeroes() {
+            const heroList = document.getElementById('heroList');
+
+            // Example hero data (you can replace this with dynamic data)
+            const heroes = [
+                { name: 'Mr Beast', image: 'hero1.png' },
+                { name: 'Harsha Shai', image: 'hero2.png' },
+                { name: 'Lawrance', image: 'hero3.png' },
+                { name: 'KPY Bala', image: 'hero1.png' },
+                { name: 'Surya', image: 'hero2.png' },
+                { name: 'Karthik', image: 'hero3.png' },
+                { name: 'Karthik', image: 'hero3.png' }
+            ];
+
+            heroList.innerHTML = heroes.map(hero => `
+                <div class="hero-item">
+                    <div class="hero-avatar" style="background-image: url('${hero.image}');"></div>
+                    <div class="hero-name">${hero.name}</div>
+                </div>
+            `).join('');
+        }
+
+        function navigateToChat(userName) {
+            window.location.href = `text.html?user=${encodeURIComponent(userName)}`;
+        }
+    </script>
+</body>
+</html>

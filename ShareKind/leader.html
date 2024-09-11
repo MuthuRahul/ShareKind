@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .leaderboard-container {
+            margin-top: 130px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            padding: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .leaderboard-container:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-around;
+            background-color: #007bff;
+            padding: 10px 0;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .leaderboard-header div {
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            flex: 1;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .leaderboard-header div.active {
+            background-color: #0056b3;
+            border-radius: 15px;
+            padding: 10px 0;
+            transform: scale(1.05);
+        }
+        .leaderboard-body {
+            padding: 10px 20px;
+        }
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .leaderboard-table th, .leaderboard-table td {
+            text-align: left;
+            padding: 10px;
+        }
+        .leaderboard-table th {
+            color: #6c757d;
+            font-size: 12px;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s ease;
+        }
+        .leaderboard-table th:hover {
+            background-color: #e2e6ea;
+        }
+        .leaderboard-table td {
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .leaderboard-table tr:hover td {
+            background-color: #e9ecef;
+        }
+        .leaderboard-table tr:not(:last-child) {
+            border-bottom: 1px solid #e9ecef;
+        }
+        .rank-icon {
+            margin-right: 15px;
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+        .rank-1 {
+            color: gold;
+        }
+        .rank-2 {
+            color: silver;
+        }
+        .rank-3 {
+            color: #cd7f32;
+        }
+        .leaderboard-rank {
+            text-align: center;
+            width: 15%;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            width: 60%;
+            transition: transform 0.3s ease;
+        }
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+        .user-info:hover .profile-img {
+            transform: scale(1.1);
+        }
+        .user-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .donations {
+            text-align: right;
+            width: 25%;
+        }
+    </style>
+</head>
+<body>
+    <div class="leaderboard-container">
+        <div class="leaderboard-header">
+            <div id="topDonorsTab" class="active">💰 Top Donors</div>
+            <div id="mostActiveTab">👥 Most Active</div>
+        </div>
+        <div class="leaderboard-body">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>User</th>
+                        <th>Donations</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardContent">
+                    <!-- Dynamic content will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLeaderboardContent('topDonors');
+        });
+
+        document.getElementById('topDonorsTab').addEventListener('click', function() {
+            activateTab('topDonorsTab');
+            updateLeaderboardContent('topDonors');
+        });
+
+        document.getElementById('mostActiveTab').addEventListener('click', function() {
+            activateTab('mostActiveTab');
+            updateLeaderboardContent('mostActive');
+        });
+
+        function activateTab(tabId) {
+            document.getElementById('topDonorsTab').classList.remove('active');
+            document.getElementById('mostActiveTab').classList.remove('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function updateLeaderboardContent(type) {
+            const leaderboardContent = document.getElementById('leaderboardContent');
+            let content = '';
+
+            const topDonorsData = [
+                { rank: 1, name: 'Alice', amount: '$1200', rankClass: 'rank-1', icon: '🥇', profile: 'https://via.placeholder.com/40' },
+                { rank: 2, name: 'Bob', amount: '$950', rankClass: 'rank-2', icon: '🥈', profile: 'https://via.placeholder.com/40' },
+                { rank: 3, name: 'Charlie', amount: '$800', rankClass: 'rank-3', icon: '🥉', profile: 'https://via.placeholder.com/40' },
+                { rank: 4, name: 'Dave', amount: '$700', profile: 'https://via.placeholder.com/40' },
+                { rank: 5, name: 'Eve', amount: '$600', profile: 'https://via.placeholder.com/40' },
+                { rank: 6, name: 'Frank', amount: '$500', profile: 'https://via.placeholder.com/40' },
+                { rank: 7, name: 'Grace', amount: '$450', profile: 'https://via.placeholder.com/40' },
+                { rank: 8, name: 'Hank', amount: '$400', profile: 'https://via.placeholder.com/40' },
+                { rank: 9, name: 'Ivy', amount: '$350', profile: 'https://via.placeholder.com/40' },
+                { rank: 10, name: 'Jack', amount: '$300', profile: 'https://via.placeholder.com/40' },
+            ];
+
+            const mostActiveData = [
+                { rank: 1, name: 'Laura', amount: '200 comments', rankClass: 'rank-1', icon: '🥇', profile: 'https://via.placeholder.com/40' },
+                { rank: 2, name: 'Mike', amount: '180 comments', rankClass: 'rank-2', icon: '🥈', profile: 'https://via.placeholder.com/40' },
+                { rank: 3, name: 'Nina', amount: '150 comments', rankClass: 'rank-3', icon: '🥉', profile: 'https://via.placeholder.com/40' },
+                { rank: 4, name: 'Oscar', amount: '140 comments', profile: 'https://via.placeholder.com/40' },
+                { rank: 5, name: 'Pam', amount: '130 comments', profile: 'https://via.placeholder.com/40' },
+                { rank: 6, name: 'Quinn', amount: '120 comments', profile: 'https://via.placeholder.com/40' },
+                { rank: 7, name: 'Rob', amount: '110 comments', profile: 'https://via.placeholder.com/40' },
+                { rank: 8, name: 'Sara', amount: '100 comments', profile: 'https://via.placeholder.com/40' },
+                { rank: 9, name: 'Tom', amount: '90 comments', profile: 'https://via.placeholder.com/40' },
+                { rank: 10, name: 'Uma', amount: '80 comments', profile: 'https://via.placeholder.com/40' },
+            ];
+
+            const data = type === 'topDonors' ? topDonorsData : mostActiveData;
+
+            data.forEach(item => {
+                content += `
+                    <tr>
+                        <td class="leaderboard-rank ${item.rankClass}">
+                            ${item.icon || item.rank}
+                        </td>
+                        <td class="user-info">
+                            <img src="${item.profile}" alt="${item.name}" class="profile-img">
+                            <span class="user-name">${item.name}</span>
+                        </td>
+                        <td class="donations">
+                            ${item.amount}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            leaderboardContent.innerHTML = content;
+        }
+    </script>
+</body>
+</html>
