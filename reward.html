@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareKind Rewards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <style>
+        /* General Styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #007bff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .help-button {
+            background-color: transparent;
+            border: none;
+            font-weight: bold;
+            font-size: 15px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .help-button i {
+            margin-left: 10px;
+        }
+
+        .profile-section {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .posts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .post-item {
+            width: 400px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-item:hover {
+            transform: scale(1.02);
+        }
+
+        .post-item img {
+            width: 100%;
+            height: 300px; /* Instagram-like aspect ratio */
+            object-fit: cover;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+        }
+
+        .post-actions i {
+            cursor: pointer;
+            color: #007bff;
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .post-actions i:hover {
+            color: #0056b3;
+        }
+
+        .post-description {
+            padding: 10px;
+            font-size: 14px;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Limit description to 3 lines */
+            -webkit-box-orient: vertical;
+        }
+
+        .profile {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+        }
+
+        .profile-details {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-pic img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-details h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .support-button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .main-buttons {
+                flex-direction: column;
+            }
+
+            .main-buttons button {
+                width: 100%;
+            }
+
+            .posts-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .post-item {
+                width: 90%;
+            }
+        }
+
+        .bottom-nav {
+            position: fixed;
+            align-items: center;
+            bottom: 0;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-around;
+            background-color: #ffffff;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+        }
+
+        .bottom-nav img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .bottom-nav .nav-icon {
+            font-size: 24px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        /* Responsive Navigation */
+        @media (max-width: 768px) {
+            .header h1 {
+                padding-right: 5px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ShareKind</h1>
+        <button class="help-button" aria-label="Help">
+            Help <i class="fa-regular fa-circle-question"></i>
+        </button>
+    </header>
+
+    <main>
+        <section class="profile-section">
+            <div id="postsContainer" class="posts-container">
+                <!-- Images will be dynamically added here -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // Open the IndexedDB database
+    const dbRequest = indexedDB.open('ShareKindDB', 3);
+
+    dbRequest.onerror = function(event) {
+        console.error('Database error:', event.target.errorCode);
+    };
+
+    dbRequest.onsuccess = function(event) {
+        const db = event.target.result;
+        console.log('Database opened successfully');
+        loadSavedPosts(db);
+    };
+
+    dbRequest.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains('posts')) {
+            db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
+        }
+    };
+
+    function loadSavedPosts(db) {
+        const transaction = db.transaction(['posts'], 'readonly');
+        const objectStore = transaction.objectStore('posts');
+        const request = objectStore.getAll();
+
+        request.onsuccess = function(event) {
+            const posts = event.target.result;
+            posts.forEach(post => {
+                if (post.type === 'image') {
+                    addPostToGrid(post);
+                }
+            });
+        };
+
+        request.onerror = function(event) {
+            console.error('Failed to load posts:', event.target.errorCode);
+        };
+    }
+
+    function addPostToGrid(post) {
+        const postsContainer = document.getElementById('postsContainer');
+        const postItem = document.createElement('div');
+        postItem.classList.add('post-item');
+
+        if (post.type === 'image') {
+            // Add profile section at the top
+            const profileSection = document.createElement('div');
+            profileSection.classList.add('profile');
+
+            const profileDetails = document.createElement('div');
+            profileDetails.classList.add('profile-details');
+
+            const profilePic = document.createElement('div');
+            profilePic.classList.add('profile-pic');
+            const profileImg = document.createElement('img');
+            profileImg.src = localStorage.getItem('profileImage') || 'default-profile-pic.png'; // Fallback to default image
+            profileImg.alt = 'Profile Picture';
+            profilePic.appendChild(profileImg);
+
+            const profileName = document.createElement('h2');
+            profileName.textContent = localStorage.getItem('profileName') || 'Profile Name'; // Fallback to default name
+            profileDetails.appendChild(profilePic);
+            profileDetails.appendChild(profileName);
+
+            const supportButton = document.createElement('button');
+            supportButton.classList.add('support-button');
+            supportButton.textContent = 'Support';
+
+            profileSection.appendChild(profileDetails);
+            profileSection.appendChild(supportButton);
+            postItem.appendChild(profileSection);
+
+            // Add image
+            const img = document.createElement('img');
+            img.src = post.content;  // Use post.content if this field holds the image URL
+            img.alt = 'Post Image';  // Added alt attribute for accessibility
+            postItem.appendChild(img);
+
+            // Add post actions below the image
+            const postActions = document.createElement('div');
+            postActions.classList.add('post-actions');
+
+            // Create and append action icons
+            const likeIcon = document.createElement('i');
+            likeIcon.classList.add('fa-regular', 'fa-heart');
+            postActions.appendChild(likeIcon);
+
+            const commentIcon = document.createElement('i');
+            commentIcon.classList.add('fa-regular', 'fa-comment');
+            postActions.appendChild(commentIcon);
+
+            const shareIcon = document.createElement('i');
+            shareIcon.classList.add('fa-solid', 'fa-link');
+            postActions.appendChild(shareIcon);
+
+            const starIcon = document.createElement('i');
+            starIcon.classList.add('fa-regular', 'fa-star');
+            postActions.appendChild(starIcon);
+
+            postItem.appendChild(postActions);
+
+            // Add description below the actions
+            const postDescription = document.createElement('div');
+            postDescription.classList.add('post-description');
+            postDescription.textContent = post.description || 'No description available';
+            postItem.appendChild(postDescription);
+
+            // Append post item to the container
+            postsContainer.appendChild(postItem);
+        }
+    }
+});
+    </script>
+    
+<div class="bottom-nav">
+    <div class="nav-icon"><a href="index.html" title="Home"><i class="fa-solid fa-house"></i></a></div>
+    <div class="nav-icon"><a href="reels.html" title="Reels"><i class="fa-solid fa-radio"></i></a></div>
+    <div class="nav-icon"><a href="maker.html" title="Makers"><i class="fa fa-star"></i></a></div>
+    <div class="nav-icon"><a href="reward.html" title="Rewards"><i class="fa-solid fa-trophy"></i></a></div>
+    <div class="nav-icon"><a href="profile.html" title="Profile"><img id="bottomNavProfileImage" src="sk pictures\k6.png" alt="Profile Icon"></a></div>
+  </div>
+  <script>
+  
+    // Load saved profile image from localStorage on page load
+        const savedImage = localStorage.getItem('profileImage');
+        if (savedImage) {
+            document.getElementById('bottomNavProfileImage').src = savedImage;
+        }
+  
+  </script>
+</body>
+</html>

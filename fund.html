@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Fundraiser - ShareKind</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        h2 {
+            color: #4a90e2;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        /* Step Indicators */
+        .step-indicators {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .step {
+            width: 30px;
+            height: 30px;
+            margin: 0 10px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            line-height: 30px;
+            text-align: center;
+            color: #aaa;
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+        }
+        .step.active {
+            border-color: #4a90e2;
+            color: #fff;
+            background: #4a90e2;
+        }
+        .progress-bar {
+            background: #4a90e2;
+            height: 4px;
+            width: 0;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .form-group label {
+            display: block;
+            color: #555;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #4a90e2;
+        }
+
+        /* Navigation buttons */
+        .nav-btns {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .nav-btns button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            color: white;
+            background: #4a90e2;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .nav-btns button:hover {
+            background: #357abd;
+            transform: scale(1.05);
+        }
+        .nav-btns button.disabled {
+            background: #ddd;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        /* Success Message */
+        .success-message {
+            color: #4caf50;
+            font-size: 20px;
+            margin-top: 30px;
+            font-weight: 600;
+            display: none;
+        }
+
+        /* Hide steps by default */
+        .step-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .step-content.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Media Display */
+        .media-preview {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .media-preview img, .media-preview video {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Start Fundraiser</h2>
+
+    <!-- Step Indicators -->
+    <div class="step-indicators">
+        <div class="step active" id="step1" role="tab" aria-controls="step1-content">1</div>
+        <div class="step" id="step2" role="tab" aria-controls="step2-content">2</div>
+        <div class="step" id="step3" role="tab" aria-controls="step3-content">3</div>
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Step 1: Patient Information -->
+    <div class="step-content active" id="step1-content">
+        <div class="form-group">
+            <label for="patientName">Full Name:</label>
+            <input type="text" id="patientName" placeholder="Enter patient's full name" required>
+        </div>
+        <div class="form-group">
+            <label for="issue">What Issue?</label>
+            <textarea id="issue" rows="3" placeholder="Describe the issue" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input type="text" id="location" placeholder="Enter address" required>
+        </div>
+    </div>
+
+    <!-- Step 2: Fundraiser Details -->
+    <div class="step-content" id="step2-content">
+        <div class="form-group">
+            <label for="title">Fundraiser Title:</label>
+            <input type="text" id="title" placeholder="Enter fundraiser title" required>
+        </div>
+        <div class="form-group">
+            <label for="goal">Goal Amount:</label>
+            <input type="number" id="goal" placeholder="Enter goal amount" required>
+        </div>
+        <div class="form-group">
+            <label for="upload">Upload Image or Video:</label>
+            <input type="file" id="upload" accept="image/,video/" onchange="previewMedia()">
+        </div>
+    </div>
+
+    <!-- Step 3: Confirmation -->
+    <div class="step-content" id="step3-content">
+        <h3>Confirmation</h3>
+        <p id="confirmName"></p>
+        <p id="confirmIssue"></p>
+        <p id="confirmLocation"></p>
+        <p id="confirmTitle"></p>
+        <p id="confirmGoal"></p>
+        <div class="media-preview" id="mediaPreview"></div>
+        <button id="submitBtn" onclick="finishStep()">Finish</button>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-btns">
+        <button id="prevBtn" class="disabled" onclick="prevStep()">Previous</button>
+        <button id="nextBtn" onclick="nextStep()">Next</button>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        Your fundraiser is successfully created!
+    </div>
+</div>
+
+<script>
+    let currentStep = 1;
+
+    function updateSteps() {
+        // Update the progress bar
+        const progressBar = document.getElementById('progressBar');
+        progressBar.style.width = (currentStep - 1) / 2 * 100 + '%';
+
+        // Update the step indicators
+        for (let i = 1; i <= 3; i++) {
+            document.getElementById('step' + i).classList.toggle('active', i <= currentStep);
+        }
+
+        // Show the correct step content
+        for (let i = 1; i <= 3; i++) {
+            document.getElementById('step' + i + '-content').classList.toggle('active', i === currentStep);
+        }
+
+        // Update the navigation buttons
+        document.getElementById('prevBtn').classList.toggle('disabled', currentStep === 1);
+        document.getElementById('nextBtn').classList.toggle('disabled', currentStep === 3);
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+    }
+
+    function prevStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            updateSteps();
+        }
+    }
+
+    function nextStep() {
+        if (currentStep < 3) {
+            currentStep++;
+            updateSteps();
+        } else {
+            // On the last step, show confirmation
+            document.getElementById('confirmName').textContent = Name: ${document.getElementById('patientName').value};
+            document.getElementById('confirmIssue').textContent = Issue: ${document.getElementById('issue').value};
+            document.getElementById('confirmLocation').textContent = Location: ${document.getElementById('location').value};
+            document.getElementById('confirmTitle').textContent = Title: ${document.getElementById('title').value};
+            document.getElementById('confirmGoal').textContent = Goal: ${document.getElementById('goal').value};
+
+            // Handle media preview
+            const mediaPreview = document.getElementById('mediaPreview');
+            mediaPreview.innerHTML = '';
+            const fileInput = document.getElementById('upload').files[0];
+            if (fileInput) {
+                const mediaElement = document.createElement(fileInput.type.startsWith('video') ? 'video' : 'img');
+                mediaElement.src = URL.createObjectURL(fileInput);
+                mediaElement.controls = fileInput.type.startsWith('video');
+                mediaPreview.appendChild(mediaElement);
+            }
+
+            updateSteps();
+        }
+    }
+
+    function finishStep() {
+        document.getElementById('successMessage').style.display = 'block';
+        setTimeout(() => {
+            document.querySelector('.container').reset(); // Reset form if needed
+            document.getElementById('successMessage').style.display = 'none';
+            currentStep = 1;
+            updateSteps();
+        }, 2000);
+    }
+
+    function previewMedia() {
+        const fileInput = document.getElementById('upload').files[0];
+        if (fileInput) {
+            const mediaElement = document.createElement(fileInput.type.startsWith('video') ? 'video' : 'img');
+            mediaElement.src = URL.createObjectURL(fileInput);
+            mediaElement.controls = fileInput.type.startsWith('video');
+            document.getElementById('mediaPreview').innerHTML = '';
+            document.getElementById('mediaPreview').appendChild(mediaElement);
+        }
+    }
+
+    updateSteps();
+</script>
+
+</body>
+</html>
