@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareKind Reels</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/solid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .reels-page {
+            width: 100%;
+            height: 100%;
+            max-width: 400px;
+            max-height: 900px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .reel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 95%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: pointer;
+            background: #000;
+        }
+
+        .reel video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .reel-header {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            color: #fff;
+        }
+
+        .reel-header img {
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+        }
+
+        .reel-header span {
+            font-size: 16px;
+            margin-right: 5px;
+        }
+
+        .reel-header .support-button {
+            background: none;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            opacity: 0.8;
+        }
+
+        .reel-header .support-button:hover {
+            background-color: #fff;
+            color: #000;
+            opacity: 1;
+        }
+
+        .reel-actions {
+            position: absolute;
+            right: 10px;
+            bottom: 80px;
+            gap: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+        }
+
+        .action-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 8px;
+            transition: transform 0.3s ease, color 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .action-button:hover {
+            color: #007bff;
+            transform: scale(1.2);
+            opacity: 1;
+        }
+
+        .reel-actions span {
+            color: #fff;
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .reel-actions span:hover {
+            color: white;
+        }
+
+        .liked {
+            color: red;
+            transform: scale(1.5);
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .donate-container {
+            position: absolute;
+            width: 18rem;
+            height: 30px;
+            bottom: 100px;
+            left: 10px;
+            right: 10px;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .donate-container button {
+            flex: 1;
+            background: none;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+            transition: color 0.4s ease, border-color 0.4s ease;
+            opacity: 0.8;
+        }
+
+        .donate-container button:hover {
+            color: #000;
+            border-color: #000;
+            background-color: #fff;
+            opacity: 1;
+        }
+
+        .donate-container button:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            transition: left 0.4s ease;
+            z-index: 1;
+        }
+
+        .donate-container button:hover:before {
+            left: 0;
+        }
+
+        .donate-container button span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .donate-container .donate-button i,
+        .donate-container .encourage-button i {
+            font-size: 18px;
+            transition: transform 0.4s ease;
+        }
+
+        .donate-container .donate-button:hover i {
+            animation: moneyAnim 1s ease-in-out;
+        }
+
+        .donate-container .encourage-button:hover i {
+            animation: starAnim 1s ease-in-out;
+        }
+
+        @keyframes moneyAnim {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.5) rotate(360deg);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes starAnim {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .description-container {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.7);
+            max-height: 100px;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            cursor: pointer;
+        }
+
+        .description-container.expanded {
+            max-height: 300px;
+        }
+
+        @media (max-width: 600px) {
+            .reels-page {
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .reels-page {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .bottom-nav {
+            position: fixed;
+            align-items: center;
+            bottom: 0;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-around;
+        }
+        .bottom-nav img {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+        }
+        .bottom-nav .nav-icon {
+            font-size: 18px;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="reels-page" id="reelsPage">
+        <!-- Reels will be dynamically inserted here -->
+        <div id="message" style="color: #fff; display: none;">No reels found</div>
+        <button class="tab-button" onclick="nextReel()">Next Reel</button>
+    </div>
+
+    <!-- FontAwesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    let currentReel = 0;
+
+    function loadSavedReels() {
+        console.log('Loading saved reels...');
+        const dbName = 'ShareKindDB';
+        const request = indexedDB.open(dbName, 3);  // Incremented version number
+
+        request.onerror = function (event) {
+            console.error('IndexedDB error:', event.target.errorCode);
+        };
+
+        request.onsuccess = function (event) {
+            const db = event.target.result;
+            console.log('Database opened successfully');
+            const transaction = db.transaction(['posts'], 'readonly');
+            const postStore = transaction.objectStore('posts');
+
+            // Check if the index exists
+            if (!postStore.indexNames.contains('type')) {
+                console.error('The index "type" does not exist.');
+                return;
+            }
+
+            const reelsCursor = postStore.index('type').openCursor(IDBKeyRange.only('reel'));
+
+            let reelCount = 0;
+            const reelsPage = document.getElementById('reelsPage');
+            if (!reelsPage) {
+                console.error('Reels page element not found');
+                return;
+            }
+            reelsPage.innerHTML = ''; // Clear existing reels
+
+            reelsCursor.onsuccess = function (event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    console.log('Loading reel:', cursor.value);
+                    const reel = document.createElement('div');
+                    reel.classList.add('reel');
+                    reel.style.display = (reelCount === 0) ? 'flex' : 'none';
+
+                    const video = document.createElement('video');
+                    video.src = cursor.value.content;
+                    video.controls = false;
+                    video.loop = true;
+                    reel.appendChild(video);
+
+                    const profile = getProfileData();
+                    const header = document.createElement('div');
+                    header.classList.add('reel-header');
+                    header.innerHTML = `
+                        <img src="${profile.profileImage}" alt="Profile Picture">
+                        <span>${profile.profileName}</span>
+                        <button class="support-button" aria-label="Support">SUPPORT</button>
+                    `;
+                    reel.appendChild(header);
+
+                    const actions = document.createElement('div');
+                    actions.classList.add('reel-actions');
+                    actions.innerHTML = `
+                        <button class="action-button view-button" title="View"><i class="fa-regular fa-eye"></i></button>
+                        <span>20K</span>
+                        <button class="action-button like-button" title="Like"><i class="fa-regular fa-heart"></i></button>
+                        <span>10K</span>
+                        <button class="action-button" title="Comment"><i class="fa-regular fa-comment"></i></button>
+                        <span>5K</span>
+                        <button class="action-button" title="Share"><i class="fa-solid fa-link"></i></button>
+                    `;
+                    reel.appendChild(actions);
+
+                    const donateContainer = document.createElement('div');
+                    donateContainer.classList.add('donate-container');
+                    donateContainer.innerHTML = `
+                        <button class="donate-button" aria-label="Donate">
+                            <span>Donate <i class="fa fa-donate"></i></span>
+                        </button>
+                        <button class="encourage-button" aria-label="Encourage">
+                            <span>Encourage <i class="fa fa-star"></i></span>
+                        </button>
+                    `;
+                    reel.appendChild(donateContainer);
+
+                    const description = document.createElement('div');
+                    description.classList.add('description-container');
+                    description.id = 'descriptionContainer';
+                    description.textContent = 'Small acts, Big impact. Join Rahul in every donation.';
+                    reel.appendChild(description);
+
+                    reelsPage.appendChild(reel);
+                    reel.addEventListener('click', togglePlayPause);
+                    reel.addEventListener('dblclick', likeReel);
+
+                    reelCount++;
+                    cursor.continue();
+                } else {
+                    if (reelCount === 0) {
+                        document.getElementById('message').style.display = 'block';
+                    } else {
+                        document.getElementById('message').style.display = 'none';
+                    }
+                }
+            };
+
+            reelsCursor.onerror = function (event) {
+                console.error('Cursor error:', event.target.errorCode);
+            };
+        };
+
+        request.onupgradeneeded = function (event) {
+            const db = event.target.result;
+            let postStore;
+            if (!db.objectStoreNames.contains('posts')) {
+                console.log('Creating object store');
+                postStore = db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
+            } else {
+                postStore = event.target.transaction.objectStore('posts');
+            }
+
+            // Create the 'type' index if it doesn't exist
+            if (!postStore.indexNames.contains('type')) {
+                postStore.createIndex('type', 'type', { unique: false });
+                console.log('Index "type" created successfully.');
+            }
+        };
+    }
+
+    function togglePlayPause(event) {
+        const video = event.currentTarget.querySelector('video');
+        if (video) {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+    }
+
+    function getProfileData() {
+        return {
+            profileImage: localStorage.getItem('profileImage') || 'default-profile.jpg',
+            profileName: localStorage.getItem('profileName') || 'Default Name'
+        };
+    }
+
+    function nextReel() {
+        const reels = document.querySelectorAll('.reel');
+        if (reels.length === 0) return;
+
+        const currentVideo = reels[currentReel].querySelector('video');
+        if (currentVideo) {
+            currentVideo.pause();
+        }
+
+        reels[currentReel].style.display = 'none';
+
+        currentReel = (currentReel + 1) % reels.length;
+        reels[currentReel].style.display = 'flex';
+
+        const nextVideo = reels[currentReel].querySelector('video');
+        if (nextVideo) {
+            nextVideo.play();
+        }
+    }
+
+    function previousReel() {
+        const reels = document.querySelectorAll('.reel');
+        if (reels.length === 0) return;
+
+        const currentVideo = reels[currentReel].querySelector('video');
+        if (currentVideo) {
+            currentVideo.pause();
+        }
+
+        reels[currentReel].style.display = 'none';
+
+        currentReel = (currentReel - 1 + reels.length) % reels.length;
+        reels[currentReel].style.display = 'flex';
+
+        const prevVideo = reels[currentReel].querySelector('video');
+        if (prevVideo) {
+            prevVideo.play();
+        }
+    }
+
+    function likeReel(event) {
+        const likeButton = event.currentTarget.querySelector('.like-button i');
+        likeButton.classList.add('liked');  // Add a CSS class to animate the heart
+        setTimeout(() => {
+            likeButton.classList.remove('liked');
+        }, 1000);  // Remove the class after 1 second
+    }
+
+    function toggleDescription() {
+        const descriptionContainer = document.getElementById('descriptionContainer');
+        if (descriptionContainer) {
+            descriptionContainer.classList.toggle('expanded');
+        }
+    }
+
+    document.getElementById('descriptionContainer')?.addEventListener('click', toggleDescription);
+
+    let touchstartX = 0;
+    let touchstartY = 0;
+    let touchendX = 0;
+    let touchendY = 0;
+    const swipeThreshold = 50;
+
+    function handleSwipe() {
+        const verticalSwipeUp = touchendY < touchstartY - swipeThreshold;
+        const verticalSwipeDown = touchendY > touchstartY + swipeThreshold;
+        if (verticalSwipeUp) {
+            nextReel();
+        } else if (verticalSwipeDown) {
+            previousReel();
+        }
+    }
+
+    document.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+        touchstartY = e.changedTouches[0].screenY;
+    });
+
+    document.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        touchendY = e.changedTouches[0].screenY;
+        handleSwipe();
+    });
+
+    window.onload = function () {
+        loadSavedReels();
+    };
+});
+    </script>        
+    <div class="bottom-nav">
+        <div class="nav-icon"><a href="index.html" title="Home"><i class="fa-solid fa-house"></i></a></div>
+        <div class="nav-icon"><a href="reels.html" title="Reels"><i class="fa-solid fa-radio"></i></a></div>
+        <div class="nav-icon"><a href="maker.html" title="Makers"><i class="fa fa-star"></i></a></div>
+        <div class="nav-icon"><a href="reward.html" title="Rewards"><i class="fa-solid fa-trophy"></i></a></div>
+        <div class="nav-icon"><a href="profile.html" title="Profile"><img id="bottomNavProfileImage" src="sk pictures\k6.png" alt="Profile Icon"></a></div>
+      </div>
+      <script>
+      
+        // Load saved profile image from localStorage on page load
+            const savedImage = localStorage.getItem('profileImage');
+            if (savedImage) {
+                document.getElementById('bottomNavProfileImage').src = savedImage;
+            }
+      
+      </script>
+</body>
+</html>
