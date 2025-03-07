@@ -8,7 +8,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #007bff;
+    background-color: #28A745;
     padding: 1px 20px;
 }
 .navbar .logo {
@@ -79,7 +79,7 @@ body {
 }
 .swiper-slide .image img{
     width: 100%;
-    height: 200px;
+    height: 550px;
 }
 .swiper .swiper-button-prev, .swiper .swiper-button-next{
     color: #ffffff;
@@ -137,6 +137,7 @@ html {
 ::-webkit-scrollbar-track{
     background: #f9f9f9;
 }
+
 body {
     font-size: 1.5rem;
     background: var(--bg);
@@ -144,12 +145,15 @@ body {
 
 .container {
     max-width: 124rem;
-    padding: 0 1rem;
     margin: 0 auto;
 }
 
 .text-center {
     text-align: center;
+}
+.section-subheading {
+    font-size: 2rem;
+    color: #000;
 }
 
 .section-heading {
@@ -180,7 +184,6 @@ body {
     }
 }
 
-/* Slide and Image Styling */
 .trending-slide {
     width: 37rem;
     height: 42rem;
@@ -188,27 +191,23 @@ body {
     display: flex;
     justify-content: center;
 }
-
-@media (max-width: 500px) {
-    .trending-slide {
+@media (max-width:500px){
+    .tranding-slide{
         width: 28rem !important;
         height: 36rem !important;
     }
-    .trending-slide .trending-slide-img img {
+    .tranding-slide .tranding-slide-img img{
         width: 28rem !important;
         height: 36rem !important;
     }
-}
-
-/* Full image visualization with responsiveness */
+}    
 .trending-slide .trending-slide-img img {
     width: 37rem;
     height: 42rem;
-    object-fit: cover; /* Makes sure image covers the container */
+    object-fit: cover;
     border-radius: 2rem;
 }
 
-/* Slide content overlay */
 .trending-slide .trending-slide-content {
     position: absolute;
     left: 0;
@@ -226,18 +225,15 @@ body {
 
 .trending-slide-content .trending-slide-content-bottom {
     position: absolute;
-    bottom: 10rem;
-    left: 2rem;
+    bottom: 9rem;
+    left: 3rem;
     color: var(--bg);
 }
-
-/* Hide shadows for slider effects */
-.swiper-slide-shadow-left, 
-.swiper-slide-shadow-right {
+.swiper-slide-shadow-left,
+.swiper-slide-shadow-right{
     display: none;
 }
 
-/* Slider controls and pagination */
 .trending-slider-control {
     position: relative;
     bottom: 8rem;
@@ -245,20 +241,25 @@ body {
     align-items: center;
     justify-content: center;
 }
-
 @media (max-width: 990px) {
     .trending-slider-control {
+        position: relative;
         bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
 @media (max-width: 450px) {
     .trending-slider-control {
+        position: relative;
         bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
-
-/* Swiper navigation buttons */
 .trending-slider-control .swiper-button-next,
 .trending-slider-control .swiper-button-prev {
     position: absolute;
@@ -323,7 +324,6 @@ body {
     content: '';
 }
 
-/* Swiper pagination bullets */
 .trending-slider-control .swiper-pagination {
     position: relative;
     width: 15rem;
@@ -337,7 +337,6 @@ body {
 .trending-slider-control .swiper-pagination .swiper-pagination-bullet-active {
     background: var(--primary);
 }
-
 .donation-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -385,7 +384,7 @@ body {
     transition: transform 0.3s, color 0.3s;
 }
 
-.donation-btn span {
+.donation-btn  a {
     display: block;
     margin-top: 10px;
     font-weight: bold;
@@ -405,7 +404,7 @@ body {
     color: #000;
 }
 
-.donation-btn:hover span {
+.donation-btn:hover a {
     color: #333;
 }
 .food-btn { border-color: #FD7E14;}
@@ -441,7 +440,7 @@ body {
         margin-right: 4px;
     }
 
-    .donation-btn span {
+    .donation-btn a {
         font-size: 16px;
     }
 }
