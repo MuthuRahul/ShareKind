@@ -10,24 +10,7 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>ShareKind</title>
-    <style>
-      body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0; }
-      .stories { display: flex; overflow-x: auto; padding: 10px; background-color: #fff; }
-      .story { text-align: center; margin-right: 10px; }
-      .story-img { position: relative; width: 70px; height: 70px; border-radius: 50%; overflow: hidden; border: 2px solid #0095f6; cursor: pointer; }
-      .story-img img { width: 100%; height: 100%; object-fit: cover; }
-      .add-icon { position: absolute; bottom: 0; right: 5px; background-color: #28a745; color: white; width: 20px; height: 20px; border-radius: 50%; text-align: center; line-height: 20px; font-size: 16px; font-weight: bold; }
-      .story p { margin-top: 5px; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 70px; }
-      #uploadInput { display: none; }
-      .uploaded-content { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 10; justify-content: center; align-items: center; cursor: pointer; }
-      .uploaded-content img, .uploaded-content video { max-width: 100%; max-height: 100%; border-radius: 10px; }
-      .uploaded-content video { max-height: 90%; }
-      .close-btn { position: absolute; top: 10px; right: 10px; color: white; font-size: 24px; cursor: pointer; }
-      .delete-btn i { position: absolute; top: 10px; left: 10px; color: white; font-size: 24px; cursor: pointer; }
-      .navigation { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; }
-      .nav-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #fff; margin: 0 5px; cursor: pointer; opacity: 0.5; }
-      .nav-dot.active { opacity: 1; }
-  </style>
+    
 </head>
 <body>
     <div class="navbar">
@@ -42,178 +25,8 @@
             <a href="chat.html"><i class="fa-regular fa-bell"></i></a>
         </div>
     </div>
-
-    <div class="stories">
-      <div class="story">
-          <div class="story-img" id="your-story">
-            <img id="storyProfileImage" src="sk pictures\k6.png" alt="Profile Icon">
-              <div class="add-icon" id="uploadButton">+</div>
-          </div>
-          <p>Story</p>
-      </div>
-  </div>
-  <input type="file" id="uploadInput" accept="image/,video/" multiple>
-  <div class="uploaded-content" id="uploadedContent">
-    <div class="delete-btn" id="deleteBtn"><i class="fa-solid fa-trash"></i>&times;</div>
-      <div class="close-btn" id="closeBtn">&times;</div>
-      <img id="uploadedImage" src="" alt="Uploaded Image">
-      <video controls autoplay id="uploadedVideo">
-          <source id="videoSource" src="" type="video/mp4">
-          Your browser does not support the video tag.
-      </video>
-      <div class="navigation" id="navigation"></div>
-  </div>
-  <script>
-      document.addEventListener('DOMContentLoaded', function () {
-          const uploadButton = document.getElementById('uploadButton');
-          const uploadInput = document.getElementById('uploadInput');
-          const yourStory = document.getElementById('your-story');
-          const uploadedContent = document.getElementById('uploadedContent');
-          const uploadedImage = document.getElementById('uploadedImage');
-          const uploadedVideo = document.getElementById('uploadedVideo');
-          const videoSource = document.getElementById('videoSource');
-          const closeBtn = document.getElementById('closeBtn');
-          const deleteBtn = document.getElementById('deleteBtn');
-          const navigation = document.getElementById('navigation');
-
-          let uploadedFiles = [];
-          let currentIndex = 0;
-          let swapTimeout;
-
-          uploadButton.addEventListener('click', function () {
-              uploadInput.click();
-          });
-
-          uploadInput.addEventListener('change', function () {
-              const newFiles = Array.from(this.files);
-              newFiles.forEach(file => {
-                  uploadedFiles.push({ file, timestamp: Date.now() });
-              });
-              removeExpiredStories();
-              updateNavigation();
-          });
-
-          yourStory.addEventListener('click', function () {
-              if (uploadedFiles.length > 0) {
-                  showUploadedMedia(0);
-              } else {
-  
-              }
-          });
-
-          closeBtn.addEventListener('click', function (event) {
-              event.stopPropagation();
-              uploadedContent.style.display = 'none';
-              clearTimeout(swapTimeout);
-          });
-
-          deleteBtn.addEventListener('click', function (event) {
-            event.stopPropagation();
-            deleteCurrentMedia();
-          });
-
-          uploadedContent.addEventListener('click', function () {
-              clearTimeout(swapTimeout);
-              currentIndex = (currentIndex + 1) % uploadedFiles.length;
-              showUploadedMedia(currentIndex);
-          });
-          // Load saved profile image from localStorage on page load
-          window.onload = function() {
-            const savedImage = localStorage.getItem('profileImage');
-            if (savedImage) {
-              document.getElementById('storyProfileImage').src = savedImage;
-            }
-          };
-
-          function showUploadedMedia(index) {
-              const file = uploadedFiles[index].file;
-              const url = URL.createObjectURL(file);
-
-              if (file.type.startsWith('image/')) {
-                  uploadedImage.setAttribute('src', url);
-                  uploadedImage.style.display = 'block';
-                  uploadedVideo.style.display = 'none';
-                  startAutoSwap(5000); // Swap image after 5 seconds
-              } else if (file.type.startsWith('video/')) {
-                  videoSource.setAttribute('src', url);
-                  uploadedVideo.load();
-                  uploadedVideo.style.display = 'block';
-                  uploadedImage.style.display = 'none';
-                  uploadedVideo.onloadedmetadata = function () {
-                      const duration = Math.min(uploadedVideo.duration * 1000, 10000); // Play video for its duration or max 10 seconds
-                      startAutoSwap(duration);
-                  };
-                  uploadedVideo.play();
-              }
-
-              uploadedContent.style.display = 'flex';
-              currentIndex = index;
-              updateActiveNavDot(index);
-          }
-
-          function updateNavigation() {
-              navigation.innerHTML = '';
-              uploadedFiles.forEach((file, index) => {
-                  const dot = document.createElement('div');
-                  dot.classList.add('nav-dot');
-                  dot.addEventListener('click', (event) => {
-                      event.stopPropagation(); // Prevent parent click event
-                      showUploadedMedia(index);
-                  });
-                  navigation.appendChild(dot);
-              });
-          }
-
-          function updateActiveNavDot(activeIndex) {
-              const dots = document.querySelectorAll('.nav-dot');
-              dots.forEach((dot, index) => {
-                  if (index === activeIndex) {
-                      dot.classList.add('active');
-                  } else {
-                      dot.classList.remove('active');
-                  }
-              });
-          }
-
-          function removeExpiredStories() {
-              const currentTime = Date.now();
-              uploadedFiles = uploadedFiles.filter(({ file, timestamp }) => {
-                  if (currentTime - timestamp < 24 * 60 * 60 * 1000) {
-                      return true;
-                  } else {
-                      URL.revokeObjectURL(URL.createObjectURL(file));
-                      return false;
-                  }
-              });
-
-              updateNavigation();
-          }
-
-          function startAutoSwap(duration) {
-              clearTimeout(swapTimeout); // Clear any existing timeout
-              swapTimeout = setTimeout(() => {
-                  currentIndex = (currentIndex + 1) % uploadedFiles.length;
-                  showUploadedMedia(currentIndex);
-              }, duration);
-          }
-
-          function deleteCurrentMedia() {
-                if (uploadedFiles.length > 0) {
-                    uploadedFiles.splice(currentIndex, 1);
-                    if (uploadedFiles.length > 0) {
-                        currentIndex = Math.min(currentIndex, uploadedFiles.length - 1);
-                        showUploadedMedia(currentIndex);
-                    } else {
-                        uploadedContent.style.display = 'none';
-                    }
-                    updateNavigation();
-                }
-            }
-            setInterval(removeExpiredStories, 60 * 1000); // Check and remove expired stories every minute
-      });
-      </script>
-      
-      <section class="home" id="home">
+    
+    <section class="home" id="home">
         <div class="home-slider">
             <div class="swiper">
                 <!-- Additional required wrapper -->
@@ -221,25 +34,25 @@
                   <!-- Slides -->
                   <div class="swiper-slide">
                     <div class="image">
-                      <img src="sk pictures\k4.jpg" alt="">
+                      <img src="sk pictures\z8.png" alt="">
                     </div>
                   </div>
                   
                   <div class="swiper-slide">
                     <div class="image">
-                      <img src="sk pictures\k3.jpg" alt="">
+                      <img src="sk pictures\z2.png" alt="">
                     </div>
                   </div>
                   
                   <div class="swiper-slide">
                     <div class="image">
-                      <img src="sk pictures\k2.jpg" alt="">
+                      <img src="sk pictures\z9.webp" alt="">
                     </div>
                   </div>
                   
                   <div class="swiper-slide">
                     <div class="image">
-                      <img src="sk pictures\k1.jpg" alt="">
+                      <img src="sk pictures\z10.webp" alt="">
                     </div>
                     </div>
                 
@@ -275,8 +88,8 @@
 
 <section  id="trending">
     <div class="container">
-      <h3 class="text-center section-subheading">-ShareKind-</h3>
-      <h1 class="text-center section-heading">-Small Acts Big Impacts!-</h1>
+      <h3 class="text-center section-subheading">-Emergency Section-</h3>
+      <h1 class="text-center section-heading">Small Acts Big Impacts!</h1>
     </div>
     <div class="container">
       <div class="swiper trending-slider">
@@ -436,7 +249,7 @@
 <div class="donation-buttons"></div>
 <div class="donation-btn food-btn">
   <i class="fas fa-utensils"></i>
-  <span>Food & Hungry</span>
+  <a href="fund.html">Food & Hungry</a>
 </div>
 <div class="cards-container">
 <div class="fundraiser-card">
@@ -659,7 +472,7 @@
 <div class="donation-buttons"></div>
 <div class="donation-btn btn-medical">
   <i class="fas fa-heart"></i> <!-- Education Icon -->
-  <span>Medical</span>
+  <a href="fund.html">Medical</a>
 </div>
 <div class="cards-container">
 <div class="fundraiser-card">
@@ -883,7 +696,7 @@
 <div class="donation-buttons"></div>
 <div class="donation-btn btn-education">
   <i class="fas fa-graduation-cap"></i> <!-- Education Icon -->
-  <span>Education</span>
+  <a href="fund.html">Education</a>
 </div>
 <div class="cards-container">
 <div class="fundraiser-card">
@@ -1105,7 +918,7 @@
 <div class="donation-buttons"></div>
 <div class="donation-btn btn-disabled">
   <i class="fas fa-wheelchair"></i>
-  <span>Disabled person</span>
+  <a href="fund.html">Disabled person</a>
 </div>
 <div class="cards-container">
 <div class="fundraiser-card">
