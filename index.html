@@ -9,8 +9,9 @@
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" /> 
     <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <title>ShareKind</title>
-    
 </head>
 <body>
     <div class="navbar">
@@ -246,896 +247,1134 @@
 <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 <script src="script.js"></script>
 
-<div class="donation-buttons"></div>
-<div class="donation-btn food-btn">
-  <i class="fas fa-utensils"></i>
-  <a href="fund.html">Food & Hungry</a>
-</div>
-<div class="cards-container">
-<div class="fundraiser-card">
-  <img src="sk pictures/f1.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Saran's Family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
+<div class="wrapper">
+  <div class="image-box">
+      <img id="dynamic-image" src="sk pictures/front1.webp" alt="Smiling Children">
   </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
+  <div class="text-section">
+      <h1 id="dynamic-title" class="main-title">Sharekind - Spreading Kindness Globally</h1>
+      <p id="dynamic-text" class="main-text">Join us in making a difference worldwide. Your support can help those in need across the globe.</p>
+      <button class="action-btn" onclick="displayMessage()">Get Involved</button>
   </div>
 </div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/f3.webp" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Suresh's Family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-
-
-<div class="fundraiser-card">
-  <img src="sk pictures/f4.webp" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Sundar's Family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/f5.webp" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Sudharshan's Family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/f2.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Sridar's Family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-</div>
-
-
 
 <script>
-  // Initial setup
-   currentProgress = 50; // Example: 50% funded
-   totalSupporters = 45;
-
-  document.getElementById('donate-button').addEventListener('click', function() {
-      if (currentProgress < 100) {
-          currentProgress += 10;
-          totalSupporters += 1;
-          updateProgressBar();
-          alert('Thank you for your contribution!');
-      } else {
-          alert('The goal has already been reached!');
-      }
-  });
-
-  document.querySelector('.share-icon').addEventListener('click', function() {
-      alert('Share this fundraiser on your social media!');
-      // Placeholder for share functionality
-  });
-
-  function updateProgressBar() {
-      const progressElement = document.getElementById('progress');
-      const progressLabel = document.getElementById('progress-label');
-      const goalBadge = document.getElementById('goal-badge');
-      const supporterCount = document.getElementById('supporter-count');
-
-      progressElement.style.width = currentProgress + '%';
-      progressLabel.textContent = currentProgress + '% funded';
-      supporterCount.textContent = totalSupporters + ' Supporters';
-
-      if (currentProgress >= 100) {
-          goalBadge.style.display = 'block';
-          progressLabel.textContent = 'Goal Achieved!';
-      }
+  function displayMessage() {
+      alert("Thank you for your support! Together, we can make the world a better place.");
   }
 
-  // Initialize progress bar on load
-  window.onload = function() {
-      updateProgressBar();
-  };
-</script>
-
-<div class="donation-buttons"></div>
-<div class="donation-btn btn-medical">
-  <i class="fas fa-heart"></i> <!-- Education Icon -->
-  <a href="fund.html">Medical</a>
-</div>
-<div class="cards-container">
-<div class="fundraiser-card">
-  <img src="sk pictures/m1.avif" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for karthik's family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-
-
-<div class="fundraiser-card">
-  <img src="sk pictures/m2.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for kumar's family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/m3.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for kathir's family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/m4.webp" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for karthikeyan's family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/m5.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for kumari's family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-</div>
-
-
-
-<script>
-  // Initial setup
-   currentProgress = 50; // Example: 50% funded
-   totalSupporters = 45;
-
-  document.getElementById('donate-button').addEventListener('click', function() {
-      if (currentProgress < 100) {
-          currentProgress += 10;
-          totalSupporters += 1;
-          updateProgressBar();
-          alert('Thank you for your contribution!');
-      } else {
-          alert('The goal has already been reached!');
-      }
-  });
-
-  document.querySelector('.share-icon').addEventListener('click', function() {
-      alert('Share this fundraiser on your social media!');
-      // Placeholder for share functionality
-  });
-
-  function updateProgressBar() {
-      const progressElement = document.getElementById('progress');
-      const progressLabel = document.getElementById('progress-label');
-      const goalBadge = document.getElementById('goal-badge');
-      const supporterCount = document.getElementById('supporter-count');
-
-      progressElement.style.width = currentProgress + '%';
-      progressLabel.textContent = currentProgress + '% funded';
-      supporterCount.textContent = totalSupporters + ' Supporters';
-
-      if (currentProgress >= 100) {
-          goalBadge.style.display = 'block';
-          progressLabel.textContent = 'Goal Achieved!';
-      }
+  // Image and Quote Slideshow
+  const imageList = [
+      "sk pictures/front1.webp",
+      "sk pictures/front2.jpg",
+      "sk pictures/front3.webp",
+      "sk pictures/front4.jpg"
+  ];
+  const titleList = [
+      "Sharekind - Spreading Kindness Globally",
+      "Together, We Can Change the World",
+      "A Small Act of Kindness Can Make a Big Difference",
+      "Every Smile Matters - Join Us Today"
+  ];
+  const textList = [
+      "Join us in making a difference worldwide. Your support can help those in need across the globe.",
+      "Your generosity empowers communities and transforms lives.",
+      "Kindness has no boundaries - be part of the change.",
+      "Spread love, support, and hope across the world."
+  ];
+  
+  let imgIndex = 0;
+  const imgElement = document.getElementById("dynamic-image");
+  const titleElement = document.getElementById("dynamic-title");
+  const textElement = document.getElementById("dynamic-text");
+  
+  function updateContent() {
+      imgIndex = (imgIndex + 1) % imageList.length;
+      imgElement.style.transform = "scale(1.2)";
+      setTimeout(() => {
+          imgElement.src = imageList[imgIndex];
+          imgElement.style.transform = "scale(1)";
+          titleElement.innerText = titleList[imgIndex];
+          textElement.innerText = textList[imgIndex];
+      }, 500);
   }
-
-  // Initialize progress bar on load
-  window.onload = function() {
-      updateProgressBar();
-  };
+  setInterval(updateContent, 2000);
 </script>
 
 
-<div class="donation-buttons"></div>
-<div class="donation-btn btn-education">
-  <i class="fas fa-graduation-cap"></i> <!-- Education Icon -->
-  <a href="fund.html">Education</a>
-</div>
-<div class="cards-container">
-<div class="fundraiser-card">
-  <img src="sk pictures/e1.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Raveena's Education</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
+
+<div class="scroll-container">
+  <div class="scroll-content" id="scrollContent">
+      <div class="category">
+          <div class="icon">🥗</div>
+          <p>Food Donation</p>
+          <div class="quote">
+              <span>"No one has ever</span> 
+              <span>become poor by giving."</span>
+          </div>
+      </div>
+      <div class="category">
+          <div class="icon">🏥</div>
+          <p>Medical Aid</p>
+          <div class="quote">
+              <span>"To save a life is</span> 
+              <span>to save the world."</span>
+          </div>
+      </div>
+      <div class="category">
+          <div class="icon">🎓</div>
+          <p>Education Help</p>
+          <div class="quote">
+              <span>"Education is the most</span> 
+              <span>powerful weapon to change."</span>
+          </div>
+      </div>
+      <div class="category">
+          <div class="icon">♿</div>
+          <p>Supervised Person</p>
+          <div class="quote">
+              <span>"Disability is not inability.</span> 
+              <span>Support makes the difference."</span>
+          </div>
+      </div>
+      <!-- Duplicate for infinite scroll effect -->
+      <div class="category">
+          <div class="icon">🥗</div>
+          <p>Food Donation</p>
+          <div class="quote">
+              <span>"No one has ever</span> 
+              <span>become poor by giving."</span>
+          </div>
+      </div>
+      <div class="category">
+          <div class="icon">🏥</div>
+          <p>Medical Aid</p>
+          <div class="quote">
+              <span>"To save a life is</span> 
+              <span>to save the world."</span>
+          </div>
+      </div>
+      <div class="category">
+          <div class="icon">🎓</div>
+          <p>Education Help</p>
+          <div class="quote">
+              <span>"Education is the most</span> 
+              <span>powerful weapon to change."</span>
+          </div>
+      </div>
+      <div class="category">
+          <div class="icon">♿</div>
+          <p>Supervised Person</p>
+          <div class="quote">
+              <span>"Disability is not inability.</span> 
+              <span>Support makes the difference."</span>
+          </div>
       </div>
   </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
 </div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/e2.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Ramya's Education</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/e3.jfif" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Reethika's Education</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/e4.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Rathika's Education</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/e5.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Ranjeeni's Education</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
-</div>
-</div>
-
-
 
 <script>
-  // Initial setup
-   currentProgress = 50; // Example: 50% funded
-   totalSupporters = 45;
+  let scrollContent = document.getElementById('scrollContent');
 
-  document.getElementById('donate-button').addEventListener('click', function() {
-      if (currentProgress < 100) {
-          currentProgress += 10;
-          totalSupporters += 1;
-          updateProgressBar();
-          alert('Thank you for your contribution!');
-      } else {
-          alert('The goal has already been reached!');
-      }
+  // Pause scroll on hover
+  scrollContent.addEventListener('mouseenter', () => {
+      scrollContent.style.animationPlayState = 'paused';
   });
 
-  document.querySelector('.share-icon').addEventListener('click', function() {
-      alert('Share this fundraiser on your social media!');
-      // Placeholder for share functionality
+  scrollContent.addEventListener('mouseleave', () => {
+      scrollContent.style.animationPlayState = 'running';
   });
 
-  function updateProgressBar() {
-      const progressElement = document.getElementById('progress');
-      const progressLabel = document.getElementById('progress-label');
-      const goalBadge = document.getElementById('goal-badge');
-      const supporterCount = document.getElementById('supporter-count');
-
-      progressElement.style.width = currentProgress + '%';
-      progressLabel.textContent = currentProgress + '% funded';
-      supporterCount.textContent = totalSupporters + ' Supporters';
-
-      if (currentProgress >= 100) {
-          goalBadge.style.display = 'block';
-          progressLabel.textContent = 'Goal Achieved!';
-      }
-  }
-
-  // Initialize progress bar on load
-  window.onload = function() {
-      updateProgressBar();
-  };
+  // Clickable categories
+  document.querySelectorAll('.category').forEach(category => {
+      category.addEventListener('click', () => {
+          alert(`You clicked on ${category.querySelector('p').textContent}`);
+          // Redirect to a specific page if needed
+          // window.location.href = 'your-link-here.html';
+      });
+  });
 </script>
 
-<div class="donation-buttons"></div>
-<div class="donation-btn btn-disabled">
-  <i class="fas fa-wheelchair"></i>
-  <a href="fund.html">Disabled person</a>
-</div>
+
+<!----fundraising section--->
+
+<div class="donation-buttons">
+  <!-- Food & Hungry Button -->
+  <div class="donation-btn food-btn">
+    <i class="fas fa-utensils"></i>
+    <a href="fund.html" aria-label="Donate to help feed the hungry">Food & Hungry</a>
+  </div>
+
 <div class="cards-container">
-<div class="fundraiser-card">
-  <img src="sk pictures/d1.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Amir's Family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
+  <!-- Fundraiser 1 -->
+<div class="fundraiser-card" id="food-fundraiser-1">
+<img src="sk pictures/f1.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Saran's Family</h2>
+<div class="milestones">
+  <div>
+    <i class="fas fa-share-alt"></i>
+    <span onclick="openSharePopup(1, 'food')">Share</span>
   </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
+  <div>
+    <i class="fas fa-comments"></i>
+    <span onclick="openCommentPopup(1, 'food')">Comment</span>
   </div>
 </div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/d2.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Abinash's Family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
+<div class="supporters">
+  <i class="fas fa-users"></i>
+  <span id="supporter-count-food-1">Supporters: 0</span> 
+  <span id="total-amount-food-1">Total Raised: ₹0</span>
 </div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/d3.jpeg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Ajith's Family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
+<div class="progress-bar">
+  <div class="progress" id="progress-food-1"></div>
 </div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/d4.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Akash's Family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
+<div class="progress-label" id="progress-label-food-1">0% funded</div>
+<div class="milestones">
+  <i class="fas fa-bullseye"></i>
+  <span id="milestone-text-food-1">Target: 25%</span>
+  <span id="days-left-1">
+    <i class="fas fa-calendar-day"></i> 40 Days Left
+  </span>
 </div>
-
-<div class="fundraiser-card">
-  <img src="sk pictures/d5.jpg" alt="Fundraiser Image">
-  <div id="goal-badge" class="goal-reached" style="display: none;">Goal Reached!</div>
-  <h2>Help Fund for Arun's Family</h2>
-  <div class="milestones">
-    <div>
-      <i class="share-icon">🔗</i> <!-- Share Icon -->
-      <span id="share-text">Share</span>
-  </div>
-      <div>
-          <i class="comment-icon">💬</i> <!-- Comment Icon -->
-          <span>33 Comments</span>
-      </div>
-  </div>
-  <div class="supporters">
-    <span>₹1,98,000 Required</span>
-      <div>
-        <i class="milestone-icon">🎯</i> <!-- Milestone Icon -->
-        <span id="days-left">35 Days Left</span>
-    </div>
-  </div>
-  <div class="progress-bar">
-      <div class="progress" id="progress"></div>
-  </div>
-  <div class="progress-label" id="progress-label">50% funded</div>
-  <div class="donate">
-    <div>
-      <i class="supporters-icon">👥</i> <!-- Supporters Icon -->
-      <span id="supporter-count">45 Supporters</span>
-  </div>
-      <button id="donate-button">Help Now</button>
-  </div>
+<div class="donate">
+  <button id="donate-button-food-1" onclick="showDonationPopup(1, 'food')">Help Now</button>
 </div>
 </div>
 
+  <!-- Fundraiser 2 -->
+<div class="fundraiser-card" id="food-fundraiser-2">
+<img src="sk pictures/f3.webp" alt="Fundraiser Image">
+<h2>Help Fund for Santhiya's Family</h2>
+<div class="milestones">
+  <div>
+    <i class="fas fa-share-alt"></i>
+    <span onclick="openSharePopup(2, 'food')">Share</span>
+  </div>
+  <div>
+    <i class="fas fa-comments"></i>
+    <span onclick="openCommentPopup(2, 'food')">Comment</span>
+  </div>
+</div>
+<div class="supporters">
+  <i class="fas fa-users"></i>
+  <span id="supporter-count-food-2">Supporters: 0</span> 
+  <span id="total-amount-food-2">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+  <div class="progress" id="progress-food-2"></div>
+</div>
+<div class="progress-label" id="progress-label-food-2">0% funded</div>
+<div class="milestones">
+  <i class="fas fa-bullseye"></i>
+  <span id="milestone-text-food-2">Target: 25%</span>
+  <span id="days-left-2">
+    <i class="fas fa-calendar-day"></i> 40 Days Left
+  </span>
+</div>
+<div class="donate">
+  <button id="donate-button-food-2" onclick="showDonationPopup(2, 'food')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 3 -->
+<div class="fundraiser-card" id="food-fundraiser-3">
+<img src="sk pictures/f4.webp" alt="Fundraiser Image">
+<h2>Help Fund for Sudharshan's Family</h2>
+<div class="milestones">
+  <div>
+    <i class="fas fa-share-alt"></i>
+    <span onclick="openSharePopup(3, 'food')">Share</span>
+  </div>
+  <div>
+    <i class="fas fa-comments"></i>
+    <span onclick="openCommentPopup(3, 'food')">Comment</span>
+  </div>
+</div>
+<div class="supporters">
+  <i class="fas fa-users"></i>
+  <span id="supporter-count-food-3">Supporters: 0</span> 
+  <span id="total-amount-food-3">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+  <div class="progress" id="progress-food-3"></div>
+</div>
+<div class="progress-label" id="progress-label-food-3">0% funded</div>
+<div class="milestones">
+  <i class="fas fa-bullseye"></i>
+  <span id="milestone-text-food-3">Target: 25%</span>
+  <span id="days-left-3">
+    <i class="fas fa-calendar-day"></i> 40 Days Left
+  </span>
+</div>
+<div class="donate">
+  <button id="donate-button-food-3" onclick="showDonationPopup(3, 'food')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 4 -->
+<div class="fundraiser-card" id="food-fundraiser-4">
+<img src="sk pictures/f5.webp" alt="Fundraiser Image">
+<h2>Help Fund for Saraniya's Family</h2>
+<div class="milestones">
+  <div>
+    <i class="fas fa-share-alt"></i>
+    <span onclick="openSharePopup(4, 'food')">Share</span>
+  </div>
+  <div>
+    <i class="fas fa-comments"></i>
+    <span onclick="openCommentPopup(4, 'food')">Comment</span>
+  </div>
+</div>
+<div class="supporters">
+  <i class="fas fa-users"></i>
+  <span id="supporter-count-food-4">Supporters: 0</span> 
+  <span id="total-amount-food-4">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+  <div class="progress" id="progress-food-4"></div>
+</div>
+<div class="progress-label" id="progress-label-food-4">0% funded</div>
+<div class="milestones">
+  <i class="fas fa-bullseye"></i>
+  <span id="milestone-text-food-4">Target: 25%</span>
+  <span id="days-left-4">
+    <i class="fas fa-calendar-day"></i> 40 Days Left
+  </span>
+</div>
+<div class="donate">
+  <button id="donate-button-food-4" onclick="showDonationPopup(4, 'food')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 5 -->
+<div class="fundraiser-card" id="food-fundraiser-5">
+<img src="sk pictures/f2.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Surya's Family</h2>
+<div class="milestones">
+  <div>
+    <i class="fas fa-share-alt"></i>
+    <span onclick="openSharePopup(5, 'food')">Share</span>
+  </div>
+  <div>
+    <i class="fas fa-comments"></i>
+    <span onclick="openCommentPopup(5, 'food')">Comment</span>
+  </div>
+</div>
+<div class="supporters">
+  <i class="fas fa-users"></i>
+  <span id="supporter-count-food-5">Supporters: 0</span> 
+  <span id="total-amount-food-5">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+  <div class="progress" id="progress-food-5"></div>
+</div>
+<div class="progress-label" id="progress-label-food-5">0% funded</div>
+<div class="milestones">
+  <i class="fas fa-bullseye"></i>
+  <span id="milestone-text-food-5">Target: 25%</span>
+  <span id="days-left-5">
+    <i class="fas fa-calendar-day"></i> 40 Days Left
+  </span>
+</div>
+<div class="donate">
+  <button id="donate-button-food-5" onclick="showDonationPopup(5, 'food')">Help Now</button>
+</div>
+</div>
+</div>
 
+<!-- Health & Medical Button -->
+<div class="donation-btn">
+<i class="fas fa-heartbeat"></i>
+<a href="fund.html" aria-label="Donate for Health & Medical assistance">Health & Medicine</a>
+</div>
+
+<div class="cards-container">
+<!-- Fundraiser 1 -->
+<div class="fundraiser-card" id="medical-fundraiser-1">
+<img src="sk pictures/m1.avif" alt="Fundraiser Image">
+<h2>Help Fund for Saravana's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(1, 'medical')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(1, 'medical')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-medical-1">Supporters: 0</span> 
+<span id="total-amount-medical-1">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-medical-1"></div>
+</div>
+<div class="progress-label" id="progress-label-medical-1">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-medical-1">Target: 25%</span>
+<span id="days-left-1">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-medical-1" onclick="showDonationPopup(1, 'medical')">Help Now</button>
+</div>
+</div>
+
+<!-- Fundraiser 2 -->
+<div class="fundraiser-card" id="medical-fundraiser-2">
+<img src="sk pictures/m2.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Rahul's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(2, 'medical')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(2, 'medical')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-medical-2">Supporters: 0</span> 
+<span id="total-amount-medical-2">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-medical-2"></div>
+</div>
+<div class="progress-label" id="progress-label-medical-2">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-medical-2">Target: 25%</span>
+<span id="days-left-2">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-medical-2" onclick="showDonationPopup(2, 'medical')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 3 -->
+<div class="fundraiser-card" id="medical-fundraiser-3">
+<img src="sk pictures/m3.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Balaji's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(3, 'medical')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(3, 'medical')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-medical-3">Supporters: 0</span> 
+<span id="total-amount-medical-3">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-medical-3"></div>
+</div>
+<div class="progress-label" id="progress-label-medical-3">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-medical-3">Target: 25%</span>
+<span id="days-left-3">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-medical-3" onclick="showDonationPopup(3, 'medical')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 4 -->
+<div class="fundraiser-card" id="medical-fundraiser-4">
+<img src="sk pictures/m4.webp" alt="Fundraiser Image">
+<h2>Help Fund for Vinith's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(4, 'medical')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(4, 'medical')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-medical-4">Supporters: 0</span> 
+<span id="total-amount-medical-4">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-medical-4"></div>
+</div>
+<div class="progress-label" id="progress-label-medical-4">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-medical-4">Target: 25%</span>
+<span id="days-left-4">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-medical-4" onclick="showDonationPopup(4, 'medical')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 5 -->
+<div class="fundraiser-card" id="medical-fundraiser-5">
+<img src="sk pictures/m5.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Abinash's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(5, 'medical')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(5, 'medical')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-medical-5">Supporters: 0</span> 
+<span id="total-amount-medical-5">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-medical-5"></div>
+</div>
+<div class="progress-label" id="progress-label-medical-5">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-medical-5">Target: 25%</span>
+<span id="days-left-5">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-medical-5" onclick="showDonationPopup(5, 'medical')">Help Now</button>
+</div>
+</div>
+</div>
+
+<!-- Education Button -->
+<div class="donation-btn">
+<i class="fas fa-book"></i>
+<a href="fund.html" aria-label="Donate to help provide education">Education & Skill</a>
+</div>
+
+<div class="cards-container">
+<!-- Fundraiser 1 -->
+<div class="fundraiser-card" id="education-fundraiser-1">
+<img src="sk pictures/e1.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Hari's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(1, 'education')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(1, 'education')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-education-1">Supporters: 0</span> 
+<span id="total-amount-education-1">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-education-1"></div>
+</div>
+<div class="progress-label" id="progress-label-education-1">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-education-1">Target: 25%</span>
+<span id="days-left-1">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-education-1" onclick="showDonationPopup(1, 'education')">Help Now</button>
+</div>
+</div>
+
+<!-- Fundraiser 2 -->
+<div class="fundraiser-card" id="education-fundraiser-2">
+<img src="sk pictures/e2.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Adranio's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(2, 'education')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(2, 'education')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-education-2">Supporters: 0</span> 
+<span id="total-amount-education-2">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-education-2"></div>
+</div>
+<div class="progress-label" id="progress-label-education-2">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-education-2">Target: 25%</span>
+<span id="days-left-2">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-education-2" onclick="showDonationPopup(2, 'education')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 3 -->
+<div class="fundraiser-card" id="education-fundraiser-3">
+<img src="sk pictures/e3.jfif" alt="Fundraiser Image">
+<h2>Help Fund for Muthu Krishnan's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(3, 'education')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(3, 'education')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-education-3">Supporters: 0</span> 
+<span id="total-amount-education-3">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-education-3"></div>
+</div>
+<div class="progress-label" id="progress-label-education-3">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-education-3">Target: 25%</span>
+<span id="days-left-3">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-education-3" onclick="showDonationPopup(3, 'education')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 4 -->
+<div class="fundraiser-card" id="education-fundraiser-4">
+<img src="sk pictures/e4.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Ramesh's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(4, 'education')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(4, 'education')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-education-4">Supporters: 0</span> 
+<span id="total-amount-education-4">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-education-4"></div>
+</div>
+<div class="progress-label" id="progress-label-education-4">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-education-4">Target: 25%</span>
+<span id="days-left-4">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-education-4" onclick="showDonationPopup(4, 'education')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 5 -->
+<div class="fundraiser-card" id="education-fundraiser-5">
+<img src="sk pictures/e5.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Sherwin's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(5, 'education')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(5, 'education')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-education-5">Supporters: 0</span> 
+<span id="total-amount-education-5">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-education-5"></div>
+</div>
+<div class="progress-label" id="progress-label-education-5">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-education-5">Target: 25%</span>
+<span id="days-left-5">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-education-5" onclick="showDonationPopup(5, 'education')">Help Now</button>
+</div>
+</div>
+</div>
+
+<!-- Disabled Person Button -->
+<div class="donation-btn">
+<i class="fas fa-wheelchair"></i>
+<a href="fund.html" aria-label="Donate for Disabled Persons support">Supervised & Care</a>
+</div>
+
+<div class="cards-container">
+<!-- Fundraiser 1 -->
+<div class="fundraiser-card" id="disabled-fundraiser-1">
+<img src="sk pictures/d1.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Esakki's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(1, 'disabled')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(1, 'disabled')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-disabled-1">Supporters: 0</span> 
+<span id="total-amount-disabled-1">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-disabled-1"></div>
+</div>
+<div class="progress-label" id="progress-label-disabled-1">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-disabled-1">Target: 25%</span>
+<span id="days-left-1">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-disabled-1" onclick="showDonationPopup(1, 'disabled')">Help Now</button>
+</div>
+</div>
+
+<!-- Fundraiser 2 -->
+<div class="fundraiser-card" id="disabled-fundraiser-2">
+<img src="sk pictures/d2.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Ajmal's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(2, 'disabled')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(2, 'disabled')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-disabled-2">Supporters: 0</span> 
+<span id="total-amount-disabled-2">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-disabled-2"></div>
+</div>
+<div class="progress-label" id="progress-label-disabled-2">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-disabled-2">Target: 25%</span>
+<span id="days-left-2">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-disabled-2" onclick="showDonationPopup(2, 'disabled')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 3 -->
+<div class="fundraiser-card" id="disabled-fundraiser-3">
+<img src="sk pictures/d3.jpeg" alt="Fundraiser Image">
+<h2>Help Fund for Akshai's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(3, 'disabled')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(3, 'disabled')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-disabled-3">Supporters: 0</span> 
+<span id="total-amount-disabled-3">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-disabled-3"></div>
+</div>
+<div class="progress-label" id="progress-label-disabled-3">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-disabled-3">Target: 25%</span>
+<span id="days-left-3">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-disabled-3" onclick="showDonationPopup(3, 'disabled')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 4 -->
+<div class="fundraiser-card" id="disabled-fundraiser-4">
+<img src="sk pictures/d4.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Sundar's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(4, 'disabled')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(4, 'disabled')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-disabled-4">Supporters: 0</span> 
+<span id="total-amount-disabled-4">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-disabled-4"></div>
+</div>
+<div class="progress-label" id="progress-label-disabled-4">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-disabled-4">Target: 25%</span>
+<span id="days-left-4">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-disabled-4" onclick="showDonationPopup(4, 'disabled')">Help Now</button>
+</div>
+</div>
+<!-- Fundraiser 5 -->
+<div class="fundraiser-card" id="disabled-fundraiser-5">
+<img src="sk pictures/d5.jpg" alt="Fundraiser Image">
+<h2>Help Fund for Bebin's Family</h2>
+<div class="milestones">
+<div>
+  <i class="fas fa-share-alt"></i>
+  <span onclick="openSharePopup(5, 'disabled')">Share</span>
+</div>
+<div>
+  <i class="fas fa-comments"></i>
+  <span onclick="openCommentPopup(5, 'disabled')">Comment</span>
+</div>
+</div>
+<div class="supporters">
+<i class="fas fa-users"></i>
+<span id="supporter-count-disabled-5">Supporters: 0</span> 
+<span id="total-amount-disabled-5">Total Raised: ₹0</span>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress-disabled-5"></div>
+</div>
+<div class="progress-label" id="progress-label-disabled-5">0% funded</div>
+<div class="milestones">
+<i class="fas fa-bullseye"></i>
+<span id="milestone-text-disabled-5">Target: 25%</span>
+<span id="days-left-5">
+  <i class="fas fa-calendar-day"></i> 40 Days Left
+</span>
+</div>
+<div class="donate">
+<button id="donate-button-disabled-5" onclick="showDonationPopup(5, 'disabled')">Help Now</button>
+</div>
+</div>
+</div>
+</div>
+
+<canvas id="confettiCanvas"></canvas>
+
+<!-- Donation Popup -->
+<div class="popup" id="donation-popup">
+  <span class="popup-close" onclick="closePopup('donation-popup')">×</span>
+  <h2>Enter Your Donation Amount</h2>
+  <input type="number" id="donation-amount" placeholder="Enter amount" min="1" required>
+  <button onclick="processDonation()">Donate</button>
+</div>
+
+<!-- Share Popup -->
+<div class="popup" id="share-popup">
+  <span class="popup-close" onclick="closePopup('share-popup')">×</span>
+  <h2>Share this Fundraiser</h2>
+  <div class="social-share-icons">
+    <i class="fab fa-whatsapp" onclick="shareOnSocial('whatsapp')"></i>
+    <i class="fab fa-facebook" onclick="shareOnSocial('facebook')"></i>
+    <i class="fab fa-twitter" onclick="shareOnSocial('twitter')"></i>
+    <i class="fab fa-instagram" onclick="shareOnSocial('instagram')"></i>
+    <i class="fab fa-telegram-plane" onclick="shareOnSocial('telegram')"></i>
+  </div>
+</div>
+
+<!-- Comment Popup -->
+<div class="popup" id="comment-popup">
+  <span class="popup-close" onclick="closePopup('comment-popup')">×</span>
+  <h2>Leave a Comment</h2>
+  <textarea id="comment-text" placeholder="Write your comment here" rows="5"></textarea>
+  <button onclick="submitComment()">Submit Comment</button>
+</div>
 
 <script>
-  // Initial setup
-  let currentProgress = 50; // Example: 50% funded
-  let totalSupporters = 45;
+  // Goal for each fundraiser category (food, medical, education, disabled)
+const goalAmount = 198000; // Goal for each fundraiser in all categories
+let totalAmountCollected = {
+  food: [0, 0, 0, 0, 0],
+  medical: [0, 0, 0, 0, 0],
+  education: [0, 0, 0, 0, 0],
+  disabled: [0, 0, 0, 0, 0],
+};
 
-  document.getElementById('donate-button').addEventListener('click', function() {
-      if (currentProgress < 100) {
-          currentProgress += 10;
-          totalSupporters += 1;
-          updateProgressBar();
-          alert('Thank you for your contribution!');
-      } else {
-          alert('The goal has already been reached!');
-      }
-  });
+let supporterCount = {
+  food: [0, 0, 0, 0, 0],
+  medical: [0, 0, 0, 0, 0],
+  education: [0, 0, 0, 0, 0],
+  disabled: [0, 0, 0, 0, 0],
+};
 
-  document.querySelector('.share-icon').addEventListener('click', function() {
-      alert('Share this fundraiser on your social media!');
-      // Placeholder for share functionality
-  });
+let donationsClosed = {
+  food: [false, false, false, false, false],
+  medical: [false, false, false, false, false],
+  education: [false, false, false, false, false],
+  disabled: [false, false, false, false, false],
+};
 
-  function updateProgressBar() {
-      const progressElement = document.getElementById('progress');
-      const progressLabel = document.getElementById('progress-label');
-      const goalBadge = document.getElementById('goal-badge');
-      const supporterCount = document.getElementById('supporter-count');
+const totalDays = 40; // Set the number of days for the fundraiser
 
-      progressElement.style.width = currentProgress + '%';
-      progressLabel.textContent = currentProgress + '% funded';
-      supporterCount.textContent = totalSupporters + ' Supporters';
+// Confetti effect function
+function createConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  const confettiColors = ['#ff0', '#f00', '#00f', '#0f0', '#f0f', '#0ff'];
+  const confettiCount = 100;
+  let confettiArray = [];
 
-      if (currentProgress >= 100) {
-          goalBadge.style.display = 'block';
-          progressLabel.textContent = 'Goal Achieved!';
-      }
+  // Set canvas size
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // Create confetti objects
+  for (let i = 0; i < confettiCount; i++) {
+    confettiArray.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      size: Math.random() * 10 + 5,
+      speed: Math.random() * 3 + 1,
+      color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+    });
   }
 
-  // Initialize progress bar on load
-  window.onload = function() {
-      updateProgressBar();
-  };
+  function animateConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < confettiCount; i++) {
+      let c = confettiArray[i];
+      c.y += c.speed;
+      c.x += Math.sin(c.y / 10) * 2;
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+      ctx.fillStyle = c.color;
+      ctx.fill();
+    }
+
+    // Continue animation
+    if (canvas.style.display === 'block') {
+      requestAnimationFrame(animateConfetti);
+    }
+  }
+
+  // Show confetti canvas and start animation
+  canvas.style.display = 'block';
+  animateConfetti();
+
+  // Hide the canvas after 5 seconds
+  setTimeout(() => {
+    canvas.style.display = 'none';
+  }, 5000); // 3000 milliseconds = 5 seconds
+}
+
+// Function to update progress bar and milestone text for each fundraiser
+function updateDonationProgress(amountDonated, fundraiserId, category) {
+  totalAmountCollected[category][fundraiserId - 1] += amountDonated;
+  supporterCount[category][fundraiserId - 1]++;
+
+  const progressPercentage = (totalAmountCollected[category][fundraiserId - 1] / goalAmount) * 100;
+
+  const progressElement = document.getElementById(`progress-${category}-${fundraiserId}`);
+  const progressLabel = document.getElementById(`progress-label-${category}-${fundraiserId}`);
+  progressElement.style.width = progressPercentage + '%';
+  progressLabel.textContent = Math.floor(progressPercentage) + '% funded';
+
+  const milestoneText = document.getElementById(`milestone-text-${category}-${fundraiserId}`);
+  if (progressPercentage >= 100) {
+      milestoneText.textContent = 'Goal Achieved!';
+      donationsClosed[category][fundraiserId - 1] = true;
+      document.getElementById(`donate-button-${category}-${fundraiserId}`).disabled = true;
+      document.getElementById(`donate-button-${category}-${fundraiserId}`).textContent = 'Donation Closed';
+  } else if (progressPercentage >= 75) {
+      milestoneText.textContent = '75% funded';
+  } else if (progressPercentage >= 50) {
+      milestoneText.textContent = '50% funded';
+  } else if (progressPercentage >= 25) {
+      milestoneText.textContent = '25% funded';
+  }
+
+  // Update supporter count and total amount raised
+  document.getElementById(`supporter-count-${category}-${fundraiserId}`).textContent = `Supporters: ${supporterCount[category][fundraiserId - 1]}`;
+  document.getElementById(`total-amount-${category}-${fundraiserId}`).textContent = `Total Raised: ₹${totalAmountCollected[category][fundraiserId - 1]}`;
+}
+
+// Function to show donation popup for each fundraiser
+function showDonationPopup(fundraiserId, category) {
+  if (donationsClosed[category][fundraiserId - 1]) {
+      alert("Donation is closed");
+      return;
+  }
+  document.getElementById('donation-popup').style.display = 'block';
+  // Store the fundraiser id in a global variable for later use
+  window.currentFundraiserId = fundraiserId;
+  window.currentCategory = category;
+}
+
+// Function to close any popup
+function closePopup(popupId) {
+  document.getElementById(popupId).style.display = 'none';
+}
+
+// Function to process donation
+function processDonation() {
+  const donationAmount = document.getElementById('donation-amount').value;
+  const fundraiserId = window.currentFundraiserId;
+  const category = window.currentCategory;
+  if (donationAmount > 0) {
+    updateDonationProgress(parseInt(donationAmount, 10), fundraiserId, category);
+    createConfetti(); // Trigger confetti animation
+    closePopup('donation-popup');
+  } else {
+    alert("Please enter a valid donation amount");
+  }
+}
+
+// Function to open share popup
+function openSharePopup(fundraiserId, category) {
+  document.getElementById('share-popup').style.display = 'block';
+  window.currentFundraiserId = fundraiserId;
+  window.currentCategory = category;
+}
+
+// Function to share on social media
+function shareOnSocial(platform) {
+  const url = window.location.href;
+  let shareUrl = '';
+
+  switch (platform) {
+      case 'whatsapp':
+          shareUrl = `https://wa.me/?text=${encodeURIComponent(url)}`;
+          break;
+      case 'facebook':
+          shareUrl = `https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+          break;
+      case 'twitter':
+          shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`;
+          break;
+      case 'instagram':
+          alert("Instagram does not support direct sharing links. You can share the URL manually.");
+          return;
+      case 'telegram':
+          shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}`;
+          break;
+  }
+
+  window.open(shareUrl, '_blank');
+}
+
+// Function to open comment popup
+function openCommentPopup(fundraiserId, category) {
+  document.getElementById('comment-popup').style.display = 'block';
+  window.currentFundraiserId = fundraiserId;
+  window.currentCategory = category;
+}
+
+// Function to submit comment
+function submitComment() {
+  const commentText = document.getElementById('comment-text').value;
+  if (commentText) {
+      alert(`Thank you for your comment: ${commentText}`);
+      closePopup('comment-popup');
+  } else {
+      alert("Please write a comment.");
+  }
+}
+
 </script>
+
+<div class="container">
+  <h1 class="highlight">Connects Nonprofits, Donors & Companies in Every Country</h1>
+  <h2 class="main-title">ShareKind <a href="profile.html" class="sharekind-btn">Join Us</a></h2>
+
+  <div class="section">
+      <div class="item">
+          <span class="icon food">🍲</span>
+          <span class="title">Food Assistance</span>
+          <p class="desc">Providing nutritious meals and sustainable food solutions for communities in need.</p>
+      </div>
+
+      <div class="item">
+          <span class="icon medical">⚕️</span>
+          <span class="title">Medical Aid</span>
+          <p class="desc">Offering essential healthcare services, medical supplies, and emergency assistance.</p>
+      </div>
+
+      <div class="item">
+          <span class="icon education">📖</span>
+          <span class="title">Education Support</span>
+          <p class="desc">Ensuring access to quality education and learning resources for children and adults.</p>
+      </div>
+
+      <div class="item">
+          <span class="icon disabled">♿</span>
+          <span class="title">Supervised Persons</span>
+          <p class="desc">Advocating for accessibility, inclusion, and support services for differently-abled individuals.</p>
+      </div>
+  </div>
+</div>
+
+
 
 
 <div class="bottom-nav">
@@ -1146,13 +1385,47 @@
   <div class="nav-icon"><a href="profile.html" title="Profile"><img id="bottomNavProfileImage" src="sk pictures\k6.png" alt="Profile Icon"></a></div>
 </div>
 <script>
-
-  // Load saved profile image from localStorage on page load
+// Load saved profile image from localStorage on page load
       const savedImage = localStorage.getItem('profileImage');
       if (savedImage) {
           document.getElementById('bottomNavProfileImage').src = savedImage;
       }
 
+</script>
+
+<footer class="footer">
+  <h2 class="footer-title">ShareKind</h2>
+  <p class="footer-text">Making a difference through donations. Join us in spreading kindness and generosity.</p>
+  <div class="social-icons">
+      <a href="#" class="icon"><i class="fab fa-facebook"></i></a>
+      <a href="#" class="icon"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="icon"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="icon"><i class="fab fa-linkedin"></i></a>
+  </div>
+  <div class="footer-grid">
+      <div>
+          <h3>About Us</h3>
+          <p>Learn more about our mission and how we help communities.</p>
+      </div>
+      <div>
+          <h3>Quick Links</h3>
+          <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="reels.html">Reels</a></li>
+              <li><a href="maker.html">Change Maker</a></li>
+              <li><a href="profile.html">ShareKKind Profile</a></li>
+          </ul>
+      </div>
+      <div>
+          <h3>Contact Us</h3>
+          <p>Email: rahulpitchiah2004@gmail.com</p>
+          <p>Phone: 9080874207</p>
+      </div>
+  </div>
+  <p class="footer-copyright">&copy; <span id="year"></span> ShareKind. All Rights Reserved.</p>
+</footer>
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 
 
