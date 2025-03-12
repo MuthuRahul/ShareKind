@@ -405,11 +405,6 @@
                     <ul>
                         <li><a href="fund.html">Start Fundraiser</a><i class="fa-regular fa-address-book"></i></li>
                         <li><a href="#">Donate Kindness</a><i class="fa-solid fa-hand-holding-dollar"></i></li>
-                        <li><a href="#">Monetization</a><i class="fa-solid fa-money-bill-transfer"></i></li>
-                        <li><a href="#">ShareKind Verified</a><i class="fa-regular fa-star"></i></li>
-                        <li><a href="#">Saved Favorites</a><i class="fa-regular fa-bookmark"></i></li>
-                        <li><a href="#">Refers to earn</a><i class="fa-solid fa-retweet"></i></li>
-                        <li><a href="#">Help</a><i class="fa-solid fa-circle-question"></i></li>
                         <li><a href="#">Log Out</a><i class="fa-solid fa-arrow-right-from-bracket"></i></li>
                     </ul>
                 </div>
@@ -419,12 +414,11 @@
         </div>
         <div class="profile-info">
             <div class="profile-pic">
-                <input type="file" id="profileImageUpload" accept="image/*">
+                <input type="file" id="imageUpload" accept="image/*" style="display:none;">
                 <img id="profileImage" src="sk pictures/k6.png" alt="Profile Image">
                 <label class="edit-icon" for="imageUpload">
                     <i class="fas fa-pencil-alt"></i>
                 </label>
-                <input type="file" id="imageUpload" accept="image/*">
             </div>
             <div class="profile-name">
                 <input type="text" id="profileName" placeholder="Your Name" maxlength="50" required>
@@ -440,15 +434,15 @@
             </div>
             <div class="stat">
                 <p><i class="fas fa-hands-helping"></i> Lives Helped</p>
-                <h3>100</h3>
+                <h3>0</h3>
             </div>
             <div class="stat">
                 <p><i class="fas fa-users"></i> Supporters</p>
-                <h3>1.1M</h3>
+                <h3>0</h3>
             </div>
             <div class="stat">
                 <p><i class="fas fa-user-friends"></i> Supporting</p>
-                <h3>500</h3>
+                <h3>0</h3>
             </div>
         </div>
         
@@ -473,63 +467,62 @@
         </div>
     </div>
     <div class="bottom-nav">
-        <a href="home.html" title="Home"><i class="fa-solid fa-house"></i></a>
-        <a href="reels.html" title="Reels"><i class="fa-solid fa-radio"></i></a>
-        <a href="maker.html" title="Makers"><i class="fa fa-star"></i></a>
-        <a href="rewards.html" title="Rewards"><i class="fa-solid fa-trophy"></i></a>
-        <a href="profile.html" title="Profile"><img src="sk pictures/k6.png" alt="Profile"></a>
-    </div>
+        <div class="nav-icon"><a href="index.html" title="Home"><i class="fa-solid fa-house"></i></a></div>
+        <div class="nav-icon"><a href="reels.html" title="Reels"><i class="fa-solid fa-radio"></i></a></div>
+        <div class="nav-icon"><a href="maker.html" title="Makers"><i class="fa fa-star"></i></a></div>
+        <div class="nav-icon"><a href="reward.html" title="Rewards"><i class="fa-solid fa-trophy"></i></a></div>
+        <div class="nav-icon"><a href="profile.html" title="Profile"><img id="bottomNavProfileImage" src="sk pictures\k6.png" alt="Profile Icon"></a></div>
+      </div>
+      
+
     <div id="loading" class="loading">Loading...</div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function () {
     let postCount = 0;
 
+    // Load profile data
     loadProfile();
 
+    // Event listeners
     document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
     document.getElementById('profileName').addEventListener('input', saveProfile);
     document.getElementById('profileBio').addEventListener('input', saveProfile);
 
-    document.getElementById('uploadImage').addEventListener('change', handleFileUpload.bind(null, 'image'));
-    document.getElementById('uploadVideo').addEventListener('change', handleFileUpload.bind(null, 'video'));
-    document.getElementById('uploadReel').addEventListener('change', handleFileUpload.bind(null, 'reel'));
+    document.getElementById('uploadImage').addEventListener('change', (e) => handleFileUpload('image', e));
+    document.getElementById('uploadVideo').addEventListener('change', (e) => handleFileUpload('video', e));
+    document.getElementById('uploadReel').addEventListener('change', (e) => handleFileUpload('reel', e));
 
     document.getElementById('addImageIcon').addEventListener('click', () => document.getElementById('uploadImage').click());
     document.getElementById('addVideoIcon').addEventListener('click', () => document.getElementById('uploadVideo').click());
     document.getElementById('addReelIcon').addEventListener('click', () => document.getElementById('uploadReel').click());
 
     document.querySelectorAll('.tab-button').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             filterPosts(this.getAttribute('data-tab'));
         });
     });
 
-    const request = indexedDB.open('ShareKindDB', 3); // Use consistent version number
+    // Initialize IndexedDB
+    const db = await initializeDB();
+    loadPosts(db);
 
-    request.onerror = function(event) {
-        console.error('Database error:', event.target.errorCode);
+    // Modal functionality
+    const modal = document.getElementById("menuModal");
+    const btn = document.getElementById("menuBtn");
+    const closeBtn = document.getElementsByClassName("close")[0];
+
+    btn.onclick = () => (modal.style.display = "block");
+    closeBtn.onclick = () => (modal.style.display = "none");
+    window.onclick = (event) => {
+        if (event.target === modal) modal.style.display = "none";
     };
 
-    request.onsuccess = function(event) {
-        const db = event.target.result;
-        console.log('Database opened successfully');
-        loadPosts(db);
-    };
-
-    request.onupgradeneeded = function(event) {
-        const db = event.target.result;
-        if (!db.objectStoreNames.contains('posts')) {
-            console.log('Creating object store');
-            db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
-        }
-    };
-
+    // Functions
     function saveProfile() {
         const profileName = document.getElementById('profileName').value;
         const profileBio = document.getElementById('profileBio').value;
-
         localStorage.setItem('profileName', profileName);
         localStorage.setItem('profileBio', profileBio);
     }
@@ -547,87 +540,95 @@
         }
     }
 
-    function handleImageUpload(event) {
+    async function handleImageUpload(event) {
         const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const profileImage = e.target.result;
-                document.getElementById('profileImage').src = profileImage;
-                document.querySelector('.bottom-nav img').src = profileImage;
-                localStorage.setItem('profileImage', profileImage);
-            };
-            reader.readAsDataURL(file);
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            showAlert('Please upload a valid image file.');
+            return;
+        }
+
+        try {
+            const profileImage = await readFileAsDataURL(file);
+            document.getElementById('profileImage').src = profileImage;
+            document.querySelector('.bottom-nav img').src = profileImage;
+            localStorage.setItem('profileImage', profileImage);
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            showAlert('Failed to upload image.');
         }
     }
 
-    function handleFileUpload(type, event) {
+    async function handleFileUpload(type, event) {
         const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const post = {
-                    id: Date.now(),
-                    type: type,
-                    content: e.target.result
-                };
-                if (type === 'video' || type === 'reel') {
-                    const videoElement = document.createElement('video');
-                    videoElement.src = e.target.result;
-                    videoElement.onloadedmetadata = function() {
-                        const videoDuration = videoElement.duration;
-                        if (type === 'reel' && videoDuration > 120) {
-                            showAlert('Reels can only be less than 2 minutes!');
-                            return;
+        if (!file) return;
+
+        // Validate file type and size
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg'];
+        const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+        const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
+
+        if (
+            (type === 'image' && !validImageTypes.includes(file.type)) ||
+            ((type === 'video' || type === 'reel') && !validVideoTypes.includes(file.type))
+        ) {
+            showAlert(`Invalid file type for ${type}.`);
+            return;
+        }
+
+        if (file.size > (type === 'image' ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE)) {
+            showAlert(`File size exceeds the limit for ${type}.`);
+            return;
+        }
+
+        try {
+            const content = await readFileAsDataURL(file);
+            const post = { id: Date.now(), type, content };
+
+            if (type === 'video' || type === 'reel') {
+                const videoElement = document.createElement('video');
+                videoElement.src = content;
+                await new Promise((resolve, reject) => {
+                    videoElement.onloadedmetadata = () => {
+                        const duration = videoElement.duration;
+                        if (type === 'reel' && duration > 120) {
+                            reject('Reels must be less than 2 minutes.');
+                        } else if (type === 'video' && (duration <= 120 || duration > 10800)) {
+                            reject('Videos must be more than 2 minutes and up to 3 hours.');
+                        } else {
+                            resolve();
                         }
-                        if (type === 'video' && (videoDuration <= 120 || videoDuration > 10800)) {
-                            showAlert('Videos must be more than 2 minutes and up to 3 hours!');
-                            return;
-                        }
-                        savePost(post);
                     };
-                    videoElement.onerror = function() {
-                        showAlert('Error loading video.');
-                    };
-                } else {
-                    savePost(post);
-                }
-            };
-            reader.onerror = function() {
-                showAlert('Error reading file.');
-            };
-            reader.readAsDataURL(file);
+                    videoElement.onerror = () => reject('Error loading video.');
+                });
+            }
+
+            await savePost(post);
+            loadPosts(db);
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            showAlert(error);
         }
     }
 
-    function savePost(post) {
-        const request = indexedDB.open('ShareKindDB', 3);
-        request.onsuccess = function(event) {
-            const db = event.target.result;
+    async function savePost(post) {
+        return new Promise((resolve, reject) => {
             const transaction = db.transaction(['posts'], 'readwrite');
             const objectStore = transaction.objectStore('posts');
-            objectStore.add(post);
-            transaction.oncomplete = function() {
-                console.log('Post saved:', post);
-                loadPosts(db); // Refresh the posts after saving
-            };
-            transaction.onerror = function(event) {
-                console.error('Transaction error:', event.target.errorCode);
-            };
-        };
+            const request = objectStore.add(post);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
     }
 
-    function loadPosts(db) {
+    async function loadPosts(db) {
         const transaction = db.transaction(['posts'], 'readonly');
         const objectStore = transaction.objectStore('posts');
         const request = objectStore.getAll();
-        request.onsuccess = function(event) {
-            const posts = event.target.result;
-            displayPosts(posts);
-        };
-        request.onerror = function(event) {
-            console.error('Failed to load posts:', event.target.errorCode);
-        };
+        request.onsuccess = (event) => displayPosts(event.target.result);
+        request.onerror = (event) => console.error('Failed to load posts:', event.target.error);
     }
 
     function displayPosts(posts) {
@@ -637,43 +638,25 @@
             posts.forEach(post => {
                 const postItem = document.createElement('div');
                 postItem.className = 'post-item';
-                postItem.setAttribute('data-id', post.id); // Store post ID for deletion
+                postItem.setAttribute('data-id', post.id);
 
                 let postContent = '';
                 if (post.type === 'image') {
-                    postContent = `<img src="${post.content}" alt="Post Image">`;
+                    postContent = `<img src="${post.content}" alt="Post Image" loading="lazy">`;
                 } else if (post.type === 'video' || post.type === 'reel') {
-                    postContent = `
-                        <video src="${post.content}" class="${post.type === 'video' ? 'long-video' : ''}" controls></video>
-                    `;
+                    postContent = `<video src="${post.content}" ${post.type === 'video' ? 'class="long-video"' : ''} controls loading="lazy"></video>`;
                 }
 
-                // Add delete icon
                 postItem.innerHTML = `
                     ${postContent}
                     <button class="delete-icon" onclick="deletePost(${post.id})">🗑</button>
                 `;
-
                 postGrid.appendChild(postItem);
-
-                // Add event listeners for play/pause functionality directly on the video element
-                const videoElement = postItem.querySelector('video');
-
-                if (videoElement) {
-                    videoElement.addEventListener('click', () => {
-                        if (videoElement.paused) {
-                            videoElement.play();
-                        } else {
-                            videoElement.pause();
-                        }
-                    });
-                }
             });
             document.getElementById('message').style.display = 'none';
         } else {
             document.getElementById('message').style.display = 'block';
         }
-
         updatePostCount(posts.length);
     }
 
@@ -681,22 +664,16 @@
         document.getElementById('postCount').innerText = count;
     }
 
-    function filterPosts(tab) {
-        const request = indexedDB.open('ShareKindDB', 3);
-        request.onsuccess = function(event) {
-            const db = event.target.result;
-            const transaction = db.transaction(['posts'], 'readonly');
-            const objectStore = transaction.objectStore('posts');
-            const request = objectStore.getAll();
-            request.onsuccess = function(event) {
-                const posts = event.target.result;
-                const filteredPosts = posts.filter(post => tab === 'all' || post.type === tab);
-                displayPosts(filteredPosts);
-            };
-            request.onerror = function(event) {
-                console.error('Failed to filter posts:', event.target.errorCode);
-            };
+    async function filterPosts(tab) {
+        const transaction = db.transaction(['posts'], 'readonly');
+        const objectStore = transaction.objectStore('posts');
+        const request = objectStore.getAll();
+        request.onsuccess = (event) => {
+            const posts = event.target.result;
+            const filteredPosts = posts.filter(post => tab === 'all' || post.type === tab);
+            displayPosts(filteredPosts);
         };
+        request.onerror = (event) => console.error('Failed to filter posts:', event.target.error);
     }
 
     function showAlert(message) {
@@ -707,50 +684,37 @@
         setTimeout(() => alertBox.remove(), 3000);
     }
 
-    window.deletePost = function(postId) {
-        const request = indexedDB.open('ShareKindDB', 3);
-        request.onsuccess = function(event) {
-            const db = event.target.result;
-            const transaction = db.transaction(['posts'], 'readwrite');
-            const objectStore = transaction.objectStore('posts');
-            const deleteRequest = objectStore.delete(postId);
-            deleteRequest.onsuccess = function() {
-                console.log('Post deleted:', postId);
-                loadPosts(db); // Refresh the posts after deletion
-            };
-            deleteRequest.onerror = function(event) {
-                console.error('Delete error:', event.target.errorCode);
-            };
-        };
-    };
-});
-
-// Get the modal
-var modal = document.getElementById("menuModal");
-
-// Get the menu button that opens the modal
-var btn = document.getElementById("menuBtn");
-
-// Get the <span> element that closes the modal
-var closeBtn = document.getElementsByClassName("close")[0];
-
-// When the user clicks the menu button, open the modal
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-closeBtn.onclick = function() {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+    async function deletePost(postId) {
+        const transaction = db.transaction(['posts'], 'readwrite');
+        const objectStore = transaction.objectStore('posts');
+        const request = objectStore.delete(postId);
+        request.onsuccess = () => loadPosts(db);
+        request.onerror = (event) => console.error('Delete error:', event.target.error);
     }
-}
 
+    function readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function initializeDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open('ShareKindDB', 3);
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains('posts')) {
+                    db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
+                }
+            };
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+});
     </script>        
 </body>
 </html>
