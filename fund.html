@@ -8,18 +8,23 @@
         /* Global Styles */
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            /* Background Image */
+            background-image: url('sk pictures/back5.webp'); /* Replace with your image URL */
+            background-size: cover; /* Ensures the image covers the entire background */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
         }
+
         .container {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             max-width: 500px;
             width: 100%;
             padding: 30px;
@@ -27,20 +32,23 @@
             position: relative;
             overflow: hidden;
         }
+
         h2 {
             color: #4a90e2;
             margin-bottom: 20px;
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 26px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* Step Indicators */
         .step-indicators {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
-            position: relative;
+            margin-bottom: 30px;
         }
+
         .step {
             width: 30px;
             height: 30px;
@@ -50,22 +58,16 @@
             line-height: 30px;
             text-align: center;
             color: #aaa;
-            transition: background 0.3s, color 0.3s, border-color 0.3s;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
         }
+
         .step.active {
             border-color: #4a90e2;
             color: #fff;
             background: #4a90e2;
-        }
-        .progress-bar {
-            background: #4a90e2;
-            height: 4px;
-            width: 0;
-            border-radius: 2px;
-            transition: width 0.3s ease;
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            transform: scale(1.1);
         }
 
         /* Forms */
@@ -74,72 +76,131 @@
             text-align: left;
             animation: fadeIn 0.5s ease-in-out;
         }
+
         .form-group label {
             display: block;
             color: #555;
-            font-weight: 500;
+            font-weight: 700;
             margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .form-group input, .form-group textarea {
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
             outline: none;
-            transition: border-color 0.3s;
-        }
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: #4a90e2;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        /* Navigation buttons */
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 8px rgba(74, 144, 226, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Step Content */
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        /* Navigation Buttons */
         .nav-btns {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
         }
+
         .nav-btns button {
             padding: 12px 24px;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
             color: white;
             background: #4a90e2;
             cursor: pointer;
             transition: background 0.3s, transform 0.2s;
         }
+
         .nav-btns button:hover {
             background: #357abd;
             transform: scale(1.05);
         }
+
         .nav-btns button.disabled {
             background: #ddd;
             cursor: not-allowed;
             transform: scale(1);
         }
 
-        /* Success Message */
-        .success-message {
-            color: #4caf50;
-            font-size: 20px;
-            margin-top: 30px;
-            font-weight: 600;
+        /* Thank You Message */
+        .thank-you-message {
             display: none;
+            text-align: center;
         }
 
-        /* Hide steps by default */
-        .step-content {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-        .step-content.active {
+        .thank-you-message.active {
             display: block;
-            opacity: 1;
         }
 
-        /* Animations */
+        .thank-you-message .icon {
+            font-size: 50px;
+            color: #4caf50;
+            margin-bottom: 20px;
+            animation: bounce 1.5s infinite;
+        }
+
+        .thank-you-message h3 {
+            color: #4caf50;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .thank-you-message p {
+            color: #555;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .thank-you-message button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            background: #4caf50;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .thank-you-message button:hover {
+            background: #43a047;
+            transform: scale(1.05);
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -151,16 +212,13 @@
             }
         }
 
-        /* Media Display */
-        .media-preview {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .media-preview img, .media-preview video {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
     </style>
 </head>
@@ -171,10 +229,9 @@
 
     <!-- Step Indicators -->
     <div class="step-indicators">
-        <div class="step active" id="step1" role="tab" aria-controls="step1-content">1</div>
-        <div class="step" id="step2" role="tab" aria-controls="step2-content">2</div>
-        <div class="step" id="step3" role="tab" aria-controls="step3-content">3</div>
-        <div class="progress-bar" id="progressBar"></div>
+        <div class="step active" id="step1">1</div>
+        <div class="step" id="step2">2</div>
+        <div class="step" id="step3">3</div>
     </div>
 
     <!-- Step 1: Patient Information -->
@@ -184,19 +241,25 @@
             <input type="text" id="patientName" placeholder="Enter patient's full name" required>
         </div>
         <div class="form-group">
-            <label for="issue">What Issue?</label>
-            <textarea id="issue" rows="3" placeholder="Describe the issue" required></textarea>
+            <label for="issueType">What Issues? (Optional):</label>
+            <select id="issueType">
+                <option value="">Select an issue</option>
+                <option value="Food">Food</option>
+                <option value="Medicine">Medicine</option>
+                <option value="Education">Education</option>
+                <option value="Supervised Person (Disability)">Supervised Person (Disability)</option>
+            </select>
         </div>
         <div class="form-group">
-            <label for="location">Location:</label>
-            <input type="text" id="location" placeholder="Enter address" required>
+            <label for="issueDescription">Description of Issues (Optional):</label>
+            <textarea id="issueDescription" rows="3" placeholder="Describe the issue"></textarea>
         </div>
     </div>
 
     <!-- Step 2: Fundraiser Details -->
     <div class="step-content" id="step2-content">
         <div class="form-group">
-            <label for="title">Fundraiser Title:</label>
+            <label for="title">Fundraising Title:</label>
             <input type="text" id="title" placeholder="Enter fundraiser title" required>
         </div>
         <div class="form-group">
@@ -204,21 +267,25 @@
             <input type="number" id="goal" placeholder="Enter goal amount" required>
         </div>
         <div class="form-group">
-            <label for="upload">Upload Image or Video:</label>
-            <input type="file" id="upload" accept="image/,video/" onchange="previewMedia()">
+            <label for="days">How Many Days:</label>
+            <input type="number" id="days" placeholder="Enter number of days" required>
+        </div>
+        <div class="form-group">
+            <label for="image">Your Image:</label>
+            <input type="file" id="image" accept="image/*" required>
         </div>
     </div>
 
-    <!-- Step 3: Confirmation -->
+    <!-- Step 3: Address and Documents -->
     <div class="step-content" id="step3-content">
-        <h3>Confirmation</h3>
-        <p id="confirmName"></p>
-        <p id="confirmIssue"></p>
-        <p id="confirmLocation"></p>
-        <p id="confirmTitle"></p>
-        <p id="confirmGoal"></p>
-        <div class="media-preview" id="mediaPreview"></div>
-        <button id="submitBtn" onclick="finishStep()">Finish</button>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" id="address" placeholder="Enter address" required>
+        </div>
+        <div class="form-group">
+            <label for="documents">Upload Documents or Video (Optional):</label>
+            <input type="file" id="documents" accept="image/*,video/*">
+        </div>
     </div>
 
     <!-- Navigation Buttons -->
@@ -227,9 +294,12 @@
         <button id="nextBtn" onclick="nextStep()">Next</button>
     </div>
 
-    <!-- Success Message -->
-    <div class="success-message" id="successMessage">
-        Your fundraiser is successfully created!
+    <!-- Thank You Message -->
+    <div class="thank-you-message" id="thankYouMessage">
+        <div class="icon">🎉</div>
+        <h3>Thank You!</h3>
+        <p>Your fundraiser has been successfully created. Together, we can make a difference!</p>
+        <button onclick="redirectToIndex()">Close</button>
     </div>
 </div>
 
@@ -237,26 +307,19 @@
     let currentStep = 1;
 
     function updateSteps() {
-        // Update the progress bar
-        const progressBar = document.getElementById('progressBar');
-        progressBar.style.width = (currentStep - 1) / 2 * 100 + '%';
-
-        // Update the step indicators
+        // Update step indicators
         for (let i = 1; i <= 3; i++) {
-            document.getElementById('step' + i).classList.toggle('active', i <= currentStep);
+            document.getElementById(`step${i}`).classList.toggle('active', i === currentStep);
         }
 
         // Show the correct step content
         for (let i = 1; i <= 3; i++) {
-            document.getElementById('step' + i + '-content').classList.toggle('active', i === currentStep);
+            document.getElementById(`step${i}-content`).classList.toggle('active', i === currentStep);
         }
 
-        // Update the navigation buttons
+        // Update navigation buttons
         document.getElementById('prevBtn').classList.toggle('disabled', currentStep === 1);
-        document.getElementById('nextBtn').classList.toggle('disabled', currentStep === 3);
-
-        // Scroll to top
-        window.scrollTo(0, 0);
+        document.getElementById('nextBtn').innerText = currentStep === 3 ? 'Submit' : 'Next';
     }
 
     function prevStep() {
@@ -267,51 +330,50 @@
     }
 
     function nextStep() {
-        if (currentStep < 3) {
-            currentStep++;
-            updateSteps();
-        } else {
-            // On the last step, show confirmation
-            document.getElementById('confirmName').textContent = Name: ${document.getElementById('patientName').value};
-            document.getElementById('confirmIssue').textContent = Issue: ${document.getElementById('issue').value};
-            document.getElementById('confirmLocation').textContent = Location: ${document.getElementById('location').value};
-            document.getElementById('confirmTitle').textContent = Title: ${document.getElementById('title').value};
-            document.getElementById('confirmGoal').textContent = Goal: ${document.getElementById('goal').value};
+        // Validate current step before proceeding
+        let isValid = true;
 
-            // Handle media preview
-            const mediaPreview = document.getElementById('mediaPreview');
-            mediaPreview.innerHTML = '';
-            const fileInput = document.getElementById('upload').files[0];
-            if (fileInput) {
-                const mediaElement = document.createElement(fileInput.type.startsWith('video') ? 'video' : 'img');
-                mediaElement.src = URL.createObjectURL(fileInput);
-                mediaElement.controls = fileInput.type.startsWith('video');
-                mediaPreview.appendChild(mediaElement);
+        if (currentStep === 1) {
+            const patientName = document.getElementById('patientName').value;
+            if (!patientName) {
+                isValid = false;
+                alert('Please fill the form: Patient Name is required.');
             }
+        } else if (currentStep === 2) {
+            const title = document.getElementById('title').value;
+            const goal = document.getElementById('goal').value;
+            const days = document.getElementById('days').value;
+            const image = document.getElementById('image').files[0];
 
-            updateSteps();
+            if (!title || !goal || !days || !image) {
+                isValid = false;
+                alert('Please fill the form: All fields are required.');
+            }
+        } else if (currentStep === 3) {
+            const address = document.getElementById('address').value;
+            if (!address) {
+                isValid = false;
+                alert('Please fill the form: Address is required.');
+            }
+        }
+
+        // Proceed to the next step if validation passes
+        if (isValid) {
+            if (currentStep < 3) {
+                currentStep++;
+                updateSteps();
+            } else {
+                // Show thank you message on final step
+                document.getElementById('thankYouMessage').classList.add('active');
+                document.getElementById('step3-content').classList.remove('active');
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('prevBtn').style.display = 'none';
+            }
         }
     }
 
-    function finishStep() {
-        document.getElementById('successMessage').style.display = 'block';
-        setTimeout(() => {
-            document.querySelector('.container').reset(); // Reset form if needed
-            document.getElementById('successMessage').style.display = 'none';
-            currentStep = 1;
-            updateSteps();
-        }, 2000);
-    }
-
-    function previewMedia() {
-        const fileInput = document.getElementById('upload').files[0];
-        if (fileInput) {
-            const mediaElement = document.createElement(fileInput.type.startsWith('video') ? 'video' : 'img');
-            mediaElement.src = URL.createObjectURL(fileInput);
-            mediaElement.controls = fileInput.type.startsWith('video');
-            document.getElementById('mediaPreview').innerHTML = '';
-            document.getElementById('mediaPreview').appendChild(mediaElement);
-        }
+    function redirectToIndex() {
+        window.location.href = 'index.html'; // Redirect to index.html
     }
 
     updateSteps();
