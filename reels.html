@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShareKind Reels</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/solid.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -297,17 +296,25 @@
         <div id="message" style="color: #fff; display: none;">No reels found</div>
         <button class="tab-button" onclick="nextReel()">Next Reel</button>
     </div>
+  <div class="bottom-nav">
+  <div class="nav-icon"><a href="index.html" title="Home"><i class="fa-solid fa-house"></i></a></div>
+  <div class="nav-icon"><a href="reels.html" title="Reels"><i class="fa-solid fa-radio"></i></a></div>
+  <div class="nav-icon"><a href="maker.html" title="Makers"><i class="fa fa-star"></i></a></div>
+  <div class="nav-icon"><a href="reward.html" title="Rewards"><i class="fa-solid fa-trophy"></i></a></div>
+  <div class="nav-icon"><a href="profile.html" title="Profile"><img id="bottomNavProfileImage" src="sk pictures\k6.png" alt="Profile Icon"></a></div>
+  </div>
 
     <!-- FontAwesome for icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
     let currentReel = 0;
 
+    // Function to load saved reels from IndexedDB
     function loadSavedReels() {
         console.log('Loading saved reels...');
         const dbName = 'ShareKindDB';
-        const request = indexedDB.open(dbName, 3);  // Incremented version number
+        const request = indexedDB.open(dbName, 3);
 
         request.onerror = function (event) {
             console.error('IndexedDB error:', event.target.errorCode);
@@ -319,46 +326,52 @@
             const transaction = db.transaction(['posts'], 'readonly');
             const postStore = transaction.objectStore('posts');
 
-            // Check if the index exists
+            // Check if the 'type' index exists
             if (!postStore.indexNames.contains('type')) {
-                console.error('The index "type" does not exist.');
+                console.error('The index "type" does not exist in IndexedDB.');
                 return;
             }
 
             const reelsCursor = postStore.index('type').openCursor(IDBKeyRange.only('reel'));
-
             let reelCount = 0;
             const reelsPage = document.getElementById('reelsPage');
+
             if (!reelsPage) {
-                console.error('Reels page element not found');
+                console.error('Reels page element not found.');
                 return;
             }
-            reelsPage.innerHTML = ''; // Clear existing reels
+
+            reelsPage.innerHTML = ''; // Clear previous reels
 
             reelsCursor.onsuccess = function (event) {
                 const cursor = event.target.result;
                 if (cursor) {
-                    console.log('Loading reel:', cursor.value);
+                    console.log('Reel found:', cursor.value);
+
                     const reel = document.createElement('div');
                     reel.classList.add('reel');
                     reel.style.display = (reelCount === 0) ? 'flex' : 'none';
 
+                    // Create video element
                     const video = document.createElement('video');
-                    video.src = cursor.value.content;
+                    video.src = cursor.value.content; // Reel video source
                     video.controls = false;
                     video.loop = true;
+                    video.setAttribute('playsinline', true);
                     reel.appendChild(video);
 
+                    // Load profile data from localStorage
                     const profile = getProfileData();
                     const header = document.createElement('div');
                     header.classList.add('reel-header');
                     header.innerHTML = `
                         <img src="${profile.profileImage}" alt="Profile Picture">
                         <span>${profile.profileName}</span>
-                        <button class="support-button" aria-label="Support">SUPPORT</button>
+                        <button class="support-button">SUPPORT</button>
                     `;
                     reel.appendChild(header);
 
+                    // Actions (view, like, comment, share)
                     const actions = document.createElement('div');
                     actions.classList.add('reel-actions');
                     actions.innerHTML = `
@@ -372,24 +385,26 @@
                     `;
                     reel.appendChild(actions);
 
+                    // Donate & Encourage buttons
                     const donateContainer = document.createElement('div');
                     donateContainer.classList.add('donate-container');
                     donateContainer.innerHTML = `
-                        <button class="donate-button" aria-label="Donate">
+                        <button class="donate-button">
                             <span>Donate <i class="fa fa-donate"></i></span>
                         </button>
-                        <button class="encourage-button" aria-label="Encourage">
+                        <button class="encourage-button">
                             <span>Encourage <i class="fa fa-star"></i></span>
                         </button>
                     `;
                     reel.appendChild(donateContainer);
 
+                    // Description
                     const description = document.createElement('div');
                     description.classList.add('description-container');
-                    description.id = 'descriptionContainer';
-                    description.textContent = 'Small acts, Big impact. Join Rahul in every donation.';
+                    description.textContent = cursor.value.description || 'Small acts, Big impact. Join the movement!';
                     reel.appendChild(description);
 
+                    // Add to page
                     reelsPage.appendChild(reel);
                     reel.addEventListener('click', togglePlayPause);
                     reel.addEventListener('dblclick', likeReel);
@@ -397,10 +412,10 @@
                     reelCount++;
                     cursor.continue();
                 } else {
-                    if (reelCount === 0) {
-                        document.getElementById('message').style.display = 'block';
-                    } else {
-                        document.getElementById('message').style.display = 'none';
+                    // No reels found message
+                    const messageElement = document.getElementById('message');
+                    if (messageElement) {
+                        messageElement.style.display = (reelCount === 0) ? 'block' : 'none';
                     }
                 }
             };
@@ -410,6 +425,7 @@
             };
         };
 
+        // Ensure index is created in onupgradeneeded
         request.onupgradeneeded = function (event) {
             const db = event.target.result;
             let postStore;
@@ -420,7 +436,6 @@
                 postStore = event.target.transaction.objectStore('posts');
             }
 
-            // Create the 'type' index if it doesn't exist
             if (!postStore.indexNames.contains('type')) {
                 postStore.createIndex('type', 'type', { unique: false });
                 console.log('Index "type" created successfully.');
@@ -428,6 +443,15 @@
         };
     }
 
+    // Get profile data from localStorage
+    function getProfileData() {
+        return {
+            profileImage: localStorage.getItem('profileImage') || 'default-profile.jpg',
+            profileName: localStorage.getItem('profileName') || 'Default Name'
+        };
+    }
+
+    // Play/Pause video on click
     function togglePlayPause(event) {
         const video = event.currentTarget.querySelector('video');
         if (video) {
@@ -439,13 +463,16 @@
         }
     }
 
-    function getProfileData() {
-        return {
-            profileImage: localStorage.getItem('profileImage') || 'default-profile.jpg',
-            profileName: localStorage.getItem('profileName') || 'Default Name'
-        };
+    // Like Reel (double-click)
+    function likeReel(event) {
+        const likeButton = event.currentTarget.querySelector('.like-button i');
+        likeButton.classList.add('liked');
+        setTimeout(() => {
+            likeButton.classList.remove('liked');
+        }, 1000);
     }
 
+    // Navigate reels (next and previous)
     function nextReel() {
         const reels = document.querySelectorAll('.reel');
         if (reels.length === 0) return;
@@ -486,70 +513,32 @@
         }
     }
 
-    function likeReel(event) {
-        const likeButton = event.currentTarget.querySelector('.like-button i');
-        likeButton.classList.add('liked');  // Add a CSS class to animate the heart
-        setTimeout(() => {
-            likeButton.classList.remove('liked');
-        }, 1000);  // Remove the class after 1 second
-    }
-
-    function toggleDescription() {
-        const descriptionContainer = document.getElementById('descriptionContainer');
-        if (descriptionContainer) {
-            descriptionContainer.classList.toggle('expanded');
-        }
-    }
-
-    document.getElementById('descriptionContainer')?.addEventListener('click', toggleDescription);
-
-    let touchstartX = 0;
-    let touchstartY = 0;
-    let touchendX = 0;
-    let touchendY = 0;
+    // Swipe gestures for next/previous reel
+    let touchstartY = 0, touchendY = 0;
     const swipeThreshold = 50;
 
-    function handleSwipe() {
-        const verticalSwipeUp = touchendY < touchstartY - swipeThreshold;
-        const verticalSwipeDown = touchendY > touchstartY + swipeThreshold;
-        if (verticalSwipeUp) {
-            nextReel();
-        } else if (verticalSwipeDown) {
-            previousReel();
+    document.addEventListener('touchstart', e => touchstartY = e.changedTouches[0].screenY);
+    document.addEventListener('touchend', e => {
+        touchendY = e.changedTouches[0].screenY;
+        if (touchendY < touchstartY - swipeThreshold) nextReel();
+        if (touchendY > touchstartY + swipeThreshold) previousReel();
+    });
+
+    // Load saved reels on page load
+    loadSavedReels();
+
+    // Load profile image in bottom navigation
+    const savedImage = localStorage.getItem('profileImage');
+    if (savedImage) {
+        const bottomNavProfileImage = document.getElementById('bottomNavProfileImage');
+        if (bottomNavProfileImage) {
+            bottomNavProfileImage.src = savedImage;
         }
     }
-
-    document.addEventListener('touchstart', e => {
-        touchstartX = e.changedTouches[0].screenX;
-        touchstartY = e.changedTouches[0].screenY;
-    });
-
-    document.addEventListener('touchend', e => {
-        touchendX = e.changedTouches[0].screenX;
-        touchendY = e.changedTouches[0].screenY;
-        handleSwipe();
-    });
-
-    window.onload = function () {
-        loadSavedReels();
-    };
 });
-    </script>        
-    <div class="bottom-nav">
-        <div class="nav-icon"><a href="index.html" title="Home"><i class="fa-solid fa-house"></i></a></div>
-        <div class="nav-icon"><a href="reels.html" title="Reels"><i class="fa-solid fa-radio"></i></a></div>
-        <div class="nav-icon"><a href="maker.html" title="Makers"><i class="fa fa-star"></i></a></div>
-        <div class="nav-icon"><a href="reward.html" title="Rewards"><i class="fa-solid fa-trophy"></i></a></div>
-        <div class="nav-icon"><a href="profile.html" title="Profile"><img id="bottomNavProfileImage" src="sk pictures\k6.png" alt="Profile Icon"></a></div>
-      </div>
-      <script>
+
+    </script>
+  
       
-        // Load saved profile image from localStorage on page load
-            const savedImage = localStorage.getItem('profileImage');
-            if (savedImage) {
-                document.getElementById('bottomNavProfileImage').src = savedImage;
-            }
-      
-      </script>
 </body>
 </html>
