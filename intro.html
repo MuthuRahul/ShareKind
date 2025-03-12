@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShareKind Animated Intro</title>
+  <style>
+    /* General Styling */
+    body {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #007BFF, #6F42C1);
+      transition: background 1s ease-in-out;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+    }
+
+    /* Glowing 3D Text */
+    .text {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #fff;
+      position: relative;
+      opacity: 0;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      transform: translateY(50px) scale(0.8);
+      animation: text-fade 1.5s ease-out forwards;
+    }
+
+    .text:nth-child(2) { animation-delay: 1s; }
+    .text:nth-child(3) { animation-delay: 2s; }
+
+    @keyframes text-fade {
+      0% { opacity: 0; transform: translateY(50px) scale(0.8); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Fireworks Effect */
+    .fireworks {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .spark {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: gold;
+      border-radius: 50%;
+      opacity: 0;
+      animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(3); opacity: 0; }
+    }
+
+    /* Water Ripple Effect */
+    .ripple {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      animation: ripple 2s ease-in-out infinite;
+    }
+
+    @keyframes ripple {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(0); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(2); }
+    }
+
+    /* Sliding Tagline */
+    .tagline {
+      font-size: 1.5rem;
+      color: #fff;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: tagline-slide 2s ease-in-out 3s forwards;
+    }
+
+    @keyframes tagline-slide {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Day/Night Mode */
+    @keyframes change-theme {
+      0%, 50% { background: linear-gradient(135deg, #007BFF, #6F42C1); }
+      51%, 100% { background: linear-gradient(135deg, #FF9800, #E91E63); }
+    }
+
+    .theme-change {
+      animation: change-theme 10s infinite alternate ease-in-out;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="text">Share</div>
+    <div class="text">Kindness</div>
+    <div class="text">Connect</div>
+    <div class="ripple"></div>
+    <div class="tagline">Connect. Give. Inspire.</div>
+    <div class="fireworks" id="fireworks"></div>
+  </div>
+
+  <script>
+    // Theme Auto Change
+    document.body.classList.add('theme-change');
+
+    // Fireworks Effect on Click
+    document.body.addEventListener('click', (e) => {
+      for (let i = 0; i < 30; i++) {
+        const spark = document.createElement('div');
+        spark.classList.add('spark');
+        spark.style.left = `${e.clientX}px`;
+        spark.style.top = `${e.clientY}px`;
+        spark.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        spark.style.transform = `translate(-50%, -50%) scale(${Math.random() * 1.5})`;
+        spark.style.animationDelay = `${Math.random() * 0.5}s`;
+        document.getElementById('fireworks').appendChild(spark);
+      }
+    });
+        setTimeout(() => {
+          window.location.href = "#";
+    }, 5000);
+    </script>
+</body>
+</html>

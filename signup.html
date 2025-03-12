@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareKind Signup</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+             background: linear-gradient(to right, rgba(30, 60, 114, 0.7), rgba(42, 82, 152, 0.7)),
+                url('sk pictures/back6.webp') no-repeat center center fixed;
+             background-size: cover;
+            background-blend-mode: overlay;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 120vh;
+            margin: 0;
+            padding: 10px;
+            color: #fff;
+            text-align: center;
+        }
+        .signup-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            color: #1e3c72;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #1e3c72;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #1e3c72;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background: #163161;
+            transform: scale(1.02);
+        }
+        .donation-message {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #555;
+            font-weight: bold;
+        }
+        .password-strength {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #555;
+        }
+        .password-strength span {
+            font-weight: bold;
+        }
+        .toggle-password {
+            cursor: pointer;
+            color: #1e3c72;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+            text-align: right;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h1>Join ShareKind - Make an Impact</h1>
+        <p class="donation-message">Sign up and be a part of ShareKind, where kindness transforms lives and every donation counts.</p>
+        <form id="signup-form">
+            <div class="input-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email ID</label>
+                <input type="email" id="email" name="email" required>
+                <div class="error-message" id="email-error"></div>
+            </div>
+            <div class="input-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" required pattern="^[0-9]{10}$" title="Enter a 10-digit mobile number">
+                <div class="error-message" id="mobile-error"></div>
+            </div>
+            <div class="input-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required>
+                <div class="error-message" id="dob-error"></div>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <div class="password-strength" id="password-strength"></div>
+                <span class="toggle-password" onclick="togglePasswordVisibility('password')">Show Password</span>
+            </div>
+            <div class="input-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility('confirmPassword')">Show Password</span>
+                <div class="error-message" id="confirmPassword-error"></div>
+            </div>
+            <button type="submit">Join Now</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    
+    const fullName = document.getElementById('fullName').value;
+    const email = document.getElementById('email').value;
+    const mobile = document.getElementById('mobile').value;
+    const dob = document.getElementById('dob').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    let isValid = true;
+
+    // Validate Full Name
+    if (fullName.trim() === '') {
+        isValid = false;
+        alert('Full Name is required.');
+    }
+
+    // Validate Email
+    if (!validateEmail(email)) {
+        isValid = false;
+        document.getElementById('email-error').innerText = 'Please enter a valid email address.';
+    } else {
+        document.getElementById('email-error').innerText = '';
+    }
+
+    // Validate Mobile Number
+    if (!validateMobile(mobile)) {
+        isValid = false;
+        document.getElementById('mobile-error').innerText = 'Please enter a valid 10-digit mobile number.';
+    } else {
+        document.getElementById('mobile-error').innerText = '';
+    }
+
+    // Validate Date of Birth
+    if (!validateDOB(dob)) {
+        isValid = false;
+        document.getElementById('dob-error').innerText = 'You must be at least 18 years old.';
+    } else {
+        document.getElementById('dob-error').innerText = '';
+    }
+
+    // Validate Password
+    if (!validatePassword(password)) {
+        isValid = false;
+        document.getElementById('password-strength').innerText = 'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.';
+    } else {
+        document.getElementById('password-strength').innerText = '';
+    }
+
+    // Validate Confirm Password
+    if (password !== confirmPassword) {
+        isValid = false;
+        document.getElementById('confirmPassword-error').innerText = 'Passwords do not match.';
+    } else {
+        document.getElementById('confirmPassword-error').innerText = '';
+    }
+
+    if (isValid) {
+        console.log('Validation passed! Redirecting to sklogin.html'); // Debugging line
+        window.location.href = 'sklogin.html'; // Redirect to sklogin.html
+    } else {
+        console.log('Validation failed.'); // Debugging line
+    }
+});
+
+    </script>
+</body>
+</html>
