@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Lance.A Fight Chronic Kidney Disease</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: whitesmoke;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        header h1 {
+            font-size: 2.5em;
+            color: #0073e6; /* Blue color for text */
+            background: linear-gradient(45deg, #0073e6, #00b894); /* Blue to Green gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero {
+            background: linear-gradient(to right, rgba(30, 60, 114, 0.7), rgba(42, 82, 152, 0.7)),
+                url('sk pictures/argent1.webp') no-repeat center center/cover;
+            background-size: cover;
+            background-blend-mode: overlay;
+            height: 400px; /* Adjust height as needed */
+            border-radius: 8px;
+            position: relative;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden; /* Ensure the image doesn't overflow */
+            background-attachment: fixed; /* Creates the parallax effect */
+        }
+
+        .hero-text {
+            color: #0073e6; /* Blue color for text */
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .hero-text h2 {
+            margin: 0;
+            font-size: 2em; /* Adjusted for mobile */
+            animation: fadeIn 2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .content .card {
+            flex: 1 1 300px; /* Flex-grow, flex-shrink, flex-basis */
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .content .card:hover {
+            transform: translateY(-10px);
+        }
+        .content .card h3 {
+            margin-bottom: 10px;
+            color: #00b894; /* Green color for headings */
+        }
+        .progress-container {
+            margin: 20px 0;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: #0073e6; /* Blue color for text */
+        }
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress {
+            background: #00b894; /* Green color for progress bar */
+            height: 20px;
+            width: 0;
+            transition: width 0.5s ease-in-out;
+        }
+        .donate-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .donate-section button {
+            background: #0073e6; /* Blue color for button */
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .donate-section button:hover {
+            background: #005bb5; /* Darker blue on hover */
+        }
+        .testimonials {
+            margin: 40px 0;
+            text-align: center;
+        }
+        .testimonials h2 {
+            margin-bottom: 20px;
+            color: #0073e6; /* Blue color for text */
+        }
+        .testimonial-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            display: inline-block;
+            width: 100%; /* Full width on mobile */
+            max-width: 300px; /* Limit width on larger screens */
+        }
+        .testimonial-card p {
+            font-style: italic;
+            color: #0073e6; /* Blue color for text */
+        }
+        .testimonial-card span {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #00b894; /* Green color for text */
+        }
+        .patient-image-box {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .patient-image-box img {
+            width: 150px; /* Adjusted for mobile */
+            height: 150px; /* Adjusted for mobile */
+            border-radius: 50%;
+            border: 5px solid #00b894; /* Green border for image */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background: #333;
+            color: #fff;
+            border-radius: 0 0 8px 8px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%; /* Responsive width */
+            max-width: 400px; /* Limit width on larger screens */
+            position: relative;
+        }
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .modal-content button {
+            background: #0073e6;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .modal-content button:hover {
+            background: #005bb5;
+        }
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+        .close-modal:hover {
+            color: #0073e6;
+        }
+        .profile-image-upload {
+            text-align: center;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .profile-image-upload input[type="file"] {
+            display: none;
+        }
+        .profile-image-upload label {
+            background: #0073e6;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .profile-image-upload label:hover {
+            background: #005bb5;
+        }
+
+        /* Donors List */
+        .donors-list {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .donors-list h2 {
+            margin-bottom: 20px;
+            color: #0073e6;
+        }
+        .donor-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .donor-card img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #00b894;
+        }
+        .donor-card span {
+            font-weight: bold;
+            color: #0073e6;
+        }
+
+        /* Admin Login */
+        .admin-login {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .admin-login input {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .admin-login button {
+            background: #0073e6;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .admin-login button:hover {
+            background: #005bb5;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            margin-top: 40px;
+            text-align: center;
+        }
+        .admin-panel h2 {
+            margin-bottom: 20px;
+            color: #0073e6;
+        }
+        .admin-panel button {
+            background: #e67e22;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .admin-panel button:hover {
+            background: #d35400;
+        }
+
+        /* Edit Icon */
+        .edit-icon {
+            background: #0073e6;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .edit-icon:hover {
+            background: #005bb5;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .hero {
+                height: 200px; /* Adjusted for smaller screens */
+            }
+            .hero-text h2 {
+                font-size: 1.5em; /* Adjusted for smaller screens */
+            }
+            .content .card {
+                flex: 1 1 100%; /* Full width on smaller screens */
+            }
+            .testimonial-card {
+                width: 100%; /* Full width on smaller screens */
+                max-width: none;
+            }
+            .patient-image-box img {
+                width: 100px; /* Smaller image on mobile */
+                height: 100px; /* Smaller image on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Help Lance.A Fight Chronic Kidney Disease</h1>
+        </header>
+        <div class="hero">
+            <div class="hero-text">
+                <h2>Your Support Can Save a Life</h2>
+            </div>
+        </div>
+        <div class="patient-image-box">
+            <img src="sk pictures/argent4.webp" alt="Lance.A's Image">
+        </div>
+        <div class="content">
+            <div class="card">
+                <h3>About Lance.A</h3>
+                <p>Lance.A is an 18-year-old battling Chronic Kidney Disease (CKD). Both his kidneys are affected, and his kidney function is below 15%. Doctors have advised immediate preparation for a kidney transplant.</p>
+            </div>
+            <div class="card">
+                <h3>How You Can Help</h3>
+                <p>Your donations will help cover the costs of AVF installation, kidney transplantation, and follow-up care. Every contribution brings Lance.A closer to a healthier future.</p>
+            </div>
+            <div class="card">
+                <h3>Progress</h3>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Raised: ₹<span id="raised-amount">0</span></span>
+                        <span>Goal: ₹30,000,000</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="donate-section">
+            <button onclick="openModal()">Donate Now</button>
+        </div>
+        <div class="testimonials">
+            <h2>What People Are Saying</h2>
+            <div class="testimonial-card">
+                <p>"Lance.A is a fighter, and your support can make all the difference."</p>
+                <span>- Family Member</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"This campaign is a lifeline for Lance.A. Please donate generously."</p>
+                <span>- Doctor</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Every donation counts. Together, we can save a life."</p>
+                <span>- Supporter</span>
+            </div>
+        </div>
+
+        <!-- Donors List -->
+        <div class="donors-list" id="donorsList">
+            <h2>Recent Donors</h2>
+            <!-- Donor cards will be dynamically added here -->
+        </div>
+
+        <!-- Admin Login -->
+        <div class="admin-login" id="adminLogin">
+            <h2>Admin Login</h2>
+            <input type="text" id="adminUsername" placeholder="Username">
+            <input type="password" id="adminPassword" placeholder="Password">
+            <button onclick="adminLogin()">Login</button>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="admin-panel" id="adminPanel">
+            <h2>Admin Panel</h2>
+            <div id="adminDonorsList">
+                <!-- Admin donor cards will be dynamically added here -->
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 ShareKind.A. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Modal for QR Code and Donation Amount -->
+    <div class="modal" id="donationModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <img src="sk pictures/qrcode.png" alt="QR Code">
+            <p>Scan the QR code to donate via PhonePe. After donating, please fill out the form below:</p>
+            
+            <!-- Profile Image Upload -->
+            <div class="profile-image-upload">
+                <input type="file" id="profileImage" accept="image/*">
+                <label for="profileImage">Upload Profile Image</label>
+            </div>
+
+            <input type="text" id="donorName" placeholder="Your Name">
+            <input type="text" id="donorPhone" placeholder="Your Phone Number">
+            <input type="number" id="donationAmount" placeholder="Amount Donated (₹)">
+            <button onclick="submitDonation()">Submit Donation</button>
+        </div>
+    </div>
+
+    <!-- Edit Donor Modal -->
+    <div class="modal" id="editDonorModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Donor Details</h2>
+            <input type="text" id="editDonorName" placeholder="Donor Name">
+            <input type="number" id="editDonationAmount" placeholder="Donation Amount (₹)">
+            <div class="profile-image-upload">
+                <input type="file" id="editProfileImage" accept="image/*">
+                <label for="editProfileImage">Update Profile Image</label>
+            </div>
+            <button onclick="saveDonorChanges()">Save Changes</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for Interactive Functionality
+        // JavaScript for Interactive Functionality
+let totalRaised = 0;
+const goalAmount = 30000000; // ₹30,000,000 goal
+let donors = JSON.parse(localStorage.getItem('donors')) || []; // Load donors from local storage
+let editIndex = null; // Track the index of the donor being edited
+
+window.addEventListener('scroll', function () {
+    const hero = document.querySelector('.hero');
+    const scrollPosition = window.scrollY;
+
+    // Adjust the background position based on scroll position
+    hero.style.backgroundPosition = `center ${scrollPosition * 0.5}px`; // Adjust the multiplier for speed
+});
+
+// Admin Credentials (updated as per your request)
+const adminUsername = "Rahul";
+const adminPassword = "Rahul@2004";
+
+// Load donors and update progress on page load
+window.onload = function () {
+    updateDonorsList();
+    updateProgress();
+};
+
+// Open Modal
+function openModal() {
+    document.getElementById('donationModal').style.display = 'flex';
+}
+
+// Close Modal
+function closeModal() {
+    document.getElementById('donationModal').style.display = 'none';
+}
+
+// Open Edit Modal
+function openEditModal(index) {
+    editIndex = index;
+    const donor = donors[index];
+    document.getElementById('editDonorName').value = donor.name;
+    document.getElementById('editDonationAmount').value = donor.amount;
+    document.getElementById('editDonorModal').style.display = 'flex';
+}
+
+// Close Edit Modal
+function closeEditModal() {
+    document.getElementById('editDonorModal').style.display = 'none';
+}
+
+// Submit Donation
+function submitDonation() {
+    const donorName = document.getElementById('donorName').value;
+    const donorPhone = document.getElementById('donorPhone').value;
+    const donationAmount = parseFloat(document.getElementById('donationAmount').value);
+    const profileImage = document.getElementById('profileImage').files[0];
+
+    if (!donorName || !donorPhone || isNaN(donationAmount) || donationAmount <= 0) {
+        alert('Please fill out all fields and enter a valid amount.');
+        return;
+    }
+
+    // Convert image to Base64
+    if (profileImage) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const donor = {
+                name: donorName,
+                amount: donationAmount,
+                image: e.target.result, // Store Base64 image
+            };
+            donors.push(donor);
+
+            // Save donors to local storage
+            localStorage.setItem('donors', JSON.stringify(donors));
+
+            // Update total raised and progress bar
+            totalRaised += donationAmount;
+            updateProgress();
+
+            // Show thank you message
+            alert(`Thank you, ${donorName}, for donating ₹${donationAmount.toLocaleString('en-IN')}!`);
+
+            // Close modal
+            closeModal();
+
+            // Refresh donors list
+            updateDonorsList();
+        };
+        reader.readAsDataURL(profileImage); // Convert image to Base64
+    } else {
+        // If no image is uploaded, use a default image
+        const donor = {
+            name: donorName,
+            amount: donationAmount,
+            image: 'sk pictures/k6.png', // Default image
+        };
+        donors.push(donor);
+
+        // Save donors to local storage
+        localStorage.setItem('donors', JSON.stringify(donors));
+
+        // Update total raised and progress bar
+        totalRaised += donationAmount;
+        updateProgress();
+
+        // Show thank you message
+        alert(`Thank you, ${donorName}, for donating ₹${donationAmount.toLocaleString('en-IN')}!`);
+
+        // Close modal
+        closeModal();
+
+        // Refresh donors list
+        updateDonorsList();
+    }
+}
+
+// Update Donors List
+function updateDonorsList() {
+    const donorsList = document.getElementById('donorsList');
+    donorsList.innerHTML = '<h2>Recent Donors</h2>';
+    donors.forEach((donor, index) => {
+        const donorCard = document.createElement('div');
+        donorCard.className = 'donor-card';
+
+        // Create profile image
+        const img = document.createElement('img');
+        img.src = donor.image;
+
+        // Create donor name and amount
+        const span = document.createElement('span');
+        span.textContent = `${donor.name} - ₹${donor.amount.toLocaleString('en-IN')}`;
+
+        // Append to donor card
+        donorCard.appendChild(img);
+        donorCard.appendChild(span);
+
+        // Append to donors list
+        donorsList.appendChild(donorCard);
+    });
+}
+
+// Update Progress Bar
+function updateProgress() {
+    const progressBar = document.getElementById('progress-bar');
+    const raisedAmount = document.getElementById('raised-amount');
+    totalRaised = donors.reduce((sum, donor) => sum + donor.amount, 0); // Recalculate total raised
+    const progressPercentage = Math.min((totalRaised / goalAmount) * 100, 100);
+    progressBar.style.width = progressPercentage + '%';
+    raisedAmount.textContent = totalRaised.toLocaleString('en-IN');
+}
+
+// Admin Login
+function adminLogin() {
+    const username = document.getElementById('adminUsername').value;
+    const password = document.getElementById('adminPassword').value;
+
+    if (username === adminUsername && password === adminPassword) {
+        document.getElementById('adminLogin').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        updateAdminDonorsList();
+    } else {
+        alert('Invalid username or password.');
+    }
+}
+
+// Update Admin Donors List
+function updateAdminDonorsList() {
+    const adminDonorsList = document.getElementById('adminDonorsList');
+    adminDonorsList.innerHTML = '';
+    donors.forEach((donor, index) => {
+        const donorCard = document.createElement('div');
+        donorCard.className = 'donor-card';
+
+        // Create profile image
+        const img = document.createElement('img');
+        img.src = donor.image;
+
+        // Create donor name and amount
+        const span = document.createElement('span');
+        span.textContent = `${donor.name} - ₹${donor.amount.toLocaleString('en-IN')}`;
+
+        // Create edit button
+        const editButton = document.createElement('button');
+        editButton.className = 'edit-icon';
+        editButton.innerHTML = '✏️'; // Edit icon
+        editButton.onclick = () => openEditModal(index);
+
+        // Create remove button
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.onclick = () => removeDonor(index);
+
+        // Append to donor card
+        donorCard.appendChild(img);
+        donorCard.appendChild(span);
+        donorCard.appendChild(editButton);
+        donorCard.appendChild(removeButton);
+
+        // Append to admin donors list
+        adminDonorsList.appendChild(donorCard);
+    });
+}
+
+// Remove Donor
+function removeDonor(index) {
+    const removedDonor = donors.splice(index, 1)[0];
+    localStorage.setItem('donors', JSON.stringify(donors)); // Update local storage
+    totalRaised -= removedDonor.amount;
+    updateProgress();
+    updateDonorsList();
+    updateAdminDonorsList();
+    alert(`Donation by ${removedDonor.name} removed.`);
+}
+
+// Save Donor Changes
+function saveDonorChanges() {
+    const donorName = document.getElementById('editDonorName').value;
+    const donationAmount = parseFloat(document.getElementById('editDonationAmount').value);
+    const profileImage = document.getElementById('editProfileImage').files[0];
+
+    if (!donorName || isNaN(donationAmount) || donationAmount <= 0) {
+        alert('Please fill out all fields and enter a valid amount.');
+        return;
+    }
+
+    // Update donor details
+    const donor = donors[editIndex];
+    donor.name = donorName;
+    donor.amount = donationAmount;
+
+    // Convert new image to Base64 if uploaded
+    if (profileImage) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            donor.image = e.target.result; // Update image with Base64
+            localStorage.setItem('donors', JSON.stringify(donors)); // Save to local storage
+            updateProgress();
+            closeEditModal();
+            updateDonorsList();
+            updateAdminDonorsList();
+            alert('Donor details updated successfully!');
+        };
+        reader.readAsDataURL(profileImage); // Convert image to Base64
+    } else {
+        // If no new image is uploaded, keep the existing image
+        localStorage.setItem('donors', JSON.stringify(donors)); // Save to local storage
+        updateProgress();
+        closeEditModal();
+        updateDonorsList();
+        updateAdminDonorsList();
+        alert('Donor details updated successfully!');
+    }
+}
+    </script>
+</body>
+</html>
