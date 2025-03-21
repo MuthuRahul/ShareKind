@@ -12,6 +12,168 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <title>ShareKind</title>
+    <style>
+      :root {
+  --primary: #0077cc;
+  --bg: #f8f9fa;
+  --white: #ffffff;
+  --dark: #222;
+  --donate: #ff4d4d;
+  --donate-hover: #ff1a1a;
+  --gradient: linear-gradient(45deg, #ff4d4d, #ff1a1a);
+}
+
+body {
+  font-size: 1.2rem;
+  background: var(--bg);
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.donation-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.donation-subheading {
+  font-size: 1.5rem;
+  color: var(--dark);
+  font-weight: bold;
+}
+
+.donation-heading {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+#donation-section {
+  padding: 4rem 0;
+}
+
+.donation-slider {
+  height: 480px;
+  padding: 20px 0;
+}
+
+.donation-slide {
+  width: 330px;
+  height: 470px;
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out;
+}
+
+.donation-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.donation-slide-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.donation-slide-content h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 5px 0;
+  color: #ffd700;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.donation-slide-content h2 {
+  font-size: 1.4rem;
+  opacity: 0.9;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.super-donate-btn {
+  background: var(--gradient);
+  color: var(--white);
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 12px;
+  box-shadow: 0px 4px 10px rgba(255, 0, 0, 0.4);
+  transition: all 0.3s;
+}
+
+.super-donate-btn:hover {
+  background: var(--donate-hover);
+  transform: scale(1.1);
+}
+
+.donation-nav-next, .donation-nav-prev {
+  color: var(--primary);
+}
+
+.donation-pagination .swiper-pagination-bullet-active {
+  background: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .donation-slide {
+      width: 280px;
+      height: 420px;
+  }
+
+  .donation-slide-content h1 {
+      font-size: 1.5rem;
+  }
+
+  .donation-slide-content h2 {
+      font-size: 1.2rem;
+  }
+
+  .super-donate-btn {
+      font-size: 1rem;
+      padding: 10px 20px;
+  }
+}
+
+@media (max-width: 450px) {
+  .donation-slider {
+      height: 430px;
+  }
+
+  .donation-slide {
+      width: 250px;
+      height: 380px;
+  }
+
+  .donation-slide-content h1 {
+      font-size: 1.3rem;
+  }
+
+  .donation-slide-content h2 {
+      font-size: 1.1rem;
+  }
+
+  .super-donate-btn {
+      font-size: 0.9rem;
+      padding: 9px 18px;
+  }
+}
+    </style>
 </head>
 <body>
     <div class="navbar">
@@ -87,165 +249,90 @@
                 });
         </script>
 
-<section  id="trending">
-    <div class="container">
-      <h3 class="text-center section-subheading">-Emergency Section-</h3>
-      <h1 class="text-center section-heading">Small Acts Big Impacts!</h1>
-    </div>
-    <div class="container">
-      <div class="swiper trending-slider">
-        <div class="swiper-wrapper">
-          <!------ slide start------>
-          <div class="swiper-slide trending-slide">
-            <div class="trending-slide-img">
-              <img src="sk pictures/s1.jpg" alt="Trending">
-            </div>
-            <div class="trending-slide-content">
-              <h1 class="sk-rate">₹1,00,000</h1>
-              <div class="trending-slide-content-bottom">
-                <h2 class="sk-days">10days left</h2>
-              </div>
-            </div>
-          </div>
-          <!------slide end------>
-          <!------ slide start------>
-          <div class="swiper-slide trending-slide">
-            <div class="trending-slide-img">
-              <img src="sk pictures/s2.jpg" alt="Trending">
-            </div>
-            <div class="trending-slide-content">
-              <h1 class="sk-rate">₹1,00,000</h1>
-              <div class="trending-slide-content-bottom">
-                <h2 class="sk-days">10days left</h2>
-              </div>
-            </div>
-          </div>
-          <!------slide end------>
-          <!------ slide start------>
-          <div class="swiper-slide trending-slide">
-            <div class="trending-slide-img">
-              <img src="sk pictures/s3.jpg" alt="Trending">
-            </div>
-            <div class="trending-slide-content">
-              <h1 class="sk-rate">₹1,00,000</h1>
-              <div class="trending-slide-content-bottom">
-                <h2 class="sk-days">10days left</h2>
-              </div>
-            </div>
-          </div>
-          <!------slide end------>
-          <!------ slide start------>
-          <div class="swiper-slide trending-slide">
-            <div class="trending-slide-img">
-              <img src="sk pictures/s4.jpg" alt="Trending">
-            </div>
-            <div class="trending-slide-content">
-              <h1 class="sk-rate">₹1,00,000</h1>
-              <div class="trending-slide-content-bottom">
-                <h2 class="sk-days">10days left</h2>
-              </div>
-            </div>
-          </div>
-          <!------slide end------>
-          <!------ slide start------>
-          <div class="swiper-slide trending-slide">
-            <div class="trending-slide-img">
-              <img src="sk pictures/s5.webp" alt="Trending">
-            </div>
-            <div class="trending-slide-content">
-              <h1 class="sk-rate">₹1,00,000</h1>
-              <div class="trending-slide-content-bottom">
-                <h2 class="sk-days">10days left</h2>
-              </div>
-            </div>
-          </div>
-          <!------slide end------>
-          <!------ slide start------>
-          <div class="swiper-slide trending-slide">
-            <div class="trending-slide-img">
-              <img src="sk pictures/s6.jpg" alt="Trending">
-            </div>
-            <div class="trending-slide-content">
-              <h1 class="sk-rate">₹1,00,000</h1>
-              <div class="trending-slide-content-bottom">
-                <h2 class="sk-days">10days left</h2>
-              </div>
-            </div>
-          </div>
-          <!------slide end------>
-          <!------ slide start------>
-          <div class="swiper-slide trending-slide">
-            <div class="trending-slide-img">
-              <img src="sk pictures/s7.webp" alt="Trending">
-            </div>
-            <div class="trending-slide-content">
-              <h1 class="sk-rate">₹1,00,000</h1>
-              <div class="trending-slide-content-bottom">
-                <h2 class="sk-days">10days left</h2>
-              </div>
-            </div>
-          </div>
-          <!------slide end------>
-          <!------ slide start------>
-          <div class="swiper-slide trending-slide">
-            <div class="trending-slide-img">
-              <img src="sk pictures/s8.jpg" alt="Trending">
-            </div>
-            <div class="trending-slide-content">
-              <h1 class="sk-rate">₹1,00,000</h1>
-              <div class="trending-slide-content-bottom">
-                <h2 class="sk-days">10days left</h2>
-              </div>
-            </div>
-          </div>
-          <!------slide end------>
-          <!------ slide start------>
-          <div class="swiper-slide trending-slide">
-            <div class="trending-slide-img">
-              <img src="sk pictures/s9.webp" alt="Trending">
-            </div>
-            <div class="trending-slide-content">
-              <h1 class="sk-rate">₹1,00,000</h1>
-              <div class="trending-slide-content-bottom">
-                <h2 class="sk-days">10days left</h2>
-              </div>
-            </div>
-          </div>
-          <!------slide end------>
-          <!------ slide start------>
-          <div class="swiper-slide trending-slide">
-            <div class="trending-slide-img">
-              <img src="sk pictures/s10.jpg" alt="Trending">
-            </div>
-            <div class="trending-slide-content">
-              <h1 class="sk-rate">₹1,00,000</h1>
-              <div class="trending-slide-content-bottom">
-                <h2 class="sk-days">10days left</h2>
-              </div>
-            </div>
-          </div>
-          <!------slide end------>
-        
-        </div>
+<section id="donation-section">
+  <div class="donation-container">
+      <h3 class="donation-subheading">- Emergency Donations -</h3>
+      <h1 class="donation-heading">Make a Difference Today!</h1>
+  </div>
 
-        <div class="trending-slider-control">
-          <div class="swiper-button-prev slider-arrow">
-            <ion-icon name="arrow-back-outline"></ion-icon>
+  <div class="donation-container">
+      <div class="swiper donation-slider">
+          <div class="swiper-wrapper">
+              <!-- Slides -->
+              <div class="swiper-slide donation-slide">
+                  <img src="sk pictures/s1.jpg" alt="Donation">
+                  <div class="donation-slide-content">
+                      <h1>₹1,00,000</h1>
+                      <h2>10 days left</h2>
+                      <button class="super-donate-btn">Super Donate</button>
+                  </div>
+              </div>
+
+              <div class="swiper-slide donation-slide">
+                  <img src="sk pictures/s2.jpg" alt="Donation">
+                  <div class="donation-slide-content">
+                      <h1>₹75,000</h1>
+                      <h2>5 days left</h2>
+                      <button class="super-donate-btn">Super Donate</button>
+                  </div>
+              </div>
+
+              <div class="swiper-slide donation-slide">
+                  <img src="sk pictures/s3.jpg" alt="Donation">
+                  <div class="donation-slide-content">
+                      <h1>₹50,000</h1>
+                      <h2>3 days left</h2>
+                      <button class="super-donate-btn">Super Donate</button>
+                  </div>
+              </div>
+
+              <div class="swiper-slide donation-slide">
+                  <img src="sk pictures/s4.jpg" alt="Donation">
+                  <div class="donation-slide-content">
+                      <h1>₹20,000</h1>
+                      <h2>1 day left</h2>
+                      <button class="super-donate-btn">Super Donate</button>
+                  </div>
+              </div>
           </div>
-          <div class="swiper-button-next slider-arrow">
-            <ion-icon name="arrow-forward-outline"></ion-icon>
-          </div>
-          <div class="swiper-pagination"></div>
-        </div>
+
+          <!-- Controls -->
+          <div class="swiper-button-prev donation-nav-prev"></div>
+          <div class="swiper-button-next donation-nav-next"></div>
+          <div class="swiper-pagination donation-pagination"></div>
       </div>
-    </div>
-  </section>
+  </div>
+</section>
 
-<!-- Scripts -->
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
-<script src="script.js"></script>
+<script>
+  var donationSlider = new Swiper('.donation-slider', {
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      loop: true,
+      slidesPerView: 'auto',
+      spaceBetween: 15,
+      coverflowEffect: {
+          rotate: 0,
+          stretch: 0,
+          depth: 100,
+          modifier: 2.5,
+      },
+      autoplay: {
+          delay: 2000,
+          disableOnInteraction: false,
+      },
+      pagination: {
+          el: '.donation-pagination',
+          clickable: true,
+      },
+      navigation: {
+          nextEl: '.donation-nav-next',
+          prevEl: '.donation-nav-prev',
+      }
+  });
+</script>
 
 <div class="wrapper">
   <div class="image-box">
