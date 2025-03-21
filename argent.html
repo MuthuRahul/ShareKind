@@ -247,34 +247,74 @@
         .profile-image-upload label:hover {
             background: #005bb5;
         }
-
-        /* Donors List */
+        
         .donors-list {
-            margin-top: 40px;
-            text-align: center;
-        }
-        .donors-list h2 {
-            margin-bottom: 20px;
-            color: #0073e6;
-        }
-        .donor-card {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .donor-card img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid #00b894;
-        }
-        .donor-card span {
-            font-weight: bold;
-            color: #0073e6;
-        }
+    margin-top: 40px;
+    text-align: center;
+}
 
+.donor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.donor-card {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    animation: fadeInUp 0.5s ease-in-out;
+}
+
+.donor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.donor-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #00b894;
+    margin-bottom: 10px;
+}
+
+.donor-card span {
+    font-weight: bold;
+    color: #0073e6;
+    margin-top: 10px;
+}
+
+.donor-card p {
+    color: #333;
+    font-size: 0.9em;
+    margin: 5px 0;
+}
+
+.donor-card .thank-you {
+    font-style: italic;
+    color: #00b894;
+    margin-top: 10px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+        
         /* Admin Login */
         .admin-login {
             text-align: center;
@@ -299,29 +339,74 @@
         .admin-login button:hover {
             background: #005bb5;
         }
-
-        /* Admin Panel */
         .admin-panel {
-            display: none;
-            margin-top: 40px;
-            text-align: center;
-        }
-        .admin-panel h2 {
-            margin-bottom: 20px;
-            color: #0073e6;
-        }
-        .admin-panel button {
-            background: #e67e22;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        .admin-panel button:hover {
-            background: #d35400;
-        }
+    display: none;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.admin-panel h2 {
+    color: #0073e6;
+    margin-bottom: 20px;
+}
+
+#searchDonor {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.admin-donors-list {
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #0073e6;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.admin-actions button {
+    background: #e67e22;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.admin-actions button:hover {
+    background: #d35400;
+}
+
+.admin-actions .edit-icon {
+    background: #0073e6;
+}
+
+.admin-actions .delete-icon {
+    background: #e74c3c;
+}
 
         /* Edit Icon */
         .edit-icon {
@@ -413,10 +498,11 @@
             </div>
         </div>
 
-        <!-- Donors List -->
         <div class="donors-list" id="donorsList">
             <h2>Recent Donors</h2>
-            <!-- Donor cards will be dynamically added here -->
+            <div class="donor-grid">
+                <!-- Donor cards will be dynamically added here -->
+            </div>
         </div>
 
         <!-- Admin Login -->
@@ -427,11 +513,23 @@
             <button onclick="adminLogin()">Login</button>
         </div>
 
-        <!-- Admin Panel -->
         <div class="admin-panel" id="adminPanel">
             <h2>Admin Panel</h2>
-            <div id="adminDonorsList">
-                <!-- Admin donor cards will be dynamically added here -->
+            <input type="text" id="searchDonor" placeholder="Search Donors..." oninput="searchDonors()">
+            <div class="admin-donors-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Profile</th>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminDonorsList">
+                        <!-- Admin donor rows will be dynamically added here -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -591,29 +689,40 @@ function submitDonation() {
         updateDonorsList();
     }
 }
-
-// Update Donors List
 function updateDonorsList() {
-    const donorsList = document.getElementById('donorsList');
-    donorsList.innerHTML = '<h2>Recent Donors</h2>';
-    donors.forEach((donor, index) => {
+    const donorGrid = document.querySelector('.donor-grid');
+    donorGrid.innerHTML = ''; // Clear existing cards
+
+    donors.forEach((donor) => {
         const donorCard = document.createElement('div');
         donorCard.className = 'donor-card';
 
-        // Create profile image
+        // Donor Image
         const img = document.createElement('img');
         img.src = donor.image;
+        img.alt = `${donor.name}'s Profile Picture`;
 
-        // Create donor name and amount
-        const span = document.createElement('span');
-        span.textContent = `${donor.name} - ₹${donor.amount.toLocaleString('en-IN')}`;
+        // Donor Name
+        const name = document.createElement('span');
+        name.textContent = donor.name;
+
+        // Donation Amount
+        const amount = document.createElement('p');
+        amount.textContent = `₹${donor.amount.toLocaleString('en-IN')}`;
+
+        // Thank You Message
+        const thankYou = document.createElement('p');
+        thankYou.className = 'thank-you';
+        thankYou.textContent = 'Thank You!';
 
         // Append to donor card
         donorCard.appendChild(img);
-        donorCard.appendChild(span);
+        donorCard.appendChild(name);
+        donorCard.appendChild(amount);
+        donorCard.appendChild(thankYou);
 
-        // Append to donors list
-        donorsList.appendChild(donorCard);
+        // Append to donor grid
+        donorGrid.appendChild(donorCard);
     });
 }
 
@@ -640,45 +749,64 @@ function adminLogin() {
         alert('Invalid username or password.');
     }
 }
+function searchDonors() {
+    const searchQuery = document.getElementById('searchDonor').value.toLowerCase();
+    const filteredDonors = donors.filter(donor => donor.name.toLowerCase().includes(searchQuery));
+    updateAdminDonorsList(filteredDonors);
+}
 
-// Update Admin Donors List
-function updateAdminDonorsList() {
+function updateAdminDonorsList(donorsList = donors) {
     const adminDonorsList = document.getElementById('adminDonorsList');
-    adminDonorsList.innerHTML = '';
-    donors.forEach((donor, index) => {
-        const donorCard = document.createElement('div');
-        donorCard.className = 'donor-card';
+    adminDonorsList.innerHTML = ''; // Clear existing rows
 
-        // Create profile image
+    donorsList.forEach((donor, index) => {
+        const row = document.createElement('tr');
+
+        // Profile Image
+        const profileCell = document.createElement('td');
         const img = document.createElement('img');
         img.src = donor.image;
+        img.alt = `${donor.name}'s Profile Picture`;
+        img.style.width = '50px';
+        img.style.height = '50px';
+        img.style.borderRadius = '50%';
+        profileCell.appendChild(img);
 
-        // Create donor name and amount
-        const span = document.createElement('span');
-        span.textContent = `${donor.name} - ₹${donor.amount.toLocaleString('en-IN')}`;
+        // Donor Name
+        const nameCell = document.createElement('td');
+        nameCell.textContent = donor.name;
 
-        // Create edit button
+        // Donation Amount
+        const amountCell = document.createElement('td');
+        amountCell.textContent = `₹${donor.amount.toLocaleString('en-IN')}`;
+
+        // Actions (Edit and Remove)
+        const actionsCell = document.createElement('td');
+        actionsCell.className = 'admin-actions';
+
         const editButton = document.createElement('button');
         editButton.className = 'edit-icon';
         editButton.innerHTML = '✏️'; // Edit icon
         editButton.onclick = () => openEditModal(index);
 
-        // Create remove button
         const removeButton = document.createElement('button');
-        removeButton.textContent = 'Remove';
+        removeButton.className = 'delete-icon';
+        removeButton.innerHTML = '🗑️'; // Delete icon
         removeButton.onclick = () => removeDonor(index);
 
-        // Append to donor card
-        donorCard.appendChild(img);
-        donorCard.appendChild(span);
-        donorCard.appendChild(editButton);
-        donorCard.appendChild(removeButton);
+        actionsCell.appendChild(editButton);
+        actionsCell.appendChild(removeButton);
 
-        // Append to admin donors list
-        adminDonorsList.appendChild(donorCard);
+        // Append cells to row
+        row.appendChild(profileCell);
+        row.appendChild(nameCell);
+        row.appendChild(amountCell);
+        row.appendChild(actionsCell);
+
+        // Append row to table
+        adminDonorsList.appendChild(row);
     });
 }
-
 // Remove Donor
 function removeDonor(index) {
     const removedDonor = donors.splice(index, 1)[0];
