@@ -4,33 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShareKind Reels</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        :root {
+            --primary-color: #28a745;
+            --secondary-color: #f8f9fa;
+            --text-color: #ffffff;
+            --border-color: #dbdbdb;
+            --like-color: #ed4956;
+            --comment-bg: #f0f2f5;
         }
 
-        .reels-page {
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #000;
+            color: var(--text-color);
+            line-height: 1.5;
+            height: 100vh;
+            overflow: hidden;
+            touch-action: pan-y;
+        }
+
+        .reels-container {
             width: 100%;
             height: 100%;
-            max-width: 400px;
-            max-height: 900px;
-            overflow: hidden;
             position: relative;
-            background: #000;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            overflow: hidden;
         }
 
         .reel {
@@ -38,507 +43,687 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 95%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            height: 100%;
+            display: none;
             flex-direction: column;
-            cursor: pointer;
+            justify-content: flex-end;
             background: #000;
         }
 
+        .reel.active {
+            display: flex;
+        }
+
         .reel video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .reel-header {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            align-items: center;
+            z-index: 3;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .profile-pic img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .reel-header {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            display: flex;
-            align-items: center;
-            color: #fff;
+        .profile-name {
+            font-weight: 600;
+            font-size: 14px;
         }
 
-        .reel-header img {
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            margin-right: 10px;
-        }
-
-        .reel-header span {
-            font-size: 16px;
-            margin-right: 5px;
-        }
-
-        .reel-header .support-button {
-            background: none;
-            border: 2px solid #fff;
-            color: #fff;
-            padding: 6px 12px;
+        .follow-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
             border-radius: 5px;
             margin-left: 10px;
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-            opacity: 0.8;
-        }
-
-        .reel-header .support-button:hover {
-            background-color: #fff;
-            color: #000;
-            opacity: 1;
         }
 
         .reel-actions {
             position: absolute;
-            right: 10px;
-            bottom: 80px;
-            gap: 10px;
+            right: 15px;
+            bottom: 100px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #fff;
+            z-index: 3;
         }
 
-        .action-button {
+        .action-btn {
             background: none;
             border: none;
-            cursor: pointer;
-            font-size: 24px;
-            color: #fff;
-            margin-bottom: 8px;
-            transition: transform 0.3s ease, color 0.3s ease;
-            opacity: 0.8;
-        }
-
-        .action-button:hover {
-            color: #007bff;
-            transform: scale(1.2);
-            opacity: 1;
-        }
-
-        .reel-actions span {
-            color: #fff;
-            margin-bottom: 8px;
-            transition: color 0.3s ease;
-        }
-
-        .reel-actions span:hover {
             color: white;
+            font-size: 24px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .action-count {
+            font-size: 12px;
+            margin-top: 5px;
+            font-weight: 600;
         }
 
         .liked {
-            color: red;
-            transform: scale(1.5);
-            transition: transform 0.3s ease, color 0.3s ease;
+            color: var(--like-color);
+            animation: heartBeat 0.5s;
         }
 
-        .donate-container {
-            position: absolute;
-            width: 18rem;
-            height: 30px;
-            bottom: 100px;
-            left: 10px;
-            right: 10px;
-            color: #fff;
-            text-align: center;
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.3); }
+            100% { transform: scale(1); }
         }
 
-        .donate-container button {
-            flex: 1;
-            background: none;
-            border: 2px solid #fff;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
+        .reel-description {
             position: relative;
-            overflow: hidden;
-            transition: color 0.4s ease, border-color 0.4s ease;
-            opacity: 0.8;
-        }
-
-        .donate-container button:hover {
-            color: #000;
-            border-color: #000;
-            background-color: #fff;
-            opacity: 1;
-        }
-
-        .donate-container button:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            transition: left 0.4s ease;
-            z-index: 1;
-        }
-
-        .donate-container button:hover:before {
-            left: 0;
-        }
-
-        .donate-container button span {
-            position: relative;
+            padding: 15px;
             z-index: 2;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
         }
 
-        .donate-container .donate-button i,
-        .donate-container .encourage-button i {
-            font-size: 18px;
-            transition: transform 0.4s ease;
-        }
-
-        .donate-container .donate-button:hover i {
-            animation: moneyAnim 1s ease-in-out;
-        }
-
-        .donate-container .encourage-button:hover i {
-            animation: starAnim 1s ease-in-out;
-        }
-
-        @keyframes moneyAnim {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.5) rotate(360deg);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        @keyframes starAnim {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.5);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .description-container {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            right: 10px;
-            color: #fff;
+        .description-text {
             font-size: 14px;
-            text-align: center;
-            padding: 10px;
-            border-radius: 5px;
-            background: rgba(0, 0, 0, 0.7);
-            max-height: 100px;
+            margin-bottom: 10px;
+            max-height: 60px;
             overflow: hidden;
-            transition: max-height 0.4s ease;
+            transition: max-height 0.3s;
+        }
+
+        .description-text.expanded {
+            max-height: 200px;
+        }
+
+        .read-more {
+            color: var(--primary-color);
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
         }
 
-        .description-container.expanded {
-            max-height: 300px;
+        .sound-control {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            z-index: 3;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
         }
 
-        @media (max-width: 600px) {
-            .reels-page {
-                max-width: 100%;
-                max-height: 100%;
-            }
+        .sound-control i {
+            color: white;
+            font-size: 16px;
         }
 
-        @media (max-width: 400px) {
-            .reels-page {
-                width: 100%;
-                height: 100%;
-            }
-        }
         .bottom-nav {
             position: fixed;
-            align-items: center;
             bottom: 0;
             width: 100%;
-            margin: 0 auto;
-            box-sizing: border-box;
             display: flex;
             justify-content: space-around;
+            padding: 10px 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 10;
         }
-        .bottom-nav img {
-            width: 25px;
-            height: 25px;
+
+        .nav-icon {
+            color: white;
+            font-size: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-icon.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon span {
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .nav-profile-img {
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
+            object-fit: cover;
         }
-        .bottom-nav .nav-icon {
-            font-size: 18px;
-            color: #fff;
-            cursor: pointer;
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            z-index: 5;
+        }
+
+        .no-reels {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 5;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+            z-index: 3;
+        }
+
+        .progress {
+            height: 100%;
+            background: white;
+            width: 0%;
+            transition: width 0.1s linear;
         }
     </style>
 </head>
 <body>
-    <div class="reels-page" id="reelsPage">
-        <!-- Reels will be dynamically inserted here -->
-        <div id="message" style="color: #fff; display: none;">No reels found</div>
-        <button class="tab-button" onclick="nextReel()">Next Reel</button>
+    <div class="reels-container" id="reelsContainer">
+        <div class="loading" id="loadingIndicator">Loading reels...</div>
+        <div class="no-reels" id="noReels" style="display: none;">
+            <p>No reels found</p>
+            <p>Upload videos from your profile</p>
+        </div>
+        <!-- Reels will be inserted here dynamically -->
     </div>
-  <div class="bottom-nav">
-  <div class="nav-icon"><a href="index.html" title="Home"><i class="fa-solid fa-house"></i></a></div>
-  <div class="nav-icon"><a href="reels.html" title="Reels"><i class="fa-solid fa-radio"></i></a></div>
-  <div class="nav-icon"><a href="maker.html" title="Makers"><i class="fa fa-star"></i></a></div>
-  <div class="nav-icon"><a href="reward.html" title="Rewards"><i class="fa-solid fa-trophy"></i></a></div>
-  <div class="nav-icon"><a href="profile.html" title="Profile"><img id="bottomNavProfileImage" src="sk pictures\k6.png" alt="Profile Icon"></a></div>
-  </div>
 
-    <!-- FontAwesome for icons -->
-    
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-icon" title="Home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="reels.html" class="nav-icon active" title="Reels">
+            <i class="fas fa-play"></i>
+            <span>Reels</span>
+        </a>
+        <a href="maker.html" class="nav-icon" title="Makers">
+            <i class="fas fa-star"></i>
+            <span>Makers</span>
+        </a>
+        <a href="reward.html" class="nav-icon" title="Rewards">
+            <i class="fas fa-trophy"></i>
+            <span>Rewards</span>
+        </a>
+        <a href="profile.html" class="nav-icon" title="Profile">
+            <img id="bottomNavProfileImage" class="nav-profile-img" src="sk pictures/k6.png" alt="Profile">
+            <span>Profile</span>
+        </a>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-    let currentReel = 0;
-
-    // Function to load saved reels from IndexedDB
-    function loadSavedReels() {
-        console.log('Loading saved reels...');
-        const dbName = 'ShareKindDB';
-        const request = indexedDB.open(dbName, 3);
-
-        request.onerror = function (event) {
-            console.error('IndexedDB error:', event.target.errorCode);
-        };
-
-        request.onsuccess = function (event) {
-            const db = event.target.result;
-            console.log('Database opened successfully');
-            const transaction = db.transaction(['posts'], 'readonly');
-            const postStore = transaction.objectStore('posts');
-
-            // Check if the 'type' index exists
-            if (!postStore.indexNames.contains('type')) {
-                console.error('The index "type" does not exist in IndexedDB.');
-                return;
-            }
-
-            const reelsCursor = postStore.index('type').openCursor(IDBKeyRange.only('reel'));
-            let reelCount = 0;
-            const reelsPage = document.getElementById('reelsPage');
-
-            if (!reelsPage) {
-                console.error('Reels page element not found.');
-                return;
-            }
-
-            reelsPage.innerHTML = ''; // Clear previous reels
-
-            reelsCursor.onsuccess = function (event) {
-                const cursor = event.target.result;
-                if (cursor) {
-                    console.log('Reel found:', cursor.value);
-
-                    const reel = document.createElement('div');
-                    reel.classList.add('reel');
-                    reel.style.display = (reelCount === 0) ? 'flex' : 'none';
-
-                    // Create video element
-                    const video = document.createElement('video');
-                    video.src = cursor.value.content; // Reel video source
-                    video.controls = false;
-                    video.loop = true;
-                    video.setAttribute('playsinline', true);
-                    reel.appendChild(video);
-
-                    // Load profile data from localStorage
-                    const profile = getProfileData();
-                    const header = document.createElement('div');
-                    header.classList.add('reel-header');
-                    header.innerHTML = `
-                        <img src="${profile.profileImage}" alt="Profile Picture">
-                        <span>${profile.profileName}</span>
-                        <button class="support-button">SUPPORT</button>
-                    `;
-                    reel.appendChild(header);
-
-                    // Actions (view, like, comment, share)
-                    const actions = document.createElement('div');
-                    actions.classList.add('reel-actions');
-                    actions.innerHTML = `
-                        <button class="action-button view-button" title="View"><i class="fa-regular fa-eye"></i></button>
-                        <span>20K</span>
-                        <button class="action-button like-button" title="Like"><i class="fa-regular fa-heart"></i></button>
-                        <span>10K</span>
-                        <button class="action-button" title="Comment"><i class="fa-regular fa-comment"></i></button>
-                        <span>5K</span>
-                        <button class="action-button" title="Share"><i class="fa-solid fa-link"></i></button>
-                    `;
-                    reel.appendChild(actions);
-
-                    // Donate & Encourage buttons
-                    const donateContainer = document.createElement('div');
-                    donateContainer.classList.add('donate-container');
-                    donateContainer.innerHTML = `
-                        <button class="donate-button">
-                            <span>Donate <i class="fa fa-donate"></i></span>
-                        </button>
-                        <button class="encourage-button">
-                            <span>Encourage <i class="fa fa-star"></i></span>
-                        </button>
-                    `;
-                    reel.appendChild(donateContainer);
-
-                    // Description
-                    const description = document.createElement('div');
-                    description.classList.add('description-container');
-                    description.textContent = cursor.value.description || 'Small acts, Big impact. Join the movement!';
-                    reel.appendChild(description);
-
-                    // Add to page
-                    reelsPage.appendChild(reel);
-                    reel.addEventListener('click', togglePlayPause);
-                    reel.addEventListener('dblclick', likeReel);
-
-                    reelCount++;
-                    cursor.continue();
-                } else {
-                    // No reels found message
-                    const messageElement = document.getElementById('message');
-                    if (messageElement) {
-                        messageElement.style.display = (reelCount === 0) ? 'block' : 'none';
-                    }
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const reelsContainer = document.getElementById('reelsContainer');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const noReels = document.getElementById('noReels');
+            const bottomNavProfileImage = document.getElementById('bottomNavProfileImage');
+            
+            // Global variables
+            let currentReelIndex = 0;
+            let reels = [];
+            let likes = {};
+            let comments = {};
+            let isMuted = true;
+            
+            // Initialize the page
+            init();
+            
+            async function init() {
+                try {
+                    // Load profile image
+                    loadProfileImage();
+                    
+                    // Load likes and comments from localStorage
+                    loadLocalData();
+                    
+                    // Load reels from IndexedDB
+                    await loadReels();
+                    
+                    // Set up event listeners
+                    setupEventListeners();
+                    
+                } catch (error) {
+                    console.error('Initialization error:', error);
+                    showError('Failed to load reels');
                 }
-            };
-
-            reelsCursor.onerror = function (event) {
-                console.error('Cursor error:', event.target.errorCode);
-            };
-        };
-
-        // Ensure index is created in onupgradeneeded
-        request.onupgradeneeded = function (event) {
-            const db = event.target.result;
-            let postStore;
-            if (!db.objectStoreNames.contains('posts')) {
-                console.log('Creating object store');
-                postStore = db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
-            } else {
-                postStore = event.target.transaction.objectStore('posts');
             }
-
-            if (!postStore.indexNames.contains('type')) {
-                postStore.createIndex('type', 'type', { unique: false });
-                console.log('Index "type" created successfully.');
+            
+            function loadProfileImage() {
+                const savedImage = localStorage.getItem('profileImage');
+                if (savedImage && bottomNavProfileImage) {
+                    bottomNavProfileImage.src = savedImage;
+                }
             }
-        };
-    }
-
-    // Get profile data from localStorage
-    function getProfileData() {
-        return {
-            profileImage: localStorage.getItem('profileImage') || 'default-profile.jpg',
-            profileName: localStorage.getItem('profileName') || 'Default Name'
-        };
-    }
-
-    // Play/Pause video on click
-    function togglePlayPause(event) {
-        const video = event.currentTarget.querySelector('video');
-        if (video) {
-            if (video.paused) {
-                video.play();
-            } else {
-                video.pause();
+            
+            function loadLocalData() {
+                // Load likes
+                const savedLikes = localStorage.getItem('reelLikes');
+                if (savedLikes) {
+                    likes = JSON.parse(savedLikes);
+                }
+                
+                // Load comments
+                const savedComments = localStorage.getItem('reelComments');
+                if (savedComments) {
+                    comments = JSON.parse(savedComments);
+                }
             }
-        }
-    }
-
-    // Like Reel (double-click)
-    function likeReel(event) {
-        const likeButton = event.currentTarget.querySelector('.like-button i');
-        likeButton.classList.add('liked');
-        setTimeout(() => {
-            likeButton.classList.remove('liked');
-        }, 1000);
-    }
-
-    // Navigate reels (next and previous)
-    function nextReel() {
-        const reels = document.querySelectorAll('.reel');
-        if (reels.length === 0) return;
-
-        const currentVideo = reels[currentReel].querySelector('video');
-        if (currentVideo) {
-            currentVideo.pause();
-        }
-
-        reels[currentReel].style.display = 'none';
-
-        currentReel = (currentReel + 1) % reels.length;
-        reels[currentReel].style.display = 'flex';
-
-        const nextVideo = reels[currentReel].querySelector('video');
-        if (nextVideo) {
-            nextVideo.play();
-        }
-    }
-
-    function previousReel() {
-        const reels = document.querySelectorAll('.reel');
-        if (reels.length === 0) return;
-
-        const currentVideo = reels[currentReel].querySelector('video');
-        if (currentVideo) {
-            currentVideo.pause();
-        }
-
-        reels[currentReel].style.display = 'none';
-
-        currentReel = (currentReel - 1 + reels.length) % reels.length;
-        reels[currentReel].style.display = 'flex';
-
-        const prevVideo = reels[currentReel].querySelector('video');
-        if (prevVideo) {
-            prevVideo.play();
-        }
-    }
-
-    // Swipe gestures for next/previous reel
-    let touchstartY = 0, touchendY = 0;
-    const swipeThreshold = 50;
-
-    document.addEventListener('touchstart', e => touchstartY = e.changedTouches[0].screenY);
-    document.addEventListener('touchend', e => {
-        touchendY = e.changedTouches[0].screenY;
-        if (touchendY < touchstartY - swipeThreshold) nextReel();
-        if (touchendY > touchstartY + swipeThreshold) previousReel();
-    });
-
-    // Load saved reels on page load
-    loadSavedReels();
-
-    // Load profile image in bottom navigation
-    const savedImage = localStorage.getItem('profileImage');
-    if (savedImage) {
-        const bottomNavProfileImage = document.getElementById('bottomNavProfileImage');
-        if (bottomNavProfileImage) {
-            bottomNavProfileImage.src = savedImage;
-        }
-    }
-});
-
+            
+            function saveLocalData() {
+                localStorage.setItem('reelLikes', JSON.stringify(likes));
+                localStorage.setItem('reelComments', JSON.stringify(comments));
+            }
+            
+            async function loadReels() {
+                try {
+                    // Open database
+                    const db = await openDatabase();
+                    
+                    // Get all reels (posts with type 'reel')
+                    reels = await getAllReels(db);
+                    
+                    // Hide loading indicator
+                    loadingIndicator.style.display = 'none';
+                    
+                    if (reels.length === 0) {
+                        noReels.style.display = 'block';
+                        return;
+                    }
+                    
+                    // Display reels
+                    displayReels();
+                    
+                    // Play the first reel
+                    playCurrentReel();
+                    
+                } catch (error) {
+                    console.error('Error loading reels:', error);
+                    throw error;
+                }
+            }
+            
+            function openDatabase() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open('ShareKindDB', 4);
+                    
+                    request.onerror = (event) => {
+                        reject(new Error(`Database error: ${event.target.error}`));
+                    };
+                    
+                    request.onsuccess = (event) => {
+                        resolve(event.target.result);
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains('posts')) {
+                            const store = db.createObjectStore('posts', { keyPath: 'id' });
+                            store.createIndex('type', 'type', { unique: false });
+                        }
+                    };
+                });
+            }
+            
+            function getAllReels(db) {
+                return new Promise((resolve, reject) => {
+                    const transaction = db.transaction(['posts'], 'readonly');
+                    const store = transaction.objectStore('posts');
+                    const index = store.index('type');
+                    const request = index.getAll('reel');
+                    
+                    request.onerror = () => {
+                        reject(new Error('Error fetching reels'));
+                    };
+                    
+                    request.onsuccess = () => {
+                        resolve(request.result || []);
+                    };
+                });
+            }
+            
+            function displayReels() {
+                reelsContainer.innerHTML = '';
+                
+                reels.forEach((reel, index) => {
+                    const reelElement = document.createElement('div');
+                    reelElement.className = 'reel';
+                    reelElement.dataset.reelId = reel.id;
+                    
+                    if (index === 0) {
+                        reelElement.classList.add('active');
+                    }
+                    
+                    // Get profile data
+                    const profileName = localStorage.getItem('profileName') || 'Anonymous';
+                    const profileImage = localStorage.getItem('profileImage') || 'sk pictures/k6.png';
+                    
+                    // Check if liked
+                    const isLiked = likes[reel.id] || false;
+                    
+                    // Create reel HTML
+                    reelElement.innerHTML = `
+                        <div class="progress-bar">
+                            <div class="progress" id="progress-${reel.id}"></div>
+                        </div>
+                        
+                        <video id="video-${reel.id}" loop playsinline>
+                            <source src="${reel.content}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        
+                        <div class="sound-control" data-video-id="${reel.id}">
+                            <i class="fas fa-volume-mute"></i>
+                        </div>
+                        
+                        <div class="reel-header">
+                            <div class="profile-pic">
+                                <img src="${profileImage}" alt="${profileName}">
+                            </div>
+                            <div class="profile-name">${profileName}</div>
+                            <button class="follow-btn">Follow</button>
+                        </div>
+                        
+                        <div class="reel-actions">
+                            <button class="action-btn like-btn" data-reel-id="${reel.id}">
+                                <i class="${isLiked ? 'fas liked' : 'far'} fa-heart"></i>
+                                <span class="action-count">${reel.likes || 0}</span>
+                            </button>
+                            
+                            <button class="action-btn comment-btn" data-reel-id="${reel.id}">
+                                <i class="far fa-comment"></i>
+                                <span class="action-count">${reel.comments || 0}</span>
+                            </button>
+                            
+                            <button class="action-btn share-btn" data-reel-id="${reel.id}">
+                                <i class="fas fa-share"></i>
+                                <span class="action-count">Share</span>
+                            </button>
+                        </div>
+                        
+                        <div class="reel-description">
+                            <div class="description-text">
+                                ${reel.description || 'Making a difference in my community!'}
+                            </div>
+                            <div class="read-more">Read more</div>
+                        </div>
+                    `;
+                    
+                    reelsContainer.appendChild(reelElement);
+                });
+            }
+            
+            function setupEventListeners() {
+                // Like button click
+                document.addEventListener('click', function(e) {
+                    if (e.target.closest('.like-btn')) {
+                        const reelId = e.target.closest('.like-btn').dataset.reelId;
+                        toggleLike(reelId);
+                    }
+                });
+                
+                // Double tap to like
+                document.addEventListener('dblclick', function(e) {
+                    if (e.target.closest('.reel')) {
+                        const reelId = e.target.closest('.reel').dataset.reelId;
+                        toggleLike(reelId);
+                    }
+                });
+                
+                // Sound control
+                document.addEventListener('click', function(e) {
+                    if (e.target.closest('.sound-control')) {
+                        const videoId = e.target.closest('.sound-control').dataset.videoId;
+                        toggleSound(videoId);
+                    }
+                });
+                
+                // Read more/less
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('read-more')) {
+                        const description = e.target.previousElementSibling;
+                        description.classList.toggle('expanded');
+                        e.target.textContent = description.classList.contains('expanded') ? 'Read less' : 'Read more';
+                    }
+                });
+                
+                // Swipe navigation
+                let touchStartY = 0;
+                let touchEndY = 0;
+                
+                document.addEventListener('touchstart', (e) => {
+                    touchStartY = e.changedTouches[0].clientY;
+                }, { passive: true });
+                
+                document.addEventListener('touchend', (e) => {
+                    touchEndY = e.changedTouches[0].clientY;
+                    handleSwipe();
+                }, { passive: true });
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowUp') {
+                        previousReel();
+                    } else if (e.key === 'ArrowDown') {
+                        nextReel();
+                    } else if (e.key === ' ') {
+                        togglePlayPause();
+                    }
+                });
+            }
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const swipeDistance = touchStartY - touchEndY;
+                
+                if (swipeDistance > swipeThreshold) {
+                    nextReel();
+                } else if (swipeDistance < -swipeThreshold) {
+                    previousReel();
+                }
+            }
+            
+            function playCurrentReel() {
+                if (reels.length === 0) return;
+                
+                const currentReel = reels[currentReelIndex];
+                const video = document.getElementById(`video-${currentReel.id}`);
+                
+                if (video) {
+                    video.play().catch(e => console.log('Autoplay prevented:', e));
+                    updateProgressBar(currentReel.id, video);
+                }
+            }
+            
+            function updateProgressBar(reelId, video) {
+                const progressBar = document.getElementById(`progress-${reelId}`);
+                
+                if (!progressBar) return;
+                
+                video.addEventListener('timeupdate', function() {
+                    const progress = (video.currentTime / video.duration) * 100;
+                    progressBar.style.width = `${progress}%`;
+                });
+                
+                video.addEventListener('ended', function() {
+                    progressBar.style.width = '100%';
+                });
+            }
+            
+            function toggleLike(reelId) {
+                if (!reelId) return;
+                
+                const likeBtn = document.querySelector(`.like-btn[data-reel-id="${reelId}"] i`);
+                const likeCount = document.querySelector(`.like-btn[data-reel-id="${reelId}"] .action-count`);
+                
+                if (!likeBtn || !likeCount) return;
+                
+                // Toggle like state
+                likes[reelId] = !likes[reelId];
+                
+                // Update UI
+                if (likes[reelId]) {
+                    likeBtn.classList.remove('far');
+                    likeBtn.classList.add('fas', 'liked');
+                    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                } else {
+                    likeBtn.classList.remove('fas', 'liked');
+                    likeBtn.classList.add('far');
+                    likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                }
+                
+                // Save to localStorage
+                saveLocalData();
+            }
+            
+            function toggleSound(videoId) {
+                const video = document.getElementById(`video-${videoId}`);
+                const soundIcon = document.querySelector(`.sound-control[data-video-id="${videoId}"] i`);
+                
+                if (!video || !soundIcon) return;
+                
+                isMuted = !isMuted;
+                video.muted = isMuted;
+                
+                soundIcon.classList.toggle('fa-volume-mute');
+                soundIcon.classList.toggle('fa-volume-up');
+            }
+            
+            function togglePlayPause() {
+                if (reels.length === 0) return;
+                
+                const currentReel = reels[currentReelIndex];
+                const video = document.getElementById(`video-${currentReel.id}`);
+                
+                if (!video) return;
+                
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            }
+            
+            function nextReel() {
+                if (reels.length === 0) return;
+                
+                // Pause current reel
+                const currentReel = reels[currentReelIndex];
+                const currentVideo = document.getElementById(`video-${currentReel.id}`);
+                if (currentVideo) {
+                    currentVideo.pause();
+                    currentVideo.currentTime = 0;
+                }
+                
+                // Hide current reel
+                const currentReelElement = document.querySelector(`.reel[data-reel-id="${currentReel.id}"]`);
+                if (currentReelElement) {
+                    currentReelElement.classList.remove('active');
+                }
+                
+                // Move to next reel
+                currentReelIndex = (currentReelIndex + 1) % reels.length;
+                
+                // Show and play next reel
+                const nextReel = reels[currentReelIndex];
+                const nextReelElement = document.querySelector(`.reel[data-reel-id="${nextReel.id}"]`);
+                const nextVideo = document.getElementById(`video-${nextReel.id}`);
+                
+                if (nextReelElement && nextVideo) {
+                    nextReelElement.classList.add('active');
+                    nextVideo.play().catch(e => console.log('Autoplay prevented:', e));
+                    updateProgressBar(nextReel.id, nextVideo);
+                }
+            }
+            
+            function previousReel() {
+                if (reels.length === 0) return;
+                
+                // Pause current reel
+                const currentReel = reels[currentReelIndex];
+                const currentVideo = document.getElementById(`video-${currentReel.id}`);
+                if (currentVideo) {
+                    currentVideo.pause();
+                    currentVideo.currentTime = 0;
+                }
+                
+                // Hide current reel
+                const currentReelElement = document.querySelector(`.reel[data-reel-id="${currentReel.id}"]`);
+                if (currentReelElement) {
+                    currentReelElement.classList.remove('active');
+                }
+                
+                // Move to previous reel
+                currentReelIndex = (currentReelIndex - 1 + reels.length) % reels.length;
+                
+                // Show and play previous reel
+                const prevReel = reels[currentReelIndex];
+                const prevReelElement = document.querySelector(`.reel[data-reel-id="${prevReel.id}"]`);
+                const prevVideo = document.getElementById(`video-${prevReel.id}`);
+                
+                if (prevReelElement && prevVideo) {
+                    prevReelElement.classList.add('active');
+                    prevVideo.play().catch(e => console.log('Autoplay prevented:', e));
+                    updateProgressBar(prevReel.id, prevVideo);
+                }
+            }
+            
+            function showError(message) {
+                loadingIndicator.style.display = 'none';
+                noReels.style.display = 'block';
+                noReels.innerHTML = `
+                    <p>${message}</p>
+                    <button onclick="window.location.reload()">Try Again</button>
+                `;
+            }
+        });
     </script>
-  
-      
 </body>
 </html>
