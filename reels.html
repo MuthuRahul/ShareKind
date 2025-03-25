@@ -263,6 +263,72 @@
             width: 0%;
             transition: width 0.1s linear;
         }
+
+        /* Network status indicator */
+        .network-status {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 100;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .network-status.online {
+            background-color: var(--primary-color);
+        }
+
+        .network-status.offline {
+            background-color: #ff6b6b;
+        }
+
+        @keyframes slideDown {
+            from {
+                top: -50px;
+                opacity: 0;
+            }
+            to {
+                top: 20px;
+                opacity: 1;
+            }
+        }
+
+        /* Upload progress indicator */
+        .upload-progress-container {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            padding: 10px 20px;
+            border-radius: 8px;
+            z-index: 100;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        .upload-progress-container p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .upload-progress-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .upload-progress {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -299,98 +365,77 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM Elements
-            const reelsContainer = document.getElementById('reelsContainer');
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            const noReels = document.getElementById('noReels');
-            const bottomNavProfileImage = document.getElementById('bottomNavProfileImage');
+        // Main application class
+        class ReelsApp {
+            constructor() {
+                this.reelsContainer = document.getElementById('reelsContainer');
+                this.loadingIndicator = document.getElementById('loadingIndicator');
+                this.noReels = document.getElementById('noReels');
+                this.bottomNavProfileImage = document.getElementById('bottomNavProfileImage');
+                
+                this.currentReelIndex = 0;
+                this.reels = [];
+                this.likes = {};
+                this.comments = {};
+                this.isMuted = true;
+                this.db = null;
+                
+                this.init();
+            }
             
-            // Global variables
-            let currentReelIndex = 0;
-            let reels = [];
-            let likes = {};
-            let comments = {};
-            let isMuted = true;
-            
-            // Initialize the page
-            init();
-            
-            async function init() {
+            async init() {
                 try {
                     // Load profile image
-                    loadProfileImage();
+                    this.loadProfileImage();
                     
                     // Load likes and comments from localStorage
-                    loadLocalData();
+                    this.loadLocalData();
+                    
+                    // Initialize database
+                    this.db = await this.openDatabase();
                     
                     // Load reels from IndexedDB
-                    await loadReels();
+                    await this.loadReels();
                     
                     // Set up event listeners
-                    setupEventListeners();
+                    this.setupEventListeners();
+                    
+                    // Set up network detection
+                    this.setupNetworkDetection();
                     
                 } catch (error) {
                     console.error('Initialization error:', error);
-                    showError('Failed to load reels');
+                    this.showError('Failed to load reels. Please try again later.');
                 }
             }
             
-            function loadProfileImage() {
+            loadProfileImage() {
                 const savedImage = localStorage.getItem('profileImage');
-                if (savedImage && bottomNavProfileImage) {
-                    bottomNavProfileImage.src = savedImage;
+                if (savedImage && this.bottomNavProfileImage) {
+                    this.bottomNavProfileImage.src = savedImage;
                 }
             }
             
-            function loadLocalData() {
+            loadLocalData() {
                 // Load likes
                 const savedLikes = localStorage.getItem('reelLikes');
                 if (savedLikes) {
-                    likes = JSON.parse(savedLikes);
+                    this.likes = JSON.parse(savedLikes);
                 }
                 
                 // Load comments
                 const savedComments = localStorage.getItem('reelComments');
                 if (savedComments) {
-                    comments = JSON.parse(savedComments);
+                    this.comments = JSON.parse(savedComments);
                 }
             }
             
-            function saveLocalData() {
-                localStorage.setItem('reelLikes', JSON.stringify(likes));
-                localStorage.setItem('reelComments', JSON.stringify(comments));
+            saveLocalData() {
+                localStorage.setItem('reelLikes', JSON.stringify(this.likes));
+                localStorage.setItem('reelComments', JSON.stringify(this.comments));
             }
             
-            async function loadReels() {
-                try {
-                    // Open database
-                    const db = await openDatabase();
-                    
-                    // Get all reels (posts with type 'reel')
-                    reels = await getAllReels(db);
-                    
-                    // Hide loading indicator
-                    loadingIndicator.style.display = 'none';
-                    
-                    if (reels.length === 0) {
-                        noReels.style.display = 'block';
-                        return;
-                    }
-                    
-                    // Display reels
-                    displayReels();
-                    
-                    // Play the first reel
-                    playCurrentReel();
-                    
-                } catch (error) {
-                    console.error('Error loading reels:', error);
-                    throw error;
-                }
-            }
-            
-            function openDatabase() {
+            openDatabase() {
                 return new Promise((resolve, reject) => {
                     const request = indexedDB.open('ShareKindDB', 4);
                     
@@ -412,9 +457,39 @@
                 });
             }
             
-            function getAllReels(db) {
+            async loadReels() {
+                try {
+                    this.loadingIndicator.style.display = 'block';
+                    this.noReels.style.display = 'none';
+                    
+                    // Get all reels (posts with type 'reel')
+                    this.reels = await this.getAllReels();
+                    
+                    if (this.reels.length === 0) {
+                        this.loadingIndicator.style.display = 'none';
+                        this.noReels.style.display = 'block';
+                        return;
+                    }
+                    
+                    // Display reels
+                    this.displayReels();
+                    
+                    // Play the first reel
+                    this.playCurrentReel();
+                    
+                    this.loadingIndicator.style.display = 'none';
+                    
+                } catch (error) {
+                    console.error('Error loading reels:', error);
+                    this.loadingIndicator.style.display = 'none';
+                    this.showError('Failed to load reels. Please try again.');
+                    throw error;
+                }
+            }
+            
+            getAllReels() {
                 return new Promise((resolve, reject) => {
-                    const transaction = db.transaction(['posts'], 'readonly');
+                    const transaction = this.db.transaction(['posts'], 'readonly');
                     const store = transaction.objectStore('posts');
                     const index = store.index('type');
                     const request = index.getAll('reel');
@@ -424,15 +499,28 @@
                     };
                     
                     request.onsuccess = () => {
-                        resolve(request.result || []);
+                        // Initialize view counts if they don't exist
+                        const reels = request.result.map(reel => {
+                            if (!reel.views) {
+                                reel.views = 0;
+                            }
+                            if (!reel.likes) {
+                                reel.likes = 0;
+                            }
+                            if (!reel.comments) {
+                                reel.comments = 0;
+                            }
+                            return reel;
+                        });
+                        resolve(reels || []);
                     };
                 });
             }
             
-            function displayReels() {
-                reelsContainer.innerHTML = '';
+            displayReels() {
+                this.reelsContainer.innerHTML = '';
                 
-                reels.forEach((reel, index) => {
+                this.reels.forEach((reel, index) => {
                     const reelElement = document.createElement('div');
                     reelElement.className = 'reel';
                     reelElement.dataset.reelId = reel.id;
@@ -446,7 +534,7 @@
                     const profileImage = localStorage.getItem('profileImage') || 'sk pictures/k6.png';
                     
                     // Check if liked
-                    const isLiked = likes[reel.id] || false;
+                    const isLiked = this.likes[reel.id] || false;
                     
                     // Create reel HTML
                     reelElement.innerHTML = `
@@ -474,12 +562,12 @@
                         <div class="reel-actions">
                             <button class="action-btn like-btn" data-reel-id="${reel.id}">
                                 <i class="${isLiked ? 'fas liked' : 'far'} fa-heart"></i>
-                                <span class="action-count">${reel.likes || 0}</span>
+                                <span class="action-count">${reel.likes}</span>
                             </button>
                             
                             <button class="action-btn comment-btn" data-reel-id="${reel.id}">
                                 <i class="far fa-comment"></i>
-                                <span class="action-count">${reel.comments || 0}</span>
+                                <span class="action-count">${reel.comments}</span>
                             </button>
                             
                             <button class="action-btn share-btn" data-reel-id="${reel.id}">
@@ -496,37 +584,37 @@
                         </div>
                     `;
                     
-                    reelsContainer.appendChild(reelElement);
+                    this.reelsContainer.appendChild(reelElement);
                 });
             }
             
-            function setupEventListeners() {
+            setupEventListeners() {
                 // Like button click
-                document.addEventListener('click', function(e) {
+                document.addEventListener('click', (e) => {
                     if (e.target.closest('.like-btn')) {
                         const reelId = e.target.closest('.like-btn').dataset.reelId;
-                        toggleLike(reelId);
+                        this.toggleLike(reelId);
                     }
                 });
                 
                 // Double tap to like
-                document.addEventListener('dblclick', function(e) {
+                document.addEventListener('dblclick', (e) => {
                     if (e.target.closest('.reel')) {
                         const reelId = e.target.closest('.reel').dataset.reelId;
-                        toggleLike(reelId);
+                        this.toggleLike(reelId);
                     }
                 });
                 
                 // Sound control
-                document.addEventListener('click', function(e) {
+                document.addEventListener('click', (e) => {
                     if (e.target.closest('.sound-control')) {
                         const videoId = e.target.closest('.sound-control').dataset.videoId;
-                        toggleSound(videoId);
+                        this.toggleSound(videoId);
                     }
                 });
                 
                 // Read more/less
-                document.addEventListener('click', function(e) {
+                document.addEventListener('click', (e) => {
                     if (e.target.classList.contains('read-more')) {
                         const description = e.target.previousElementSibling;
                         description.classList.toggle('expanded');
@@ -544,61 +632,110 @@
                 
                 document.addEventListener('touchend', (e) => {
                     touchEndY = e.changedTouches[0].clientY;
-                    handleSwipe();
+                    this.handleSwipe(touchStartY, touchEndY);
                 }, { passive: true });
                 
                 // Keyboard navigation
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'ArrowUp') {
-                        previousReel();
+                        this.previousReel();
                     } else if (e.key === 'ArrowDown') {
-                        nextReel();
+                        this.nextReel();
                     } else if (e.key === ' ') {
-                        togglePlayPause();
+                        this.togglePlayPause();
                     }
                 });
             }
             
-            function handleSwipe() {
+            setupNetworkDetection() {
+                window.addEventListener('online', () => this.updateOnlineStatus(true));
+                window.addEventListener('offline', () => this.updateOnlineStatus(false));
+                this.updateOnlineStatus(navigator.onLine);
+            }
+            
+            updateOnlineStatus(isOnline) {
+                // Remove existing status if any
+                const existingStatus = document.querySelector('.network-status');
+                if (existingStatus) existingStatus.remove();
+                
+                if (isOnline === undefined) return;
+                
+                const status = isOnline ? 'online' : 'offline';
+                const statusElement = document.createElement('div');
+                statusElement.className = `network-status ${status}`;
+                statusElement.textContent = isOnline ? 'Back online' : 'No internet connection';
+                
+                document.body.appendChild(statusElement);
+                
+                setTimeout(() => {
+                    statusElement.remove();
+                }, 3000);
+            }
+            
+            handleSwipe(startY, endY) {
                 const swipeThreshold = 50;
-                const swipeDistance = touchStartY - touchEndY;
+                const swipeDistance = startY - endY;
                 
                 if (swipeDistance > swipeThreshold) {
-                    nextReel();
+                    this.nextReel();
                 } else if (swipeDistance < -swipeThreshold) {
-                    previousReel();
+                    this.previousReel();
                 }
             }
             
-            function playCurrentReel() {
-                if (reels.length === 0) return;
+            playCurrentReel() {
+                if (this.reels.length === 0) return;
                 
-                const currentReel = reels[currentReelIndex];
+                const currentReel = this.reels[this.currentReelIndex];
                 const video = document.getElementById(`video-${currentReel.id}`);
                 
                 if (video) {
-                    video.play().catch(e => console.log('Autoplay prevented:', e));
-                    updateProgressBar(currentReel.id, video);
+                    // Increment view count
+                    currentReel.views++;
+                    this.updateReelInDB(currentReel);
+                    
+                    // Try to play with sound
+                    const playPromise = video.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            // If autoplay fails, mute and try again
+                            video.muted = true;
+                            this.isMuted = true;
+                            video.play();
+                            this.updateSoundIcon(video.id);
+                        });
+                    }
+                    
+                    this.updateProgressBar(currentReel.id, video);
                 }
             }
             
-            function updateProgressBar(reelId, video) {
+            updateProgressBar(reelId, video) {
                 const progressBar = document.getElementById(`progress-${reelId}`);
                 
                 if (!progressBar) return;
                 
-                video.addEventListener('timeupdate', function() {
+                const updateProgress = () => {
                     const progress = (video.currentTime / video.duration) * 100;
                     progressBar.style.width = `${progress}%`;
-                });
+                };
                 
-                video.addEventListener('ended', function() {
+                const handleVideoEnd = () => {
                     progressBar.style.width = '100%';
-                });
+                    video.removeEventListener('timeupdate', updateProgress);
+                    video.removeEventListener('ended', handleVideoEnd);
+                };
+                
+                video.addEventListener('timeupdate', updateProgress);
+                video.addEventListener('ended', handleVideoEnd);
             }
             
-            function toggleLike(reelId) {
+            toggleLike(reelId) {
                 if (!reelId) return;
+                
+                const reel = this.reels.find(r => r.id == reelId);
+                if (!reel) return;
                 
                 const likeBtn = document.querySelector(`.like-btn[data-reel-id="${reelId}"] i`);
                 const likeCount = document.querySelector(`.like-btn[data-reel-id="${reelId}"] .action-count`);
@@ -606,40 +743,57 @@
                 if (!likeBtn || !likeCount) return;
                 
                 // Toggle like state
-                likes[reelId] = !likes[reelId];
+                this.likes[reelId] = !this.likes[reelId];
+                
+                // Update reel data
+                if (this.likes[reelId]) {
+                    reel.likes++;
+                } else {
+                    reel.likes--;
+                }
+                
+                // Update database
+                this.updateReelInDB(reel);
                 
                 // Update UI
-                if (likes[reelId]) {
+                if (this.likes[reelId]) {
                     likeBtn.classList.remove('far');
                     likeBtn.classList.add('fas', 'liked');
-                    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                    likeCount.textContent = reel.likes;
                 } else {
                     likeBtn.classList.remove('fas', 'liked');
                     likeBtn.classList.add('far');
-                    likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                    likeCount.textContent = reel.likes;
                 }
                 
                 // Save to localStorage
-                saveLocalData();
+                this.saveLocalData();
             }
             
-            function toggleSound(videoId) {
+            toggleSound(videoId) {
                 const video = document.getElementById(`video-${videoId}`);
                 const soundIcon = document.querySelector(`.sound-control[data-video-id="${videoId}"] i`);
                 
                 if (!video || !soundIcon) return;
                 
-                isMuted = !isMuted;
-                video.muted = isMuted;
+                this.isMuted = !this.isMuted;
+                video.muted = this.isMuted;
                 
                 soundIcon.classList.toggle('fa-volume-mute');
                 soundIcon.classList.toggle('fa-volume-up');
             }
             
-            function togglePlayPause() {
-                if (reels.length === 0) return;
+            updateSoundIcon(videoId) {
+                const soundIcon = document.querySelector(`.sound-control[data-video-id="${videoId}"] i`);
+                if (!soundIcon) return;
                 
-                const currentReel = reels[currentReelIndex];
+                soundIcon.className = this.isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+            }
+            
+            togglePlayPause() {
+                if (this.reels.length === 0) return;
+                
+                const currentReel = this.reels[this.currentReelIndex];
                 const video = document.getElementById(`video-${currentReel.id}`);
                 
                 if (!video) return;
@@ -651,11 +805,11 @@
                 }
             }
             
-            function nextReel() {
-                if (reels.length === 0) return;
+            nextReel() {
+                if (this.reels.length === 0) return;
                 
                 // Pause current reel
-                const currentReel = reels[currentReelIndex];
+                const currentReel = this.reels[this.currentReelIndex];
                 const currentVideo = document.getElementById(`video-${currentReel.id}`);
                 if (currentVideo) {
                     currentVideo.pause();
@@ -669,25 +823,25 @@
                 }
                 
                 // Move to next reel
-                currentReelIndex = (currentReelIndex + 1) % reels.length;
+                this.currentReelIndex = (this.currentReelIndex + 1) % this.reels.length;
                 
                 // Show and play next reel
-                const nextReel = reels[currentReelIndex];
+                const nextReel = this.reels[this.currentReelIndex];
                 const nextReelElement = document.querySelector(`.reel[data-reel-id="${nextReel.id}"]`);
                 const nextVideo = document.getElementById(`video-${nextReel.id}`);
                 
                 if (nextReelElement && nextVideo) {
                     nextReelElement.classList.add('active');
                     nextVideo.play().catch(e => console.log('Autoplay prevented:', e));
-                    updateProgressBar(nextReel.id, nextVideo);
+                    this.updateProgressBar(nextReel.id, nextVideo);
                 }
             }
             
-            function previousReel() {
-                if (reels.length === 0) return;
+            previousReel() {
+                if (this.reels.length === 0) return;
                 
                 // Pause current reel
-                const currentReel = reels[currentReelIndex];
+                const currentReel = this.reels[this.currentReelIndex];
                 const currentVideo = document.getElementById(`video-${currentReel.id}`);
                 if (currentVideo) {
                     currentVideo.pause();
@@ -701,28 +855,52 @@
                 }
                 
                 // Move to previous reel
-                currentReelIndex = (currentReelIndex - 1 + reels.length) % reels.length;
+                this.currentReelIndex = (this.currentReelIndex - 1 + this.reels.length) % this.reels.length;
                 
                 // Show and play previous reel
-                const prevReel = reels[currentReelIndex];
+                const prevReel = this.reels[this.currentReelIndex];
                 const prevReelElement = document.querySelector(`.reel[data-reel-id="${prevReel.id}"]`);
                 const prevVideo = document.getElementById(`video-${prevReel.id}`);
                 
                 if (prevReelElement && prevVideo) {
                     prevReelElement.classList.add('active');
                     prevVideo.play().catch(e => console.log('Autoplay prevented:', e));
-                    updateProgressBar(prevReel.id, prevVideo);
+                    this.updateProgressBar(prevReel.id, prevVideo);
                 }
             }
             
-            function showError(message) {
-                loadingIndicator.style.display = 'none';
-                noReels.style.display = 'block';
-                noReels.innerHTML = `
+            async updateReelInDB(reel) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['posts'], 'readwrite');
+                    const store = transaction.objectStore('posts');
+                    const request = store.put(reel);
+                    
+                    request.onsuccess = () => resolve();
+                    request.onerror = (event) => reject(event.target.error);
+                });
+            }
+            
+            showError(message) {
+                this.loadingIndicator.style.display = 'none';
+                this.noReels.style.display = 'block';
+                this.noReels.innerHTML = `
                     <p>${message}</p>
-                    <button onclick="window.location.reload()">Try Again</button>
+                    <button onclick="window.location.reload()" style="
+                        background: var(--primary-color);
+                        color: white;
+                        border: none;
+                        padding: 8px 16px;
+                        border-radius: 4px;
+                        margin-top: 10px;
+                        cursor: pointer;
+                    ">Try Again</button>
                 `;
             }
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ReelsApp();
         });
     </script>
 </body>
