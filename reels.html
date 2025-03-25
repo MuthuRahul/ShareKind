@@ -436,32 +436,37 @@ async function loadAndDisplayReels() {
 // Get all reels from database
 async function getAllReels() {
     return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['posts'], 'readonly');
-        const store = transaction.objectStore('posts');
-        const index = store.index('type');
-        const request = index.getAll('reel'); // Filter by reel type
-        
-        request.onsuccess = () => {
-            const results = request.result || [];
-            // Ensure all reels have required properties
-            const completeReels = results.map(reel => {
-                return {
+        try {
+            const transaction = db.transaction(['posts'], 'readonly');
+            const store = transaction.objectStore('posts');
+            
+            // Check if index exists
+            if (!store.indexNames.contains('type')) {
+                throw new Error('Type index not found');
+            }
+            
+            const index = store.index('type');
+            const request = index.getAll('reel');
+            
+            request.onsuccess = () => {
+                const results = request.result || [];
+                resolve(results.map(reel => ({
                     ...reel,
                     views: reel.views || 0,
                     likes: reel.likes || 0,
                     comments: reel.comments || 0
-                };
-            });
-            resolve(completeReels);
-        };
-        
-        request.onerror = () => {
-            reject(new Error('Failed to fetch reels'));
-        };
+                })));
+            };
+            
+            request.onerror = () => {
+                reject(new Error('Failed to fetch reels'));
+            };
+        } catch (error) {
+            reject(error);
+        }
     });
 }
-
-// Display reels in the UI
+        // Display reels in the UI
 function displayReels(reels) {
     const reelsContainer = document.getElementById('reelsContainer');
     reelsContainer.innerHTML = '';
