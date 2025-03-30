@@ -191,43 +191,6 @@
             color: white;
             font-size: 16px;
         }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 10;
-        }
-
-        .nav-icon {
-            color: white;
-            font-size: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .nav-icon.active {
-            color: var(--primary-color);
-        }
-
-        .nav-icon span {
-            font-size: 10px;
-            margin-top: 3px;
-        }
-
-        .nav-profile-img {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
         .loading {
             position: absolute;
             top: 50%;
@@ -297,37 +260,332 @@
             }
         }
 
-        /* Upload progress indicator */
-        .upload-progress-container {
+        /* Modal styles */
+        .modal {
+            display: none;
             position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            padding: 10px 20px;
-            border-radius: 8px;
-            z-index: 100;
-            width: 80%;
-            max-width: 300px;
-        }
-
-        .upload-progress-container p {
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .upload-progress-bar {
-            height: 4px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .upload-progress {
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: #262626;
+            margin: 20px auto;
+            max-width: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 15px;
+            border-bottom: 1px solid #363636;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 15px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .comment-item {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .comment-user-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-user-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .comment-text {
+            font-size: 14px;
+            background: #363636;
+            padding: 10px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .comment-input-container {
+            padding: 15px;
+            border-top: 1px solid #363636;
+            display: flex;
+            align-items: center;
+        }
+
+        .comment-input {
+            flex: 1;
+            background: #363636;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 15px;
+            color: white;
+            outline: none;
+        }
+
+        .send-comment-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        /* Share modal styles */
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .share-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .share-icon.whatsapp { background: #25D366; color: white; }
+        .share-icon.twitter { background: #1DA1F2; color: white; }
+        .share-icon.telegram { background: #0088CC; color: white; }
+        .share-icon.facebook { background: #1877F2; color: white; }
+        .share-icon.copy { background: #555; color: white; }
+
+        .share-label {
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Donation modal styles */
+        .donation-amounts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .amount-option {
+            background: #363636;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 10px;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .amount-option:hover, .amount-option.selected {
             background: var(--primary-color);
-            width: 0%;
-            transition: width 0.3s ease;
+        }
+
+        .custom-amount {
+            margin: 15px;
+            position: relative;
+        }
+
+        .custom-amount input {
+            width: 100%;
+            background: #363636;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+        }
+
+        .donate-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-weight: 600;
+            width: calc(100% - 30px);
+            margin: 0 15px 15px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .donate-button:hover {
+            opacity: 0.9;
+        }
+
+        /* Encourage modal styles */
+        .encourage-message {
+            background: #363636;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            color: white;
+            width: calc(100% - 30px);
+            margin: 15px;
+            min-height: 100px;
+            outline: none;
+            resize: none;
+            font-family: inherit;
+        }
+
+        .encourage-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-weight: 600;
+            width: calc(100% - 30px);
+            margin: 0 15px 15px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .encourage-button:hover {
+            opacity: 0.9;
+        }
+        /* Add these styles to your existing CSS */
+        .upload-btn, .retry-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            display: block;
+            margin: 15px auto 0;
+        }
+        
+        .upload-btn:hover, .retry-btn:hover {
+            opacity: 0.9;
+        }
+        /* Bottom Navigation - Instagram Style */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #000;
+            padding: 8px 0;
+            border-top: 1px solid #363636;
+            z-index: 100;
+        }
+        
+        .bottom-nav a {
+            color: #999;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 5px;
+            transition: color 0.2s;
+        }
+        
+        .bottom-nav a.active {
+            color: var(--primary-color);
+        }
+        
+        .bottom-nav a i {
+            display: block;
+        }
+        
+        .nav-profile-img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--primary-color);
+        }
+        
+        /* Reel Swipe Controls */
+        .reel {
+            touch-action: pan-y;
+        }
+        
+        /* Like Animation */
+        .like-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 120px;
+            color: var(--like-color);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.5s, opacity 0.5s;
+            z-index: 10;
+        }
+        
+        /* Video Controls */
+        .video-controls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
         }
     </style>
 </head>
@@ -340,365 +598,691 @@
         </div>
         <!-- Reels will be inserted here dynamically -->
     </div>
+    <div class="reels-container" id="reelsContainer">
+        <div class="loading" id="loadingIndicator">Loading reels...</div>
+        <div class="no-reels" id="noReels" style="display: none;">
+            <p>No reels found in your profile</p>
+            <button onclick="location.href='maker.html'" class="upload-btn">
+                Create Your First Reel
+            </button>
+        </div>
+        <!-- Reels will be inserted here dynamically -->
+    </div>
 
+     <!-- Comment Modal -->
+     <div class="modal" id="commentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Comments</div>
+                <button class="close-modal" id="closeCommentModal">&times;</button>
+            </div>
+            <div class="modal-body" id="commentList">
+                <!-- Comments will be loaded here -->
+            </div>
+            <div class="comment-input-container">
+                <input type="text" class="comment-input" id="commentInput" placeholder="Add a comment...">
+                <button class="send-comment-btn" id="sendComment"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Share Reel</div>
+                <button class="close-modal" id="closeShareModal">&times;</button>
+            </div>
+            <div class="share-options">
+                <div class="share-option" onclick="shareTo('whatsapp')">
+                    <div class="share-icon whatsapp"><i class="fab fa-whatsapp"></i></div>
+                    <div class="share-label">WhatsApp</div>
+                </div>
+                <div class="share-option" onclick="shareTo('facebook')">
+                    <div class="share-icon facebook"><i class="fab fa-facebook-f"></i></div>
+                    <div class="share-label">Facebook</div>
+                </div>
+                <div class="share-option" onclick="shareTo('twitter')">
+                    <div class="share-icon twitter"><i class="fab fa-twitter"></i></div>
+                    <div class="share-label">Twitter</div>
+                </div>
+                <div class="share-option" onclick="shareTo('telegram')">
+                    <div class="share-icon telegram"><i class="fab fa-telegram-plane"></i></div>
+                    <div class="share-label">Telegram</div>
+                </div>
+                <div class="share-option" onclick="copyLink()">
+                    <div class="share-icon copy"><i class="fas fa-link"></i></div>
+                    <div class="share-label">Copy Link</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donate Modal -->
+    <div class="modal" id="donateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Support Creator</div>
+                <button class="close-modal" id="closeDonateModal">&times;</button>
+            </div>
+            <div class="donation-amounts">
+                <button class="amount-option" data-amount="5">$5</button>
+                <button class="amount-option" data-amount="10">$10</button>
+                <button class="amount-option" data-amount="20">$20</button>
+                <button class="amount-option" data-amount="50">$50</button>
+                <button class="amount-option" data-amount="100">$100</button>
+                <button class="amount-option" data-amount="200">$200</button>
+            </div>
+            <div class="custom-amount">
+                <span class="currency-symbol">$</span>
+                <input type="number" id="customAmount" placeholder="Custom amount" min="1">
+            </div>
+            <button class="donate-button" id="confirmDonate">Donate</button>
+        </div>
+    </div>
+
+    <!-- Encourage Modal -->
+    <div class="modal" id="encourageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Encourage Creator</div>
+                <button class="close-modal" id="closeEncourageModal">&times;</button>
+            </div>
+            <textarea class="encourage-message" id="encourageMessage" placeholder="Write an encouraging message..."></textarea>
+            <button class="encourage-button" id="sendEncouragement">Send</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <a href="index.html" class="nav-icon" title="Home">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="reels.html" class="nav-icon active" title="Reels">
-            <i class="fas fa-play"></i>
-            <span>Reels</span>
-        </a>
-        <a href="maker.html" class="nav-icon" title="Makers">
-            <i class="fas fa-star"></i>
-            <span>Makers</span>
-        </a>
-        <a href="reward.html" class="nav-icon" title="Rewards">
-            <i class="fas fa-trophy"></i>
-            <span>Rewards</span>
-        </a>
-        <a href="profile.html" class="nav-icon" title="Profile">
+        <a href="index.html" title="Home"><i class="fas fa-home"></i></a>
+        <a href="reels.html" title="Reels" class="active"><i class="fas fa-film"></i></a>
+        <a href="maker.html" title="Makers"><i class="fas fa-star"></i></a>
+        <a href="reward.html" title="Rewards"><i class="fas fa-trophy"></i></a>
+        <a href="profile.html" title="Profile">
             <img id="bottomNavProfileImage" class="nav-profile-img" src="sk pictures/k6.png" alt="Profile">
-            <span>Profile</span>
         </a>
     </div>
 
     <script>
-        // Global database reference
-let db;
+        // Global variables
+        let currentReelIndex = 0;
+        let reels = [];
+        let currentReelId = null;
+        let likes = {};
+        let comments = {};
+        let startY = 0;
+        let isDragging = false;
+        let currentVideo = null;
 
-document.addEventListener('DOMContentLoaded', async function() {
-    try {
-        // Initialize database (same as profile page)
-        db = await initializeDB();
-        
-        // Load and display reels
-        await loadAndDisplayReels();
-        
-        // Setup event listeners
-        setupReelEventListeners();
-        
-    } catch (error) {
-        console.error('Initialization error:', error);
-        showAlert('Failed to load reels. Please try again later.');
-    }
-});
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Load profile image to bottom nav
+                const profileImage = localStorage.getItem('profileImage');
+                if (profileImage) {
+                    document.getElementById('bottomNavProfileImage').src = profileImage;
+                }
 
-// Database initialization (identical to profile page)
-async function initializeDB() {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open('ShareKindDB', 4); // Same version as profile page
-        
-        request.onupgradeneeded = function(event) {
-            const db = event.target.result;
-            if (!db.objectStoreNames.contains('posts')) {
-                const store = db.createObjectStore('posts', { keyPath: 'id' });
-                store.createIndex('type', 'type', { unique: false });
+                // Initialize likes and comments from localStorage
+                loadLocalData();
+
+                // Show loading state
+                const loadingIndicator = document.getElementById('loadingIndicator');
+                const reelsContainer = document.getElementById('reelsContainer');
+                
+                // Open database with version detection
+                const { db } = await openDatabaseWithVersionDetection();
+                
+                // Load posts
+                const posts = await getAllPosts(db);
+                reels = posts.filter(post => post.type === 'reel');
+                
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+                
+                if (reels.length === 0) {
+                    reelsContainer.innerHTML = `
+                        <div class="no-reels">
+                            <p>No reels found</p>
+                            <p>Create reels from your profile page</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Display first reel
+                displayReel(currentReelIndex);
+                
+                // Set up event listeners
+                setupEventListeners();
+
+            } catch (error) {
+                console.error("Error:", error);
+                showError(`Failed to load reels: ${error.message}`);
             }
-        };
-        
-        request.onsuccess = function() {
-            resolve(request.result);
-        };
-        
-        request.onerror = function(event) {
-            reject(event.target.error);
-        };
-    });
-}
-
-// Load and display reels from database
-async function loadAndDisplayReels() {
-    try {
-        showLoading(true);
-        
-        // Get all posts with type 'reel'
-        const reels = await getAllReels();
-        
-        if (reels.length === 0) {
-            showNoReelsMessage();
-            return;
-        }
-        
-        displayReels(reels);
-        playFirstReel(reels[0]);
-        
-    } catch (error) {
-        console.error('Error loading reels:', error);
-        showError('Failed to load reels');
-        throw error;
-    } finally {
-        showLoading(false);
-    }
-}
-
-// Get all reels from database
-async function getAllReels() {
-    return new Promise((resolve, reject) => {
-        try {
-            const transaction = db.transaction(['posts'], 'readonly');
-            const store = transaction.objectStore('posts');
-            
-            // Check if index exists
-            if (!store.indexNames.contains('type')) {
-                throw new Error('Type index not found');
-            }
-            
-            const index = store.index('type');
-            const request = index.getAll('reel');
-            
-            request.onsuccess = () => {
-                const results = request.result || [];
-                resolve(results.map(reel => ({
-                    ...reel,
-                    views: reel.views || 0,
-                    likes: reel.likes || 0,
-                    comments: reel.comments || 0
-                })));
-            };
-            
-            request.onerror = () => {
-                reject(new Error('Failed to fetch reels'));
-            };
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
-        // Display reels in the UI
-function displayReels(reels) {
-    const reelsContainer = document.getElementById('reelsContainer');
-    reelsContainer.innerHTML = '';
-    
-    reels.forEach((reel, index) => {
-        const reelElement = createReelElement(reel, index === 0);
-        reelsContainer.appendChild(reelElement);
-    });
-}
-
-// Create HTML for a single reel
-function createReelElement(reel, isActive) {
-    const reelElement = document.createElement('div');
-    reelElement.className = `reel ${isActive ? 'active' : ''}`;
-    reelElement.dataset.reelId = reel.id;
-    
-    // Get profile data from localStorage (shared with profile page)
-    const profileName = localStorage.getItem('profileName') || 'Anonymous';
-    const profileImage = localStorage.getItem('profileImage') || 'sk pictures/k6.png';
-    
-    // Check if liked (from localStorage)
-    const likes = JSON.parse(localStorage.getItem('reelLikes') || {};
-    const isLiked = likes[reel.id] || false;
-    
-    reelElement.innerHTML = `
-        <div class="progress-bar">
-            <div class="progress" id="progress-${reel.id}"></div>
-        </div>
-        
-        <video id="video-${reel.id}" loop playsinline>
-            <source src="${reel.content}" type="video/mp4">
-        </video>
-        
-        <div class="sound-control" data-video-id="${reel.id}">
-            <i class="fas fa-volume-mute"></i>
-        </div>
-        
-        <div class="reel-header">
-            <div class="profile-pic">
-                <img src="${profileImage}" alt="${profileName}">
-            </div>
-            <div class="profile-name">${profileName}</div>
-        </div>
-        
-        <div class="reel-actions">
-            <button class="action-btn like-btn" data-reel-id="${reel.id}">
-                <i class="${isLiked ? 'fas liked' : 'far'} fa-heart"></i>
-                <span class="action-count">${reel.likes}</span>
-            </button>
-            
-            <button class="action-btn comment-btn" data-reel-id="${reel.id}">
-                <i class="far fa-comment"></i>
-                <span class="action-count">${reel.comments}</span>
-            </button>
-        </div>
-        
-        <div class="reel-description">
-            <div class="description-text">
-                ${reel.description || 'Making a difference!'}
-            </div>
-        </div>
-    `;
-    
-    return reelElement;
-}
-
-// Play the first reel
-function playFirstReel(reel) {
-    const video = document.getElementById(`video-${reel.id}`);
-    if (!video) return;
-    
-    // Increment view count
-    reel.views++;
-    updateReelInDB(reel);
-    
-    // Try to play with sound (will fall back to muted if needed)
-    const playPromise = video.play();
-    
-    if (playPromise !== undefined) {
-        playPromise.catch(() => {
-            video.muted = true;
-            video.play();
         });
-    }
-    
-    // Setup progress bar
-    setupProgressBar(reel.id, video);
-}
 
-// Update reel in database (shared with profile page)
-async function updateReelInDB(reel) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['posts'], 'readwrite');
-        const store = transaction.objectStore('posts');
-        const request = store.put(reel);
-        
-        request.onsuccess = () => resolve();
-        request.onerror = (event) => reject(event.target.error);
-    });
-}
-
-// Setup progress bar for a reel
-function setupProgressBar(reelId, video) {
-    const progressBar = document.getElementById(`progress-${reelId}`);
-    if (!progressBar) return;
-    
-    video.addEventListener('timeupdate', () => {
-        const progress = (video.currentTime / video.duration) * 100;
-        progressBar.style.width = `${progress}%`;
-    });
-}
-
-// Setup event listeners for reels
-function setupReelEventListeners() {
-    // Like button click
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.like-btn')) {
-            const reelId = e.target.closest('.like-btn').dataset.reelId;
-            toggleLike(reelId);
-        }
-    });
-    
-    // Sound control
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.sound-control')) {
-            const videoId = e.target.closest('.sound-control').dataset.videoId;
-            toggleSound(videoId);
-        }
-    });
-    
-    // Swipe navigation
-    let touchStartY = 0;
-    document.addEventListener('touchstart', (e) => {
-        touchStartY = e.changedTouches[0].clientY;
-    }, { passive: true });
-    
-    document.addEventListener('touchend', (e) => {
-        const touchEndY = e.changedTouches[0].clientY;
-        handleSwipe(touchStartY, touchEndY);
-    }, { passive: true });
-}
-
-// Toggle like status
-function toggleLike(reelId) {
-    const likeBtn = document.querySelector(`.like-btn[data-reel-id="${reelId}"] i`);
-    const likeCount = document.querySelector(`.like-btn[data-reel-id="${reelId}"] .action-count`);
-    
-    if (!likeBtn || !likeCount) return;
-    
-    // Get current likes from localStorage
-    const likes = JSON.parse(localStorage.getItem('reelLikes') || {};
-    const currentLikes = parseInt(likeCount.textContent);
-    
-    // Toggle like state
-    const isLiked = !likes[reelId];
-    likes[reelId] = isLiked;
-    
-    // Update UI
-    if (isLiked) {
-        likeBtn.classList.remove('far');
-        likeBtn.classList.add('fas', 'liked');
-        likeCount.textContent = currentLikes + 1;
-    } else {
-        likeBtn.classList.remove('fas', 'liked');
-        likeBtn.classList.add('far');
-        likeCount.textContent = currentLikes - 1;
-    }
-    
-    // Save to localStorage
-    localStorage.setItem('reelLikes', JSON.stringify(likes));
-    
-    // Update in database (optional - could be done in bulk later)
-    updateLikeCountInDB(reelId, isLiked ? 1 : -1);
-}
-
-// Update like count in database
-async function updateLikeCountInDB(reelId, delta) {
-    try {
-        const transaction = db.transaction(['posts'], 'readwrite');
-        const store = transaction.objectStore('posts');
-        const request = store.get(parseInt(reelId));
-        
-        request.onsuccess = () => {
-            const reel = request.result;
-            if (reel) {
-                reel.likes = (reel.likes || 0) + delta;
-                store.put(reel);
+        function loadLocalData() {
+            // Load likes from localStorage
+            const savedLikes = localStorage.getItem('reelLikes');
+            if (savedLikes) {
+                likes = JSON.parse(savedLikes);
             }
-        };
-    } catch (error) {
-        console.error('Error updating like count:', error);
-    }
-}
 
-// Toggle sound
-function toggleSound(videoId) {
-    const video = document.getElementById(`video-${videoId}`);
-    const soundIcon = document.querySelector(`.sound-control[data-video-id="${videoId}"] i`);
-    
-    if (!video || !soundIcon) return;
-    
-    video.muted = !video.muted;
-    soundIcon.classList.toggle('fa-volume-mute');
-    soundIcon.classList.toggle('fa-volume-up');
-}
+            // Load comments from localStorage
+            const savedComments = localStorage.getItem('reelComments');
+            if (savedComments) {
+                comments = JSON.parse(savedComments);
+            }
+        }
 
-// Handle swipe navigation
-function handleSwipe(startY, endY) {
-    const swipeThreshold = 50;
-    const swipeDistance = startY - endY;
-    
-    if (swipeDistance > swipeThreshold) {
-        showNextReel();
-    } else if (swipeDistance < -swipeThreshold) {
-        showPreviousReel();
-    }
-}
+        function saveLocalData() {
+            localStorage.setItem('reelLikes', JSON.stringify(likes));
+            localStorage.setItem('reelComments', JSON.stringify(comments));
+        }
 
-// UI Helper functions
-function showLoading(show) {
-    document.getElementById('loadingIndicator').style.display = show ? 'block' : 'none';
-}
+        function displayReel(index) {
+            const reelsContainer = document.getElementById('reelsContainer');
+            reelsContainer.innerHTML = '';
+            
+            if (index < 0 || index >= reels.length) return;
+            
+            const reel = reels[index];
+            currentReelId = reel.id;
+            
+            const profileName = localStorage.getItem('profileName') || 'User';
+            const profileImage = localStorage.getItem('profileImage') || 'sk pictures/k6.png';
+            const isLiked = likes[currentReelId] || false;
+            const likeCount = isLiked ? (reel.likes || 0) + 1 : (reel.likes || 0);
+            
+            const reelElement = document.createElement('div');
+            reelElement.className = 'reel active';
+            reelElement.innerHTML = `
+                <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+                <div class="reel-header">
+                    <div class="profile-pic">
+                        <img src="${profileImage}" alt="${profileName}">
+                    </div>
+                    <div class="profile-name">${profileName}</div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                
+                <video class="reel-video" loop playsinline id="reelVideo">
+                    <source src="${reel.content}" type="video/mp4">
+                </video>
+                
+                <div class="video-controls" id="videoControls"></div>
+                <div class="like-animation" id="likeAnimation"></div>
+                
+                <div class="reel-actions">
+                    <button class="action-btn" id="likeBtn">
+                        <i class="${isLiked ? 'fas liked' : 'far'} fa-heart"></i>
+                        <span class="action-count">${likeCount.toLocaleString()}</span>
+                    </button>
+                    <button class="action-btn" id="commentBtn">
+                        <i class="far fa-comment"></i>
+                        <span class="action-count">${(reel.comments || 0).toLocaleString()}</span>
+                    </button>
+                    <button class="action-btn" id="shareBtn">
+                        <i class="fas fa-share"></i>
+                        <span class="action-count">Share</span>
+                    </button>
+                    <button class="action-btn" id="donateBtn">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <span class="action-count">Donate</span>
+                    </button>
+                    <button class="action-btn" id="encourageBtn">
+                        <i class="fas fa-hands-helping"></i>
+                        <span class="action-count">Encourage</span>
+                    </button>
+                </div>
+                
+                <div class="reel-description">
+                    <div class="description-text" id="descriptionText">
+                        ${reel.description || 'Small Act Big Impacts!'}
+                    </div>
+                    <div class="read-more" id="readMore">more</div>
+                    <div class="reel-music">
+                        <i class="fas fa-music"></i> Original Sound
+                    </div>
+                </div>
+            `;
+            
+            reelsContainer.appendChild(reelElement);
+            
+            // Initialize video
+            currentVideo = document.getElementById('reelVideo');
+            currentVideo.load();
+            
+            // Play video when ready
+            currentVideo.onloadedmetadata = function() {
+                currentVideo.play().catch(e => console.log("Autoplay prevented:", e));
+                setupVideoProgress();
+            };
+            
+            // Set up event listeners for this reel
+            setupReelEventListeners();
+        }
 
-function showNoReelsMessage() {
-    document.getElementById('noReels').style.display = 'block';
-}
+        function setupReelEventListeners() {
+            // Like button
+            document.getElementById('likeBtn').addEventListener('click', function() {
+                toggleLike(currentReelId, this.querySelector('i'));
+            });
+            
+            // Comment button
+            document.getElementById('commentBtn').addEventListener('click', function() {
+                openCommentModal(currentReelId);
+            });
+            
+            // Share button
+            document.getElementById('shareBtn').addEventListener('click', function() {
+                openShareModal(currentReelId);
+            });
+            
+            // Donate button
+            document.getElementById('donateBtn').addEventListener('click', function() {
+                openDonateModal(currentReelId);
+            });
+            
+            // Encourage button
+            document.getElementById('encourageBtn').addEventListener('click', function() {
+                openEncourageModal(currentReelId);
+            });
+            
+            // Read more
+            const descriptionText = document.getElementById('descriptionText');
+            const readMore = document.getElementById('readMore');
+            
+            if (descriptionText.scrollHeight > descriptionText.clientHeight) {
+                readMore.style.display = 'block';
+                readMore.addEventListener('click', function() {
+                    descriptionText.classList.toggle('expanded');
+                    this.textContent = descriptionText.classList.contains('expanded') ? 'less' : 'more';
+                });
+            } else {
+                readMore.style.display = 'none';
+            }
+            
+            // Video controls for play/pause
+            const videoControls = document.getElementById('videoControls');
+            videoControls.addEventListener('click', function() {
+                if (currentVideo.paused) {
+                    currentVideo.play();
+                } else {
+                    currentVideo.pause();
+                }
+            });
+            
+            // Double tap to like
+            videoControls.addEventListener('dblclick', function(e) {
+                const likeBtn = document.getElementById('likeBtn');
+                toggleLike(currentReelId, likeBtn.querySelector('i'));
+                
+                // Show animation
+                const animation = document.getElementById('likeAnimation');
+                animation.innerHTML = '<i class="fas fa-heart"></i>';
+                animation.style.opacity = '1';
+                animation.style.transform = 'translate(-50%, -50%) scale(1)';
+                
+                setTimeout(() => {
+                    animation.style.opacity = '0';
+                    animation.style.transform = 'translate(-50%, -50%) scale(0)';
+                }, 1000);
+            });
+            
+            // Touch events for swipe
+            videoControls.addEventListener('touchstart', handleTouchStart, {passive: false});
+            videoControls.addEventListener('touchmove', handleTouchMove, {passive: false});
+            videoControls.addEventListener('touchend', handleTouchEnd);
+        }
 
-function showError(message) {
-    const noReels = document.getElementById('noReels');
-    noReels.style.display = 'block';
-    noReels.innerHTML = `<p>${message}</p>`;
-}
+        function toggleLike(reelId, likeIcon) {
+            if (!likes[reelId]) {
+                likes[reelId] = true;
+                likeIcon.classList.remove('fa-regular');
+                likeIcon.classList.add('fa-solid', 'liked');
+            } else {
+                likes[reelId] = false;
+                likeIcon.classList.remove('fa-solid', 'liked');
+                likeIcon.classList.add('fa-regular');
+            }
+            
+            // Update likes count display
+            const likesCount = likeIcon.closest('.action-btn').querySelector('.action-count');
+            const currentLikes = parseInt(likesCount.textContent.replace(/,/g, '')) || 0;
+            const newLikes = likes[reelId] ? currentLikes + 1 : currentLikes - 1;
+            likesCount.textContent = newLikes.toLocaleString();
+            
+            saveLocalData();
+        }
+
+        function setupVideoProgress() {
+            const progressBar = document.getElementById('progressBar');
+            
+            currentVideo.ontimeupdate = function() {
+                const progress = (currentVideo.currentTime / currentVideo.duration) * 100;
+                progressBar.style.width = progress + '%';
+            };
+            
+            currentVideo.onended = function() {
+                progressBar.style.width = '100%';
+            };
+        }
+
+        function handleTouchStart(e) {
+            startY = e.touches[0].clientY;
+            isDragging = true;
+        }
+
+        function handleTouchMove(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const y = e.touches[0].clientY;
+            const dy = startY - y;
+            
+            // Only allow vertical swipe
+            if (Math.abs(dy) > 50) {
+                if (dy > 0) {
+                    // Swipe up - next reel
+                    showNextReel();
+                } else {
+                    // Swipe down - previous reel
+                    showPreviousReel();
+                }
+                isDragging = false;
+            }
+        }
+
+        function handleTouchEnd() {
+            isDragging = false;
+        }
+
+        function showNextReel() {
+            if (currentReelIndex < reels.length - 1) {
+                currentReelIndex++;
+                displayReel(currentReelIndex);
+            }
+        }
+
+        function showPreviousReel() {
+            if (currentReelIndex > 0) {
+                currentReelIndex--;
+                displayReel(currentReelIndex);
+            }
+        }
+
+        function openCommentModal(reelId) {
+            currentReelId = reelId;
+            const modal = document.getElementById('commentModal');
+            const commentList = document.getElementById('commentList');
+            
+            // Load comments for this reel
+            commentList.innerHTML = '';
+            if (comments[reelId]) {
+                comments[reelId].forEach(comment => {
+                    commentList.appendChild(createCommentElement(comment));
+                });
+            }
+            
+            modal.style.display = 'block';
+            document.getElementById('commentInput').focus();
+        }
+
+        function closeCommentModal() {
+            document.getElementById('commentModal').style.display = 'none';
+            document.getElementById('commentInput').value = '';
+        }
+
+        function createCommentElement(comment) {
+            const element = document.createElement('div');
+            element.className = 'comment-item';
+            element.innerHTML = `
+                <img src="${comment.userImage || 'default-profile.jpg'}" class="comment-user-img" alt="${comment.user}">
+                <div class="comment-content">
+                    <div class="comment-user-name">${comment.user}</div>
+                    <div class="comment-text">${comment.text}</div>
+                </div>
+            `;
+            return element;
+        }
+
+        function openShareModal(reelId) {
+            currentReelId = reelId;
+            document.getElementById('shareModal').style.display = 'block';
+        }
+
+        function openDonateModal(reelId) {
+            currentReelId = reelId;
+            document.getElementById('donateModal').style.display = 'block';
+            
+            // Clear previous selections
+            document.querySelectorAll('.amount-option').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.getElementById('customAmount').value = '';
+        }
+
+        function openEncourageModal(reelId) {
+            currentReelId = reelId;
+            document.getElementById('encourageModal').style.display = 'block';
+            document.getElementById('encourageMessage').value = '';
+        }
+
+        function shareTo(platform) {
+            const reel = reels.find(r => r.id === currentReelId);
+            if (!reel) return;
+            
+            const text = encodeURIComponent(`Check out this reel: ${reel.description || 'Small Act Big Impacts!'}`);
+            const url = encodeURIComponent(window.location.href);
+            
+            let shareUrl = '';
+            switch(platform) {
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${text}%20${url}`;
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+                    break;
+                case 'telegram':
+                    shareUrl = `https://t.me/share/url?url=${url}&text=${text}`;
+                    break;
+            }
+            
+            window.open(shareUrl, '_blank');
+            closeShareModal();
+        }
+
+        function copyLink() {
+            const tempInput = document.createElement('input');
+            tempInput.value = window.location.href;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            alert('Link copied to clipboard!');
+            closeShareModal();
+        }
+
+        function setupEventListeners() {
+            // Modal close buttons
+            document.getElementById('closeCommentModal').addEventListener('click', closeCommentModal);
+            document.getElementById('closeShareModal').addEventListener('click', () => {
+                document.getElementById('shareModal').style.display = 'none';
+            });
+            document.getElementById('closeDonateModal').addEventListener('click', () => {
+                document.getElementById('donateModal').style.display = 'none';
+            });
+            document.getElementById('closeEncourageModal').addEventListener('click', () => {
+                document.getElementById('encourageModal').style.display = 'none';
+            });
+
+            // Comment submit
+            document.getElementById('sendComment').addEventListener('click', addComment);
+            document.getElementById('commentInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addComment();
+                }
+            });
+
+            // Donation amount selection
+            document.querySelectorAll('.amount-option').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.amount-option').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    document.getElementById('customAmount').value = '';
+                });
+            });
+
+            // Custom amount input
+            document.getElementById('customAmount').addEventListener('input', function() {
+                document.querySelectorAll('.amount-option').forEach(b => b.classList.remove('selected'));
+            });
+
+            // Donate button
+            document.getElementById('confirmDonate').addEventListener('click', processDonation);
+
+            // Encourage button
+            document.getElementById('sendEncouragement').addEventListener('click', sendEncouragement);
+        }
+
+        function addComment() {
+            const input = document.getElementById('commentInput');
+            const text = input.value.trim();
+            if (text === '') return;
+            
+            const profileName = localStorage.getItem('profileName') || 'User';
+            const profileImage = localStorage.getItem('profileImage') || 'default-profile.jpg';
+            
+            const comment = {
+                user: profileName,
+                userImage: profileImage,
+                text: text,
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+            
+            // Add to comments object
+            if (!comments[currentReelId]) {
+                comments[currentReelId] = [];
+            }
+            comments[currentReelId].push(comment);
+            
+            // Add to comment list
+            document.getElementById('commentList').appendChild(createCommentElement(comment));
+            
+            // Update comment count
+            const commentBtn = document.getElementById('commentBtn');
+            const commentCount = commentBtn.querySelector('.action-count');
+            const currentCount = parseInt(commentCount.textContent.replace(/,/g, '')) || 0;
+            commentCount.textContent = (currentCount + 1).toLocaleString();
+            
+            // Clear input
+            input.value = '';
+            
+            saveLocalData();
+        }
+
+        function processDonation() {
+            const selectedAmount = document.querySelector('.amount-option.selected');
+            const customAmount = document.getElementById('customAmount').value;
+            
+            let amount = 0;
+            if (selectedAmount) {
+                amount = parseFloat(selectedAmount.getAttribute('data-amount'));
+            } else if (customAmount) {
+                amount = parseFloat(customAmount);
+            }
+            
+            if (amount <= 0 || isNaN(amount)) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            // In a real app, you would process payment here
+            alert(`Thank you for your donation of $${amount.toFixed(2)}!`);
+            document.getElementById('donateModal').style.display = 'none';
+        }
+
+        function sendEncouragement() {
+            const message = document.getElementById('encourageMessage').value.trim();
+            if (message === '') {
+                alert('Please enter an encouraging message');
+                return;
+            }
+            
+            // In a real app, you would send this to the creator
+            alert('Your encouraging message has been sent to the creator!');
+            document.getElementById('encourageModal').style.display = 'none';
+        }
+
+        // Database functions
+        async function openDatabaseWithVersionDetection() {
+            return new Promise((resolve, reject) => {
+                const checkRequest = indexedDB.open('ShareKindDB');
+                
+                checkRequest.onsuccess = function() {
+                    const db = checkRequest.result;
+                    const currentVersion = db.version;
+                    db.close();
+                    
+                    const openRequest = indexedDB.open('ShareKindDB', currentVersion);
+                    
+                    openRequest.onerror = (event) => {
+                        reject(new Error(`Database open failed: ${event.target.error.message}`));
+                    };
+                    
+                    openRequest.onsuccess = () => {
+                        resolve({
+                            db: openRequest.result,
+                            version: currentVersion
+                        });
+                    };
+                    
+                    openRequest.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains('posts')) {
+                            db.createObjectStore('posts', { keyPath: 'id' });
+                        }
+                    };
+                };
+                
+                checkRequest.onerror = (event) => {
+                    reject(new Error(`Version check failed: ${event.target.error.message}`));
+                };
+            });
+        }
+
+        async function getAllPosts(db) {
+            return new Promise((resolve, reject) => {
+                try {
+                    const transaction = db.transaction(['posts'], 'readonly');
+                    const store = transaction.objectStore('posts');
+                    const request = store.getAll();
+                    
+                    request.onerror = () => reject(new Error("Transaction failed"));
+                    request.onsuccess = () => resolve(request.result || []);
+                    
+                    transaction.onerror = () => reject(new Error("Transaction error"));
+                } catch (err) {
+                    reject(new Error(`Query failed: ${err.message}`));
+                }
+            });
+        }
+
+        function showError(message) {
+            const reelsContainer = document.getElementById('reelsContainer');
+            reelsContainer.innerHTML = `
+                <div class="error-message">
+                    <p>${message}</p>
+                    <button class="retry-button" onclick="window.location.reload()">Retry</button>
+                </div>
+            `;
+        }
     </script>
 </body>
-</html>
+</html>-
